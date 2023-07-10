@@ -3,6 +3,9 @@ import './assets/main.css'
 // 引入全局样式
 import '@/styles/index.less'
 
+// 引入阿里图标
+import '@/assets/font/iconfont.css'
+
 import { createPinia } from 'pinia';
 
 import { createApp } from 'vue'

@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { onMounted, onUnmounted } from 'vue'
+import { useFullscreen } from '@vueuse/core'
 import { Decoration4 } from '@dataview/datav-vue3';
 import hooks from "@/hooks";
 
@@ -7,6 +8,8 @@ import setting from '@/settings'
 import { setLocalS, getLocalS, clearTimer } from "@/utils";
 
 const { useDateTime } = hooks;
+
+const { toggle, isFullscreen } = useFullscreen()
 
 const {
   currentTime,
@@ -50,6 +53,11 @@ const setTime = () => {
   }
 };
 
+const toggleFullscreen = () => {
+  toggle()
+}
+
+
 </script>
 
 <template>
@@ -70,6 +78,10 @@ const setTime = () => {
             </div>
             <div class="line">
                 <Decoration4 :reverse="true"  style="transform: rotateY(180deg);" />
+            </div>
+            <div class="full-screen-btn" @click="toggleFullscreen">
+                <span class="icon iconfont ds-icon_fullscreen_shrink size" v-if="isFullscreen" ></span>
+                <span class="icon iconfont ds-fullscreen__  size" v-else></span>
             </div>
         </div>
     </div>
@@ -98,6 +110,18 @@ const setTime = () => {
         .header-rt{
             flex: 1;
             position: relative;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            .full-screen-btn{
+                cursor: pointer;
+                color: #fff;
+                margin-right: calc(10 * var(--app-base-unit));
+                .size{
+                    font-size: calc(35 * var(--app-base-unit));
+                    transform: translateY(calc(6 * var(--app-base-unit)));
+                }
+            }
         }
         .header-center{
             width: 40%;
