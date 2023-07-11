@@ -5,24 +5,6 @@ import { propTypes } from '@/utils/propTypes'
 
 import * as echarts from 'echarts'
 
-const a = {
-    deviceTypeName
-: 
-null,
-num
-: 
-null
-orderType
-: 
-null
-totalAmount
-: 
-"3959418.00"
-years
-: 
-"2022-12"
-}
-
 // import { useFullscreen } from '@vueuse/core'
 
 // const { isFullscreen } = useFullscreen()

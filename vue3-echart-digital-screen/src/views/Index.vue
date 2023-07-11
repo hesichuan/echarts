@@ -6,10 +6,12 @@ import hooks from "@/hooks";
 import Header from '@/components/Header/index.vue'
 import Loading from '@/components/GlobalLoading/index.vue'
 
+import CenterContent from '@/views/components/CenterCentent.vue'
+
 const { useScreen, useCommon } = hooks;
 const { setScreenMode } = useCommon()
 const isLoading = ref(true)
-console.log('setScreenMode',setScreenMode)
+
 // 制定html根字体大小
 const initHtmlFontSize = () => {
   // logInfo(
@@ -60,7 +62,7 @@ const initHtmlFontSize = () => {
 };
 
 const { design, screen, minScreen, contrastRatio } = useScreen(initHtmlFontSize)
-console.log('user-screnn', design, screen, minScreen, contrastRatio)
+// console.log('user-screnn', design, screen, minScreen, contrastRatio)
 
 onMounted(() => {
   setScreenMode("AdptMultiDevice");
@@ -73,15 +75,13 @@ onMounted(() => {
 
 <template>
     <div class='digital-screen-container'>
-        <header class="header">
             <Header />
-        </header>
         <section class="section">
             <div class="aside-lf">
                 <BorderBox1 > <div class="container">组件-1</div> </BorderBox1>
             </div>
-            <div class="center-content">
-                <BorderBox1> <div class="container">组件-2</div></BorderBox1>
+            <div class="center">
+                <CenterContent />
             </div>
             <div class="aside-rt">
                 <BorderBox1> <div class="container">组件-3</div> </BorderBox1>
@@ -108,23 +108,6 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
     }
-    // .header{
-    //     background: url("../assets/header-bg-1.png") no-repeat center;
-    //     background-size: auto 100%;
-    //     position: relative;
-    //     display: flex;
-    //     max-height: 50px;
-    //     .title {
-    //         margin: 0 auto;
-    //         background-image: -webkit-linear-gradient(bottom,#01daff, #fff);
-    //         -webkit-background-clip: text;
-    //         -webkit-text-fill-color: transparent;
-    //         font-size: calc(34 * var(--app-base-unit));
-    //         margin-top: calc(-8 * var(--app-base-unit));
-    //         letter-spacing: calc(2 * var(--app-base-unit));
-    //         line-height: calc(42 * var(--app-base-unit));
-    //     }
-    // }
     .section{
         display: flex;
         height: 100%;
@@ -133,7 +116,7 @@ onMounted(() => {
         .aside-lf{
             flex:2;
         }
-        .center-content{
+        .center{
             flex: 3;
         }
         .aside-rt{
