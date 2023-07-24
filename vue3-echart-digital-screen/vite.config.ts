@@ -45,7 +45,7 @@ export default defineConfig({
         // target: "http://share.c.cloudos.cnpc.com.cn/",
         // target: "http://d.c.cloudos.cnpc.com.cn/",
         // target: "http://dev.c.cloudos.cnpc.com.cn",
-        // target: 'http://t.c.cloudos.cnpc.com.cn/',
+        target: 'http://t.c.cloudos.cnpc.com.cn/',
         changeOrigin: true, //开启代理
         // rewrite: (path) => path.replace(/^\/customer/, 'customer')
       }

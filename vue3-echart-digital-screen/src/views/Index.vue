@@ -6,7 +6,9 @@ import hooks from "@/hooks";
 import Header from '@/components/Header/index.vue'
 import Loading from '@/components/GlobalLoading/index.vue'
 
-import CenterContent from '@/views/components/CenterCentent.vue'
+import LeftContent from './components/LeftContent.vue'
+import CenterContent from './components/CenterContent.vue'
+import RightContent from './components/RightContent.vue';
 
 const { useScreen, useCommon } = hooks;
 const { setScreenMode } = useCommon()
@@ -78,13 +80,21 @@ onMounted(() => {
             <Header />
         <section class="section">
             <div class="aside-lf">
-                <BorderBox1 > <div class="container">组件-1</div> </BorderBox1>
+                <BorderBox1 >
+                  <div class="container">
+                    <LeftContent/>
+                  </div> 
+                </BorderBox1>
             </div>
             <div class="center">
                 <CenterContent />
             </div>
             <div class="aside-rt">
-                <BorderBox1> <div class="container">组件-3</div> </BorderBox1>
+                <BorderBox1> 
+                  <div class="container">
+                    <RightContent/>
+                  </div> 
+                </BorderBox1>
             </div>
         </section>
         <Loading v-if="isLoading"/>

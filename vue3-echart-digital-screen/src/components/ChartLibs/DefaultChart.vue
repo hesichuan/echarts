@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, markRaw, computed, watch } from 'vue'
+import { ref, unref, onMounted, onUnmounted, markRaw, computed, watch, reactive, nextTick} from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
 
 import * as echarts from 'echarts'
+
+import hooks from '@/hooks'
 
 // import { useFullscreen } from '@vueuse/core'
 
@@ -12,6 +14,8 @@ import * as echarts from 'echarts'
 // watch(isFullscreen, () => {
 //   myChart.value?.resize()
 // })
+const { useModuleData  } = hooks
+const { contrastRatio, calcFont } = useModuleData(null)
 
 const props = defineProps({
   option: propTypes.object.def({}),
@@ -19,20 +23,22 @@ const props = defineProps({
   autoplayLen: propTypes.number.def(1)
 })
 
-const commonTitle = {
-  top: 25,
-  left: 'center',
-  textStyle: {
-    color: '#eee',
-    fontSize: 16
+const commonTitle = computed(() => {
+  return {
+    top: calcFont(25),
+    left: 'center',
+    textStyle: {
+      color: '#eee',
+      fontSize: calcFont(16),
+    }
   }
-}
+})
 
 const chartDom = ref<any>() // 获取元素实例
 const myChart = ref<any>(null) // 获取echarts
 const chartTitle = computed(() => {
   const title = {
-    ...commonTitle,
+    ...unref(commonTitle),
     ...props.option.title
   }
   return title
@@ -69,6 +75,7 @@ const init = () => {
   myChart.value = markRaw(echarts.init(chartDom.value))
   const option = props.option
   option.title = chartTitle.value
+  console.log('Option', option)
   myChart.value.setOption(option)
 
   //过渡完成后开始动画
@@ -84,7 +91,7 @@ onMounted(() => {
     console.log('屏幕大小变了')
     myChart.value.resize() // 窗口发生改变就更新echarts
   })
-  init()
+  nextTick(() => init())
 })
 
 onUnmounted(() => {
@@ -101,7 +108,5 @@ onUnmounted(() => {
 .default-echart {
   width: 100%;
   height: 100%;
-  // overflow: hidden;
-  //   background: #06032f;
 }
 </style>
