@@ -1,5 +1,7 @@
 <script setup lang='ts'>
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue';
+import ChartThree from '@/components/ChartLibs/ChartThree.vue';
+import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 </script>
 
 <template>
@@ -8,10 +10,10 @@ import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue';
             <CompanyDevice/>
         </div>
         <div class="left-content__item">
-            <!-- <CompanyDevice/> -->
+            <ChartThree/>
         </div>
         <div class="left-content__item">
-            <!-- <CompanyDevice/> -->
+            <ChartFour/>
         </div>
 
     </div>

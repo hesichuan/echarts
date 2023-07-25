@@ -2,10 +2,10 @@ export const chartOneData = {
     "status": "SUCCEED",
     "data": [
         {
-            "deviceTypeCount": "124",
+            "deviceTypeCount": "1240",
             "orgName": "第一工程分公司",
             "deviceCount": "1542",
-            "brandCount": "800"
+            "brandCount": "1000"
         },
         {
             "deviceTypeCount": "32",

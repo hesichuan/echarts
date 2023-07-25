@@ -173,7 +173,7 @@ const option = computed(() => {
       barMaxWidth: calcFont(48),
       barWidth: calcFont(48),
       symbol: 'diamond',
-      symbolOffset: [-calcFont(46), '50%'],
+      symbolOffset: [-calcFont(24), '50%'],
       zlevel: 3,
       symbolSize: [calcFont(32), calcFont(12)] // 菱形宽高
     },
@@ -188,7 +188,7 @@ const option = computed(() => {
       color: '#1E7EFF',
       symbolPosition: 'end',
       symbol: 'diamond',
-      symbolOffset: [-calcFont(46), '-50%'],
+      symbolOffset: [-calcFont(24), '-50%'],
       symbolSize: [calcFont(32), calcFont(12)],
       zlevel: 2
     },
@@ -199,7 +199,7 @@ const option = computed(() => {
       tooltip: {
         show: false
       },
-      barMaxWidth: 48,
+      barMaxWidth: calcFont(48),
       color: {
         x: 0,
         y: 1,
@@ -290,11 +290,11 @@ const option = computed(() => {
       tooltip: {
         show: false
       },
-      barMaxWidth: 48,
+      barMaxWidth: calcFont(48),
       symbol: 'diamond',
-      symbolOffset: [0, '50%'],
       zlevel: 3,
-      symbolSize: [26, 13]
+      symbolOffset: [calcFont(8), '50%'],
+      symbolSize: [calcFont(32), calcFont(12)],
     },
     {
       data: branchCount.value,
@@ -302,12 +302,14 @@ const option = computed(() => {
       tooltip: {
         show: false
       },
-      barMaxWidth: 48,
+      barMaxWidth: calcFont(48),
       color: '#FFA75A',
       symbolPosition: 'end',
       symbol: 'diamond',
-      symbolOffset: [0, '-50%'],
-      symbolSize: [26, 10.4],
+      // symbolOffset: [0, '-50%'],
+      // symbolSize: [26, 10.4],
+      symbolOffset: [calcFont(8), '-50%'],
+      symbolSize: [calcFont(32), calcFont(12)],
       zlevel: 2
     },
     {
@@ -316,7 +318,7 @@ const option = computed(() => {
       tooltip: {
         show: false
       },
-      barMaxWidth: 48,
+      barMaxWidth: calcFont(48),
       color: {
         x: 0,
         y: 1,
@@ -346,15 +348,15 @@ const option = computed(() => {
       type: 'bar',
       name: '品牌数量',
       barGap: '20%',
-      barWidth: 26,
-      barMaxWidth: 48,
+      barWidth: calcFont(26),
+      barMaxWidth: calcFont(48),
       label: {
         show: true,
         position: 'top',
         distance: 4.8,
         textStyle: {
           color: '#FF8D28',
-          fontSize: 16
+          fontSize: calcFont(16)
         }
       },
       showBackground: true,
@@ -407,11 +409,11 @@ const option = computed(() => {
       tooltip: {
         show: false
       },
-      barMaxWidth: 48,
+      barMaxWidth: calcFont(48),
       symbol: 'diamond',
-      symbolOffset: [31.200000000000003, '50%'],
+      symbolOffset: [calcFont(40), '50%'],
       zlevel: 3,
-      symbolSize: [26, 13]
+      symbolSize: [calcFont(32), calcFont(12)],
     },
     {
       data: typeCount.value,
@@ -423,8 +425,8 @@ const option = computed(() => {
       color: '#6ACC29',
       symbolPosition: 'end',
       symbol: 'diamond',
-      symbolOffset: [31.200000000000003, '-50%'],
-      symbolSize: [26, 10.4],
+      symbolOffset: [calcFont(31), '-50%'],
+      symbolSize: [calcFont(32), calcFont(12)],
       zlevel: 2
     },
     {
@@ -463,15 +465,15 @@ const option = computed(() => {
       type: 'bar',
       name: '类型数量',
       barGap: '20%',
-      barWidth: 26,
-      barMaxWidth: 48,
+      barWidth: calcFont(26),
+      barMaxWidth: calcFont(48),
       label: {
         show: true,
         position: 'top',
         distance: 4.8,
         textStyle: {
           color: '#6ACC29',
-          fontSize: 16
+          fontSize: calcFont(16)
         }
       },
       showBackground: true,
