@@ -52,8 +52,7 @@ const getIconClassName = ({ type }) => {
 
 <template>
     <div class='project-scroll'>
-        <div class="project-list">
-            <Vue3SeamlessScroll :list="projectDemo.projectUseData" :step="0.3" :hover="true">
+            <Vue3SeamlessScroll :list="projectDemo.projectUseData" :step="0.3" :hover="true" class="project-list">
               <div
                 class="project-list-item"
                 v-for="(item, index) in projectDemo.projectUseData"
@@ -82,19 +81,25 @@ const getIconClassName = ({ type }) => {
                 </div>
               </div>
             </Vue3SeamlessScroll>
-          </div>
     </div>
 </template>
 
 <style lang='less' scoped>
-    .project-scroll{
-        height: 100%;
-        .flex-space-between {
+  .project-scroll{
+    // height:  calc(250 * var(--app-base-unit));
+    height: 32vh;
+  }
+        .project-list {
+            padding: 0 calc(20* var(--app-base-unit));
+            // height: 200px;
+            height: calc(100% - 30 * var(--app-base-unit));
+            overflow: hidden;
+          .flex-space-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .pre-icon {
+          .pre-icon {
             height: calc(40 * var(--app-base-unit));
             width: calc(40 * var(--app-base-unit));
             min-width: calc(40 * var(--app-base-unit));
@@ -104,15 +109,10 @@ const getIconClassName = ({ type }) => {
             justify-content: center;
             border-radius:  calc(4 * var(--app-base-unit));
 
-            .iconfont {
-                font-size:  calc(22 * var(--app-base-unit));
-            }
-            }
-        .project-list {
-            width: 100%;
-            height: calc(100% - 30 * var(--app-base-unit));
-            overflow: hidden;
-
+              .iconfont {
+                  font-size:  calc(22 * var(--app-base-unit));
+              }
+          }
             &-item {
                 margin-bottom: 15 calc(15 * var(--app-base-unit));;
                 background: rgba(87, 170, 255, 0.15);
@@ -170,5 +170,4 @@ const getIconClassName = ({ type }) => {
                 }
             }
             }
-    }
 </style>

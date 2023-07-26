@@ -93,7 +93,7 @@ const toggleFullscreen = () => {
   src: url("../../assets/font/PangMenZhengDaoBiaoTiTi.ttf");
 }
     .header-container{
-        height: calc(55 * var(--app-base-unit));
+        height: 100%;
         background: url("../../assets/header-bg-1.png") no-repeat center;
         background-size: auto 100%;
         position: relative;

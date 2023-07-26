@@ -77,7 +77,7 @@ onMounted(() => {
 
 <template>
     <div class='digital-screen-container'>
-            <Header />
+        <header class="header"><Header /></header>
         <section class="section">
             <div class="aside-lf">
                 <BorderBox1 >
@@ -118,11 +118,15 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
     }
+    .header{
+      height: calc(55 * var(--app-base-unit));
+    }
     .section{
         display: flex;
-        height: 100%;
+        height: calc(100vh - 55 * var(--app-base-unit));
         flex: 1;
-        padding: 5px;
+        padding: calc(10 * var(--app-base-unit));
+        box-sizing: border-box;
         .aside-lf{
             flex:2;
         }

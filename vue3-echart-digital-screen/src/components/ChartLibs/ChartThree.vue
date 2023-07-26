@@ -39,10 +39,16 @@ getDeviceEchartCount()
 
 const option = computed(() => {
   return {
+   title: {
+      top: 'auto',
+      text: '项目统计图',
+      // left: '5%',
+      bottom: 0
+   },
    // 图例
    "legend": {
       "show": true,
-      "left": "5%",
+      "right": "5%",
       "icon": "circle",
       "data": [
          { "name": "项目数" },

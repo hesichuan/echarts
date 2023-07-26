@@ -1,17 +1,19 @@
 <script setup lang='ts'>
-    import ChartProject from '@/components/ChartLibs/ChartProject.vue'
+    import DeviceCategory from '@/components/ChartLibs/DeviceCategory.vue';
+    import ChartFour from '@/components/ChartLibs/ChartFour.vue'
+    import AreaMarket from '@/components/ChartLibs/AreaMarket.vue'
 </script>
 
 <template>
     <div class='right-content'>
         <div class="right-content__item">
-            <!-- <CompanyDevice/> -->
+            <DeviceCategory/>
         </div>
         <div class="right-content__item">
-            <ChartProject/>
+            <ChartFour/>
         </div>
         <div class="right-content__item">
-            <!-- <ChartFour/> -->
+            <AreaMarket/>
         </div>
     </div>
 </template>

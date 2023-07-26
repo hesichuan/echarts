@@ -7,20 +7,16 @@ import * as echarts from 'echarts'
 
 import hooks from '@/hooks'
 
-// import { useFullscreen } from '@vueuse/core'
+import JEOJSON from '/static/data/demo_geoJSON.json'
 
-// const { isFullscreen } = useFullscreen()
-
-// watch(isFullscreen, () => {
-//   myChart.value?.resize()
-// })
 const { useModuleData  } = hooks
 const { contrastRatio, calcFont } = useModuleData(null)
 
 const props = defineProps({
   option: propTypes.object.def({}),
   autoplay: propTypes.bool.def(false),
-  autoplayLen: propTypes.number.def(1)
+  autoplayLen: propTypes.number.def(1),
+  type: propTypes.string.def('')
 })
 
 const commonTitle = computed(() => {
@@ -28,8 +24,8 @@ const commonTitle = computed(() => {
     top: calcFont(25),
     left: 'center',
     textStyle: {
-      color: '#eee',
-      fontSize: calcFont(16),
+      color: '#fff',
+      fontSize: calcFont(20),
     }
   }
 })
@@ -47,7 +43,7 @@ const chartTitle = computed(() => {
 const outoPaly = (myChart) => {
   let currentIndex = -1
   setInterval(function () {
-    var dataLen = props.autoplayLen || props.option.series[0].data.length
+    var dataLen = props.autoplayLen !== 1 ? props.autoplayLen : props.option.series[0].data.length
     // 取消之前高亮的图形
     myChart.dispatchAction({
       type: 'downplay',
@@ -73,9 +69,11 @@ const outoPaly = (myChart) => {
 
 const init = () => {
   myChart.value = markRaw(echarts.init(chartDom.value))
+
   const option = props.option
   option.title = chartTitle.value
-  console.log('Option', option)
+
+  if (props.type === 'map') echarts.registerMap('china', JEOJSON)
   myChart.value.setOption(option)
 
   //过渡完成后开始动画

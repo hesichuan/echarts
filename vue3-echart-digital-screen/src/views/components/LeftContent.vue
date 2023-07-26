@@ -1,7 +1,8 @@
 <script setup lang='ts'>
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue';
 import ChartThree from '@/components/ChartLibs/ChartThree.vue';
-import ChartFour from '@/components/ChartLibs/ChartFour.vue'
+
+import ChartProject from '@/components/ChartLibs/ChartProject.vue'
 </script>
 
 <template>
@@ -10,10 +11,12 @@ import ChartFour from '@/components/ChartLibs/ChartFour.vue'
             <CompanyDevice/>
         </div>
         <div class="left-content__item">
-            <ChartThree/>
+            <ChartProject/>
+            
         </div>
         <div class="left-content__item">
-            <ChartFour/>
+            
+            <ChartThree/>
         </div>
 
     </div>
@@ -27,6 +30,7 @@ import ChartFour from '@/components/ChartLibs/ChartFour.vue'
     flex-direction: column;
     &__item{
         flex:1;
+        overflow: hidden;
     }
 }
 </style>
