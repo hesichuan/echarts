@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { ref, unref, onMounted, onUnmounted, markRaw, computed, watch, reactive, nextTick} from 'vue'
+import {
+  ref,
+  unref,
+  onMounted,
+  onUnmounted,
+  markRaw,
+  computed,
+  watch,
+  reactive,
+  nextTick
+} from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
 
@@ -7,9 +17,9 @@ import * as echarts from 'echarts'
 
 import hooks from '@/hooks'
 
-import JEOJSON from '/static/data/demo_geoJSON.json'
+import JEOJSON from '/public/data/demo_geoJSON.json'
 
-const { useModuleData  } = hooks
+const { useModuleData } = hooks
 const { contrastRatio, calcFont } = useModuleData(null)
 
 const props = defineProps({
@@ -25,7 +35,7 @@ const commonTitle = computed(() => {
     left: 'center',
     textStyle: {
       color: '#fff',
-      fontSize: calcFont(20),
+      fontSize: calcFont(20)
     }
   }
 })
@@ -99,7 +109,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="chartDom" class="default-echart"> </div>
+  <div ref="chartDom" class="default-echart"></div>
 </template>
 
 <style lang="less" scoped>

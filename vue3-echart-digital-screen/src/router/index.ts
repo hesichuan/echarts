@@ -7,7 +7,10 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      meta: {
+        title: '数据平台'
+      }
     },
     {
       path: '/about',
@@ -15,7 +18,10 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/AboutView.vue'),
+      meta: {
+        title: '数据平台'
+      }
     },
     {
       path: '/',
@@ -23,7 +29,10 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/Index.vue')
+      component: () => import('../views/Index.vue'),
+      meta: {
+        title: '数据平台'
+      }
     }
   ]
 })
