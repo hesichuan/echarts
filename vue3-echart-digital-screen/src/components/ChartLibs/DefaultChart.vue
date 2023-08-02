@@ -17,7 +17,7 @@ import * as echarts from 'echarts'
 
 import hooks from '@/hooks'
 
-import JEOJSON from '/public/data/demo_geoJSON.json'
+import JEOJSON from '/public/demo_geoJSON.json'
 
 const { useModuleData } = hooks
 const { contrastRatio, calcFont } = useModuleData(null)
