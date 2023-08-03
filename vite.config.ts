@@ -52,6 +52,7 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
         // 正则表达式写法
         '^/customer': {
           // target: 'http://172.20.10.9:8084', 
+          target: 'http://10.100.182.125:8984', // jj
           // target: 'http://192.168.0.145:8084', 
           // target: "http://10.177.105.25:8084/",
           // target: "http://10.177.105.24:8084",
@@ -61,7 +62,7 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
           // target: "http://share.c.cloudos.cnpc.com.cn/",
           // target: "http://d.c.cloudos.cnpc.com.cn/",
           // target: "http://dev.c.cloudos.cnpc.com.cn",
-          target: 'http://t.c.cloudos.cnpc.com.cn/',
+          // target: 'http://t.c.cloudos.cnpc.com.cn/',
           changeOrigin: true, //开启代理
           // rewrite: (path) => path.replace(/^\/customer/, 'customer')
         }
