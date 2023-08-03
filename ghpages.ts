@@ -17,7 +17,7 @@ const getCurBranch = async () => {
   ghpages.publish(
     'dist',
     {
-      dest: 'dist',
+      dest: '.',
       branch: 'gh-pages',
       repo
     },
