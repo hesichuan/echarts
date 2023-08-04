@@ -55,6 +55,7 @@ const outoPaly = (myChart) => {
   setInterval(function () {
     var dataLen = props.autoplayLen !== 1 ? props.autoplayLen : props.option.series[0].data.length
     // 取消之前高亮的图形
+
     myChart.dispatchAction({
       type: 'downplay',
       seriesIndex: 0,
