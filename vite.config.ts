@@ -4,6 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import { visualizer } from "rollup-plugin-visualizer";
 
 const root = process.cwd()
 
@@ -25,6 +26,12 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
     plugins: [
       vue(),
       vueJsx(),
+      visualizer({
+        open: true,  // 注意这里要设置为true，否则无效 
+        gzipSize: true, // 分析图生成的文件名
+        brotliSize: true, // 收集 brotli 大小并将其显示
+         filename: "stats.html", // 分析图生成的文件名
+      })
     ],
     resolve: {
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.less', '.css'],
@@ -52,7 +59,7 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
         // 正则表达式写法
         '^/customer': {
           // target: 'http://172.20.10.9:8084', 
-          target: 'http://10.100.182.125:8984', // jj
+          target: 'http://10.100.182.125:8084', // jj
           // target: 'http://192.168.0.145:8084', 
           // target: "http://10.177.105.25:8084/",
           // target: "http://10.177.105.24:8084",

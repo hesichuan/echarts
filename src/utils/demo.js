@@ -206,3 +206,131 @@ export const noticeDemo = {
     size: 10
   }
 }
+
+export const OrderStatisticDemo = {
+  status: 'SUCCEED',
+  data: {
+    // 各机构每月订单成交数
+    dealOrderNum: {
+      四川石油天然气建设工程有限责任公司: 1,
+      中国石油管道局工程有限公司设备租赁分公司: 14
+    },
+    // 订单完成情况，履行中和完成x
+    completions: [
+      {
+        yearMonth: '2022-08',
+        completed: 27,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2022-09',
+        completed: 19,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2022-10',
+        completed: 31,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2022-11',
+        completed: 36,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2022-12',
+        completed: 21,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2023-01',
+        completed: 6,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2023-02',
+        completed: 45,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2023-03',
+        completed: 64,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2023-04',
+        completed: 38,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2023-05',
+        completed: 27,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2023-06',
+        completed: 26,
+        toBeContinued: 0,
+        success: 100
+      },
+      {
+        yearMonth: '2023-07',
+        completed: 14,
+        toBeContinued: 60,
+        success: 19
+      }
+    ],
+    addNewOrder: 15, //上月新增订单
+    totalAmount: '0', // 订单成交总金额
+    regions: 6, // 累计覆盖区域
+    // 项目信息（使用多少设备，金额）
+    projectInfoList: [
+      {
+        projectName: '漳州LNG外输延伸段线路工程',
+        deviceNum: '9',
+        totalAmount: '0',
+        ratio: '1.6'
+      },
+      {
+        projectName: '尼日利亚',
+        deviceNum: '9',
+        totalAmount: '0',
+        ratio: '1.6'
+      },
+      {
+        projectName: '李洋需求项目',
+        deviceNum: '8',
+        totalAmount: '0',
+        ratio: '1.4'
+      },
+      {
+        projectName: '沙特NGCP项目',
+        deviceNum: '8',
+        totalAmount: '0',
+        ratio: '1.4'
+      },
+      {
+        projectName: '中俄东线（南通-甪直）项目（盘活）',
+        deviceNum: '8',
+        totalAmount: '0',
+        ratio: '1.4'
+      },
+      {
+        projectName: '福建漳州LNG项目（盘活）',
+        deviceNum: '8',
+        totalAmount: '0',
+        ratio: '1.4'
+      }
+    ]
+  }
+}

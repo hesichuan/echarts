@@ -1,26 +1,16 @@
 <script setup lang="ts">
-import {
-  ref,
-  unref,
-  onMounted,
-  onUnmounted,
-  markRaw,
-  computed,
-  watch,
-  reactive,
-  nextTick
-} from 'vue'
+import { ref, unref, onMounted, onUnmounted, markRaw, computed, nextTick } from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
 
-import * as echarts from 'echarts'
+import echarts from '@/utils/echarts'
 
 import hooks from '@/hooks'
 
-import JEOJSON from '/public/demo_geoJSON.json'
+import JEOJSON from '/public/china_geo.json'
 
 const { useModuleData } = hooks
-const { contrastRatio, calcFont } = useModuleData(null)
+const { calcFont } = useModuleData(null)
 
 const props = defineProps({
   option: propTypes.object.def({}),

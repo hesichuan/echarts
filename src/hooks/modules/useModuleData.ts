@@ -1,6 +1,4 @@
 import { inject, watch, unref } from "vue";
-// import { isFunction } from "lodash";
-
 export default function (handleApiData) {
   const apiData = inject("getApiData", null);
   const apiLoading = inject("getApiLoading", false);

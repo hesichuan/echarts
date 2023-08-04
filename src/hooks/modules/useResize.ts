@@ -1,4 +1,4 @@
-import { isFunction } from "lodash";
+const isFunction = (fn) => Object.prototype.toString.call(fn) === '[object Function]'
 
 export default function () {
   /**

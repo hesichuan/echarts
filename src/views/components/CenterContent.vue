@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import CountStatistic from '@/components/ChartLibs/CountStatistic.vue'
 import ChinaChart from '@/components/ChartLibs/ChinaChart.vue'
 import Notice from '@/components/ChartLibs/Notice.vue'
+
+import { orderStatisticApi } from '@/api'
+
+orderStatisticApi().then((res) => {
+  console.log('orderStatisticApi-res', res)
+})
 </script>
 
 <template>

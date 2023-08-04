@@ -7,12 +7,6 @@ import hooks from '@/hooks'
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
-// import * as echarts from 'echarts'
-
-// import JEOJSON from '/static/data/demo_geoJSON.json'
-
-// const elRef = ref()
-// let echartRef = {} as any
 const option = computed(() => {
   return {
     title: {
@@ -143,7 +137,7 @@ const option = computed(() => {
               normal: {
                 show: true,
                 formatter: function (params) {
-                  console.log('params', params)
+                  // console.log('params', params)
                   return params.name + '--' + params.data.num //地图上展示文字 + 数值
                 }
               }
@@ -151,7 +145,6 @@ const option = computed(() => {
           }
         ],
         symbolSize: function (val) {
-          console.log(val)
           return val[2] / 10
         }
       }
