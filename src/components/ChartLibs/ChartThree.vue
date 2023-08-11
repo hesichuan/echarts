@@ -1,19 +1,12 @@
 <script setup lang="ts">
 import { ref, unref, inject, watch, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
-
-import { deviceEchartCountApi } from '@/api'
-
 import hooks from '@/hooks'
-
-import { chartOneData } from '@/utils/demo'
 
 const loadFinish = ref(false)
 
-const companyList = ref<Array<string>>([])
-
 const { useModuleData } = hooks
-const { calcFont, contrastRatio } = useModuleData(null)
+const { calcFont } = useModuleData(null)
 
 const projectList = ref({})
 
@@ -25,16 +18,12 @@ const legendLabel = {
 const tipData = ref([])
 const indicatorList = ref([])
 
-projectList.value = inject('projectList')
-
-// console.log('orderStatistic', orderStatistic)
+projectList.value = inject('projectList', [])
 
 watch(
   () => projectList.value,
   () => {
-    const data = unref(projectList.value)
-    console.log('projectList.value', data)
-
+    const data = unref(projectList.value) as []
     data.forEach((item, index) => {
       const { projectName: name, deviceNum, ratio, totalAmount } = item
       const obj = {
@@ -81,7 +70,9 @@ const option = computed(() => {
       },
       selectedMode: false
     },
-    tooltip: {},
+    tooltip: {
+      show: true
+    },
     color: ['rgba(71, 141, 255, 0.83)', 'rgba(31, 217, 208, 0.83)'],
     radar: [
       {

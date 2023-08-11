@@ -2,28 +2,14 @@
 import { ref, unref, inject, watch } from 'vue'
 import hooks from '@/hooks'
 
-import projectDemo from '@/utils/projectDemo'
 import { Vue3SeamlessScroll } from 'vue3-seamless-scroll'
 
 const { useFilter } = hooks
-
 const { toThousands } = useFilter()
-const projectList = ref({})
 
-projectList.value = inject('orderList')
+const orderCarousel = ref({})
 
-// console.log('orderStatistic', orderStatistic)
-
-watch(
-  () => projectList.value,
-  () => {
-    const data = unref(projectList.value)
-    console.log('projectList.value', data)
-  },
-  {
-    deep: true
-  }
-)
+orderCarousel.value = inject('orderCarousel', [])
 
 const getBackgroundClassName = ({ type }) => {
   let className = 'project-list-item__icon'
@@ -40,6 +26,8 @@ const getBackgroundClassName = ({ type }) => {
     case 'project':
       className += ' project'
       break
+    default:
+      className += ' web'
   }
   return className
 }
@@ -68,35 +56,28 @@ const getIconClassName = ({ type }) => {
 
 <template>
   <div class="project-scroll">
-    <Vue3SeamlessScroll
-      :list="projectDemo.projectUseData"
-      :step="0.3"
-      :hover="true"
-      class="project-list"
-    >
+    <Vue3SeamlessScroll :list="orderCarousel.value" :step="0.3" :hover="true" class="project-list">
       <div
         class="project-list-item"
-        v-for="(item, index) in projectDemo.projectUseData"
+        v-for="(item, index) in orderCarousel.value"
         :key="'project-item' + index"
       >
         <div :class="getBackgroundClassName(item)">
           <i :class="getIconClassName(item)"></i>
         </div>
         <div class="project-list-item__name ellipsis">
-          {{ item.name }}
+          {{ item.organName }}
         </div>
         <div class="statistics-card">
-          <span class="statistics-card__num font-16">{{ toThousands(item.users) }}</span>
-          <span class="statistics-card__text mt-5">累计使用人数</span>
+          <span class="statistics-card__num font-16">{{ toThousands(item.orderNum) }}</span>
+          <span class="statistics-card__text mt-5">订单数</span>
         </div>
-        <div class="statistics-card ml-10">
+        <!-- <div class="statistics-card ml-10">
           <span>
             <span>正常</span>
-            <!-- <el-tag v-if="item.status === 1" effect="dark" type="success">正常</el-tag>
-            <el-tag v-if="item.status === -1" effect="dark" type="">维护</el-tag> -->
           </span>
           <span class="statistics-card__text mt-5">当前状态</span>
-        </div>
+        </div> -->
       </div>
     </Vue3SeamlessScroll>
   </div>

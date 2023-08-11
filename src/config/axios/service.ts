@@ -80,8 +80,8 @@ service.interceptors.response.use(
       return response.data
     } else if (response.data.errorCode === '100') {
       clearLoginInfo()
-      if (currentRoute.value !== 'login') {
-        router.push(`/login`)
+      if (currentRoute.value !== '/') {
+        router.push(`/`)
         // router.push(`/login?redirect=${currentRoute.value}`)
       }
     } else {

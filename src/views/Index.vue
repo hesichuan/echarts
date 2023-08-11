@@ -11,30 +11,36 @@ import CenterContent from './components/CenterContent.vue'
 import RightContent from './components/RightContent.vue'
 
 // 接口
-import { OrderStatisticDemo } from '@/utils/demo'
+// import { OrderStatisticDemo } from '@/utils/demo'
+import { orderStatisticApi } from '@/api'
 
 const { useScreen, useCommon } = hooks
 const { setScreenMode } = useCommon()
 const isLoading = ref(true)
 const orderStatistic = ref({})
 
+// 中上
+const regions = computed(() => orderStatistic.value.regions)
+const addNewOrder = computed(() => orderStatistic.value.addNewOrder)
+const totalAmount = computed(() => orderStatistic.value.totalAmount)
 // 右2
 const orderComplete = computed(() => orderStatistic.value.completions)
+// 左1
+const orderCarousel = computed(() => orderStatistic.value.unitUseOrder)
 // 左3
 const projectList = computed(() => orderStatistic.value.projectInfoList)
 
 provide('orderComplete', orderComplete)
+provide('orderCarousel', orderCarousel)
 provide('projectList', projectList)
+provide('orderCount', { regions, totalAmount, addNewOrder })
 
-const getOrderStatistic = () => {
-  setTimeout(() => {
-    orderStatistic.value = OrderStatisticDemo.data
-    isLoading.value = false
-  }, 1000)
+const getOrderStatistic = async () => {
+  const orderRes = await orderStatisticApi()
+  orderStatistic.value = orderRes.data
+
+  isLoading.value = false
 }
-
-// watch(orderStatistic.value, () => {
-// })
 
 getOrderStatistic()
 
@@ -88,10 +94,10 @@ const initHtmlFontSize = () => {
 const { design, screen, minScreen, contrastRatio } = useScreen(initHtmlFontSize)
 // console.log('user-screnn', design, screen, minScreen, contrastRatio)
 
+setScreenMode('AdptMultiDevice')
 onMounted(() => {
-  setScreenMode('AdptMultiDevice')
   // setTimeout(() => {
-  //   isLoading.value = false
+  //
   // }, 2000)
 })
 </script>
@@ -118,7 +124,7 @@ onMounted(() => {
         </BorderBox1>
       </div>
     </section>
-    <!-- <Loading v-if="isLoading" /> -->
+    <Loading v-if="isLoading" />
   </div>
 </template>
 
