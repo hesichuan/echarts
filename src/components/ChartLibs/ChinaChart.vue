@@ -16,7 +16,12 @@ const option = computed(() => {
       }
     },
     tooltip: {
-      show: true
+      show: true,
+      trigger: 'item',
+      formatter: function (params) {
+        console.log('params.', params)
+        return params?.data?.num || '--'
+      }
     },
     // legend: {
     //   orient: 'vertical',
@@ -122,22 +127,22 @@ const option = computed(() => {
         label: { normal: { show: true, position: 'bottom', formatter: '{b}' } },
         itemStyle: { normal: { color: '#3ed4ff' } },
         data: [
-          { name: '新乡', value: [116.402217, 35.311657, 40] },
-          { name: '呼和浩特', value: [111.4124, 40.4901, 90] },
-          { name: '哈尔滨', value: [127.9688, 45.368, 90] },
+          { name: '新乡', value: [116.402217, 35.311657, 40], num: '30' }, // 0: 经度、1：纬度、2：“显示点的大小”
+          { name: '呼和浩特', value: [111.4124, 40.4901, 90], num: '60' },
+          { name: '哈尔滨', value: [127.9688, 45.368, 90], num: '999' },
           { name: '西安', value: [109.1162, 34.2004, 60] },
-          { name: '武汉', value: [114.3896, 30.6628, 50] },
-          { name: '沈阳', value: [123.1238, 42.1216, 20] },
+          { name: '武汉', value: [114.3896, 30.6628, 50], num: '99' },
+          { name: '沈阳', value: [123.1238, 42.1216, 20], num: '10000' },
           { name: '成都', value: [103.9526, 30.7617, 10] },
           {
             name: '乌鲁木齐',
             value: [87.617733, 43.792818, 40],
-            num: 111,
+            num: '111',
             label: {
               normal: {
                 show: true,
                 formatter: function (params) {
-                  // console.log('params', params)
+                  console.log('params', params)
                   return params.name + '--' + params.data.num //地图上展示文字 + 数值
                 }
               }

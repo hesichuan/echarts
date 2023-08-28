@@ -136,7 +136,7 @@ const option = computed(() => {
         show: true,
         textStyle: {
           color: '#0b78d5', //X轴文字颜色
-          fontSize: calcFont(20)
+          fontSize: calcFont(14)
         },
         margin: calcFont(20),
         interval: 0
