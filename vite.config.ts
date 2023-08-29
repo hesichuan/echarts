@@ -43,6 +43,15 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
         },
       },
     },
+    build: {
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_debugger: env.VITE_DROP_DEBUGGER === 'true',
+          drop_console: env.VITE_DROP_CONSOLE === 'true'
+        }
+      },
+    },
     server: {
       host: '0.0.0.0',
       port: 8080,
