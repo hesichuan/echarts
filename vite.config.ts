@@ -21,6 +21,8 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
     env = loadEnv(mode, root)
   }
 
+  console.log('env', env)
+
   return {
     base: env.VITE_BASE_PATH,
     plugins: [
@@ -28,9 +30,14 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
       vueJsx(),
       viteMockServe({
         ignore: /^\_/,
-        mockPath: './src/mock',
+        mockPath: 'mock',
         localEnabled: !isBuild,
-        prodEnabled: env.USE_CHUNK_MOCK === 'true'
+        prodEnabled: env.VITE_USE_CHUNK_MOCK === 'true',
+        injectCode: `
+          import { setupProdMockServer } from '../mock/_createProductionServer'
+  
+          setupProdMockServer()
+          `
       }),
       viteCompression({
         disable: false,

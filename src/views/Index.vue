@@ -12,7 +12,6 @@ import RightContent from './components/RightContent.vue'
 
 // 接口
 // import { OrderStatisticDemo } from '@/utils/demo'
-import orderKanbanDemo from '@/mock/orderKanbanData'
 import { orderStatisticApi, orderKanbanDataApi } from '@/api'
 
 const VITE_ENV = import.meta.env

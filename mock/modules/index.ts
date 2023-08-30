@@ -1,7 +1,7 @@
 import type { MockMethod } from "vite-plugin-mock";
-import { config } from "../config/axios/config";
+import { config } from "../../src/config/axios/config";
 
-import orderKanbanData from "./orderKanbanData";
+import orderKanbanData from "../json/orderKanbanData";
 // import getChinaGeoJson from '/public/china_geo.json'
 
 const { result_code } = config;
