@@ -12,7 +12,10 @@ import RightContent from './components/RightContent.vue'
 
 // 接口
 // import { OrderStatisticDemo } from '@/utils/demo'
-import { orderStatisticApi } from '@/api'
+import orderKanbanDemo from '@/mock/orderKanbanData'
+import { orderStatisticApi, orderKanbanDataApi } from '@/api'
+
+const VITE_ENV = import.meta.env
 
 const { useScreen, useCommon } = hooks
 const { setScreenMode } = useCommon()
@@ -36,10 +39,23 @@ provide('projectList', projectList)
 provide('orderCount', { regions, totalAmount, addNewOrder })
 
 const getOrderStatistic = async () => {
-  const orderRes = await orderStatisticApi()
-  orderStatistic.value = orderRes.data
+  let orderRes = {}
+  if (VITE_ENV.VITE_API_BASEPATH === 'test') {
+    orderRes = await orderKanbanDataApi()
+    orderStatistic.value = orderRes.data
+    isLoading.value = false
+    // setTimeout(() => {
+    //   orderRes = orderKanbanDemo
+    //   orderStatistic.value = orderRes.data
+    //   isLoading.value = false
+    // }, 1000)
+  } else {
+    orderRes = await orderStatisticApi()
+    orderStatistic.value = orderRes.data
+    isLoading.value = false
+  }
 
-  isLoading.value = false
+  // console.log('orderStatistic', orderStatistic.value)
 }
 
 getOrderStatistic()

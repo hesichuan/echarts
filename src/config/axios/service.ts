@@ -84,8 +84,10 @@ service.interceptors.response.use(
         router.push(`/`)
         // router.push(`/login?redirect=${currentRoute.value}`)
       }
+    } else if(response.config.url === '/china_geo.json'){
+      return response.data
     } else {
-      console.log(response.data.errorMessage)
+      console.log('拦截器返回错误：', response)
       return Promise.reject(response?.data || 'response-error')
     }
   },

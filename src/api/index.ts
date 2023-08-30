@@ -12,3 +12,17 @@ export const orderStatisticApi = () => {
 export const deviceStatisticApi = () => {
   return request.get({ url: `/customer/device/deviceKanbanData` })
 }
+
+
+/****
+ * 
+ * @description MOCK-data
+ * 
+ */
+export const orderKanbanDataApi = () => {
+  return request.get({ url: `/mock/api/orderKanbanApi` })
+}
+// 本地json文件
+export const getChinaGeoJson = () => {
+  return request.get({ url: `/mock/api/chinaGeoApi` })
+}

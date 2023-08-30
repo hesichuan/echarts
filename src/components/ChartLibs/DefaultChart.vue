@@ -7,7 +7,9 @@ import echarts from '@/utils/echarts'
 
 import hooks from '@/hooks'
 
-import JEOJSON from '/public/china_geo.json'
+import { getChinaGeoJson } from '@/api'
+
+import JEOJSON from '@/assets/json/china_geo.json'
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
@@ -67,13 +69,19 @@ const outoPaly = (myChart) => {
   }, 2000)
 }
 
-const init = () => {
+const init = async () => {
   myChart.value = markRaw(echarts.init(chartDom.value))
 
   const option = props.option
   option.title = chartTitle.value
 
-  if (props.type === 'map') echarts.registerMap('china', JEOJSON)
+  if (props.type === 'map') {
+    // const JEOJSON = await getChinaGeoJson().catch((err) => {
+    //   console.log('JEOJSON-err', err)
+    // })
+
+    echarts.registerMap('china', JEOJSON)
+  }
   myChart.value.setOption(option)
 
   //过渡完成后开始动画

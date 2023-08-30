@@ -8,7 +8,7 @@ const loadFinish = ref(false)
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
-const projectList = ref({})
+const projectList = ref([])
 
 const legendLabel = {
   first: '设备数',
@@ -55,8 +55,12 @@ const option = computed(() => {
     title: {
       top: 'auto',
       text: '项目统计图',
-      // left: '5%',
-      bottom: 0
+      left: '5%',
+      textStyle: {
+        fontSize: calcFont(14),
+        color: '#fff'
+      }
+      // bottom: 0
     },
     // 图例
     legend: {
@@ -103,26 +107,26 @@ const option = computed(() => {
           // 分割指标名后，文字样式
           rich: {
             a: {
-              fontSize: calcFont(20), // 标题名称
-              lineHeight: calcFont(32)
+              fontSize: calcFont(16), // 标题名称
+              lineHeight: calcFont(25)
             },
             b: {
-              fontSize: calcFont(18), // 第一个指标
-              lineHeight: calcFont(32)
+              fontSize: calcFont(16), // 第一个指标
+              lineHeight: calcFont(25)
             },
             c: {
-              fontSize: calcFont(18), // 第一个圆点背景
+              fontSize: calcFont(16), // 第一个圆点背景
               color: '#478DFF',
-              lineHeight: calcFont(32)
+              lineHeight: calcFont(25)
             },
             d: {
-              fontSize: calcFont(18), // 第二个圆点背景
+              fontSize: calcFont(16), // 第二个圆点背景
               color: '#1FD9D1',
-              lineHeight: calcFont(32)
+              lineHeight: calcFont(25)
             },
             e: {
-              fontSize: calcFont(18), // 第二个指标
-              lineHeight: calcFont(32)
+              fontSize: calcFont(16), // 第二个指标
+              lineHeight: calcFont(25)
             }
           },
           // 分割上方写的指标名。

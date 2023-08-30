@@ -3,7 +3,9 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { viteMockServe } from 'vite-plugin-mock'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import viteCompression from 'vite-plugin-compression'; // 大文件压缩.gz
 import { visualizer } from "rollup-plugin-visualizer";
 
 const root = process.cwd()
@@ -19,18 +21,29 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
     env = loadEnv(mode, root)
   }
 
-  console.log('env', env, mode)
-
   return {
     base: env.VITE_BASE_PATH,
     plugins: [
       vue(),
       vueJsx(),
+      viteMockServe({
+        ignore: /^\_/,
+        mockPath: './src/mock',
+        localEnabled: !isBuild,
+        prodEnabled: env.USE_CHUNK_MOCK === 'true'
+      }),
+      viteCompression({
+        disable: false,
+        deleteOriginFile: false, //删除源文件
+        threshold: 102400, //压缩前最小文件大小---大于1024*100（kb）的文件进行压缩
+        algorithm: 'gzip', //压缩算法
+        ext: '.gz', //文件类型
+      }),
       visualizer({
         open: true,  // 注意这里要设置为true，否则无效 
         gzipSize: true, // 分析图生成的文件名
         brotliSize: true, // 收集 brotli 大小并将其显示
-         filename: "stats.html", // 分析图生成的文件名
+        filename: "stats.html", // 分析图生成的文件名
       })
     ],
     resolve: {
@@ -51,6 +64,25 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
           },
         },
       },
+    },
+    build:{
+      // minify: 'terser',
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            if (id.includes('china_geo.json')) {
+              return 'china_geo.json';
+            }
+            if (id.includes("node_modules")) {
+              const nodeModulesArr = id.toString().split("node_modules/")
+              return nodeModulesArr[nodeModulesArr.length-1].split("/")[0].toString()
+            }
+          }
+          // manualChunks: {
+          //   echarts: ['echarts']
+          // }
+        }
+      }
     },
     server: {
       host: '0.0.0.0',

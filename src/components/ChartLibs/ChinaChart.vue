@@ -19,7 +19,6 @@ const option = computed(() => {
       show: true,
       trigger: 'item',
       formatter: function (params) {
-        console.log('params.', params)
         return params?.data?.num || '--'
       }
     },
