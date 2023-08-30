@@ -6,6 +6,7 @@ import vue from '@vitejs/plugin-vue'
 import { viteMockServe } from 'vite-plugin-mock'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import viteCompression from 'vite-plugin-compression'; // 大文件压缩.gz
+import viteImagemin from 'vite-plugin-imagemin'; // 图片压缩 https://github.com/vbenjs/vite-plugin-imagemin
 import { visualizer } from "rollup-plugin-visualizer";
 
 const root = process.cwd()
@@ -45,6 +46,36 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
         threshold: 102400, //压缩前最小文件大小---大于1024*100（kb）的文件进行压缩
         algorithm: 'gzip', //压缩算法
         ext: '.gz', //文件类型
+      }),
+      viteImagemin({
+        gifsicle: {
+          optimizationLevel: 7,
+          interlaced: false
+        },
+        optipng: {
+          optimizationLevel: 7
+        },
+        mozjpeg: {
+          quality: 20
+        },
+        pngquant: {
+          quality: [0.8, 0.9],
+          speed: 4
+        },
+        svgo: {
+          plugins: [
+            {
+              name: 'removeViewBox'
+            },
+            {
+              name: 'removeEmptyAttrs',
+              active: false
+            }
+          ]
+        },
+        // filter:(file) => {
+        //   return file.indexOf('home_3.png') === -1
+        // }
       }),
       visualizer({
         open: true,  // 注意这里要设置为true，否则无效 
