@@ -42,7 +42,12 @@ const option = computed(() => {
       top: 'auto',
       text: '区域中心统计图',
       // left: '5%',
-      bottom: 0
+      bottom: 0,
+      textStyle: {
+        fontSize: calcFont(18),
+        fontWeight: 'bolder',
+        color: '#fff' // 主标题文字颜色
+      }
     },
     tooltip: {
       show: true
@@ -61,8 +66,8 @@ const option = computed(() => {
         roam: true,
         label: {
           normal: {
-            show: true,
-            fontSize: calcFont(20)
+            show: true
+            // fontSize: calcFont(20)
           }
         },
         data: data.value

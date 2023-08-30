@@ -65,7 +65,7 @@ const option = computed(() => {
     // 图例
     legend: {
       show: true,
-      right: '5%',
+      right: '3%',
       icon: 'circle',
       data: [{ name: legendLabel.first }, { name: legendLabel.second }],
       textStyle: {
