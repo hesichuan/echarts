@@ -11,6 +11,8 @@ import { getChinaGeoJson } from '@/api'
 
 import JEOJSON from '@/assets/json/china_geo.json'
 
+const emits = defineEmits(['mapEmit'])
+
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
@@ -27,7 +29,7 @@ const commonTitle = computed(() => {
     left: 'center',
     textStyle: {
       color: '#fff',
-      fontSize: calcFont(20)
+      fontSize: calcFont(18)
     }
   }
 })
@@ -81,6 +83,8 @@ const init = async () => {
     // })
 
     echarts.registerMap('china', JEOJSON)
+
+    emits('mapEmit', JEOJSON)
   }
   myChart.value.setOption(option)
 

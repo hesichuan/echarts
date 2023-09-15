@@ -2,47 +2,47 @@ export default {
     "status": "SUCCEED",
     "data": {
         "completions": [
-            {
-                "yearMonth": "22-08",
-                "completed": 26,
-                "toBeContinued": 0,
-                "success": 100
-            },
-            {
-                "yearMonth": "22-09",
-                "completed": 19,
-                "toBeContinued": 0,
-                "success": 100
-            },
-            {
-                "yearMonth": "22-10",
-                "completed": 31,
-                "toBeContinued": 0,
-                "success": 100
-            },
-            {
-                "yearMonth": "22-11",
-                "completed": 36,
-                "toBeContinued": 0,
-                "success": 100
-            },
-            {
-                "yearMonth": "22-12",
-                "completed": 21,
-                "toBeContinued": 0,
-                "success": 100
-            },
-            {
-                "yearMonth": "23-01",
-                "completed": 6,
-                "toBeContinued": 0,
-                "success": 100
-            },
+            // {
+            //     "yearMonth": "22-08",
+            //     "completed": 26,
+            //     "toBeContinued": 0,
+            //     "success": 100
+            // },
+            // {
+            //     "yearMonth": "22-09",
+            //     "completed": 19,
+            //     "toBeContinued": 0,
+            //     "success": 100
+            // },
+            // {
+            //     "yearMonth": "22-10",
+            //     "completed": 31,
+            //     "toBeContinued": 0,
+            //     "success": 100
+            // },
+            // {
+            //     "yearMonth": "22-11",
+            //     "completed": 36,
+            //     "toBeContinued": 0,
+            //     "success": 100
+            // },
+            // {
+            //     "yearMonth": "22-12",
+            //     "completed": 21,
+            //     "toBeContinued": 0,
+            //     "success": 100
+            // },
+            // {
+            //     "yearMonth": "23-01",
+            //     "completed": 6,
+            //     "toBeContinued": 0,
+            //     "success": 100
+            // },
             {
                 "yearMonth": "23-02",
                 "completed": 45,
-                "toBeContinued": 0,
-                "success": 100
+                "toBeContinued": 40,
+                "success": 50
             },
             {
                 "yearMonth": "23-03",
@@ -58,9 +58,9 @@ export default {
             },
             {
                 "yearMonth": "23-05",
-                "completed": 27,
-                "toBeContinued": 0,
-                "success": 100
+                "completed": 80,
+                "toBeContinued": 20,
+                "success": 80
             },
             {
                 "yearMonth": "23-06",

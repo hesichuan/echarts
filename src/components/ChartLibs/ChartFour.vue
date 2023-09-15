@@ -30,7 +30,9 @@ const xAxisMonth = ref([]) // x轴
 // const completeData = ref([22, 35, 23, 40, 15, 24, 40, 21]) //柱状图数据
 // const continuData = ref([30, 30, 21, 35, 19, 17, 30, 33]) //柱状图数据
 // const succRate = ref([39, 50, 54, 49, 50, 46, 56, 54]) //折线图数据
-// xAxismonth = ref(['06-01', '06-02', '06-03', '06-04', '06-05', '06-06', '06-07', '06-08'])
+// const xAxisMonth = ref(['06-01', '06-02', '06-03', '06-04', '06-05', '06-06', '06-07', '06-08'])
+
+// loadFinish.value = true
 
 orderComplete.value = inject('orderComplete')
 
@@ -68,9 +70,6 @@ const getDeviceEchartCount = async () => {
       branchCount.value.push(bC)
       typeCount.value.push(deviceTypeCount)
     })
-    console.log('companyList.value', companyList)
-
-    console.log('getDeviceEchartCount-res', res)
   } catch (err) {}
 }
 
@@ -78,6 +77,15 @@ getDeviceEchartCount()
 
 const option = computed(() => {
   return {
+    title: {
+      text: '过去半年订单完成率',
+      top: 0
+      // left: 'center',
+      // textStyle: {
+      //   color: '#999',
+      //   fontSize: 12
+      // }
+    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -116,8 +124,8 @@ const option = computed(() => {
           textStyle: { color: '#ffffff', fontSize: calcFont(14) }
         }
       ],
-      top: '4%',
-      right: '3%',
+      top: '10%',
+      // right: '3%',
       textStyle: {
         color: '#1FC3CE',
         fontSize: calcFont(16)
@@ -136,9 +144,9 @@ const option = computed(() => {
         show: true,
         textStyle: {
           color: '#0b78d5', //X轴文字颜色
-          fontSize: calcFont(14)
+          fontSize: calcFont(12)
         },
-        margin: calcFont(20),
+        // margin: calcFont(20),
         interval: 0
       }
     },
@@ -251,6 +259,7 @@ const option = computed(() => {
           }
         },
         data: continuData.value,
+        // data: continuData.value,
         label: {
           show: true,
           position: 'top',

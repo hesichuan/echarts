@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
+import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 import ChartThree from '@/components/ChartLibs/ChartThree.vue'
 
 import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
@@ -8,7 +9,8 @@ import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
 <template>
   <div class="left-content">
     <div class="left-content__item">
-      <CompanyDevice />
+      <!-- <CompanyDevice /> -->
+      <ChartFour />
     </div>
     <div class="left-content__item">
       <OrderCarousel />

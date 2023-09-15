@@ -4,8 +4,72 @@ import { ref, unref, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
+import JEOJSON from '@/assets/json/china_geo.json'
+
+import echarts from '@/utils/echarts'
+
+const mapDeviceNum = ref([]) as any
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
+const demoData = [
+  {
+    name: '西藏',
+    deviceNum: '29'
+  },
+  {
+    name: '青海',
+    deviceNum: '20'
+  },
+  {
+    name: '陕西',
+    deviceNum: '80'
+  },
+  {
+    name: '山东',
+    deviceNum: '50'
+  },
+  {
+    name: '北京',
+    deviceNum: '2'
+  }
+]
+const mapEmitHandle = (jeoJson: any) => {
+  var mapFeatures = jeoJson.features
+  mapFeatures.forEach(function (v) {
+    // 地区名称
+    var name = v.properties.name
+    // 地区经中心经纬度
+    var geo = v.properties.center.concat([40])
+    for (let i = 0; i < demoData.length; i++) {
+      const item = demoData[i]
+      if (name.indexOf(item.name) !== -1) {
+        const deviceNum = item.deviceNum
+        mapDeviceNum.value.push({
+          name,
+          deviceNum,
+          value: geo
+          // label: {
+          //   normal: {
+          //     show: true,
+          //     formatter: function (params) {
+          //       console.log('params', params)
+          //       return params.name + '--' + params.data.deviceNum //地图上展示文字 + 数值
+          //     }
+          //   }
+          // }
+        })
+        break
+      }
+    }
+  })
+  console.log('jeoJson-arr', mapDeviceNum.value)
+}
+
+const packageData = (data) => {
+  return []
+}
+
+// packageData()
 
 const option = computed(() => {
   return {
@@ -19,7 +83,7 @@ const option = computed(() => {
       show: true,
       trigger: 'item',
       formatter: function (params) {
-        return params?.data?.num || '--'
+        return `设备数量：${params?.data?.deviceNum || '--'}`
       }
     },
     // legend: {
@@ -125,29 +189,31 @@ const option = computed(() => {
         rippleEffect: { brushType: 'stroke' },
         label: { normal: { show: true, position: 'bottom', formatter: '{b}' } },
         itemStyle: { normal: { color: '#3ed4ff' } },
-        data: [
-          { name: '新乡', value: [116.402217, 35.311657, 40], num: '30' }, // 0: 经度、1：纬度、2：“显示点的大小”
-          { name: '呼和浩特', value: [111.4124, 40.4901, 90], num: '60' },
-          { name: '哈尔滨', value: [127.9688, 45.368, 90], num: '999' },
-          { name: '西安', value: [109.1162, 34.2004, 60] },
-          { name: '武汉', value: [114.3896, 30.6628, 50], num: '99' },
-          { name: '沈阳', value: [123.1238, 42.1216, 20], num: '10000' },
-          { name: '成都', value: [103.9526, 30.7617, 10] },
-          {
-            name: '乌鲁木齐',
-            value: [87.617733, 43.792818, 40],
-            num: '111',
-            label: {
-              normal: {
-                show: true,
-                formatter: function (params) {
-                  console.log('params', params)
-                  return params.name + '--' + params.data.num //地图上展示文字 + 数值
-                }
-              }
-            }
-          }
-        ],
+        data: mapDeviceNum.value,
+        // data: [
+        //   { name: '北京', value: [116.405285, 39.904989, 40], num: '88' },
+        //   { name: '新乡', value: [116.402217, 35.311657, 40], num: '30' }, // 0: 经度、1：纬度、2：“显示点的大小”
+        //   { name: '呼和浩特', value: [111.4124, 40.4901, 90], num: '60' },
+        //   { name: '哈尔滨', value: [127.9688, 45.368, 90], num: '999' },
+        //   { name: '西安', value: [109.1162, 34.2004, 60] },
+        //   { name: '武汉', value: [114.3896, 30.6628, 50], num: '99' },
+        //   { name: '沈阳', value: [123.1238, 42.1216, 20], num: '10000' },
+        //   { name: '成都', value: [103.9526, 30.7617, 10] },
+        //   {
+        //     name: '乌鲁木齐',
+        //     value: [87.617733, 43.792818, 40],
+        //     num: '111',
+        //     label: {
+        //       normal: {
+        //         show: true,
+        //         formatter: function (params) {
+        //           console.log('params', params)
+        //           return params.name + '--' + params.data.num //地图上展示文字 + 数值
+        //         }
+        //       }
+        //     }
+        //   }
+        // ],
         symbolSize: function (val) {
           return val[2] / 10
         }
@@ -181,7 +247,13 @@ const option = computed(() => {
 
 <template>
   <!-- <div ref="elRef" id="main"></div> -->
-  <DefaultChart :option="option" :autoplay="true" :autoplayLen="8" :type="'map'" />
+  <DefaultChart
+    :option="option"
+    :autoplay="true"
+    :autoplayLen="8"
+    :type="'map'"
+    @mapEmit="mapEmitHandle"
+  />
 </template>
 
 <style lang="less" scoped></style>
