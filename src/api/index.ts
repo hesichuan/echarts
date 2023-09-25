@@ -22,7 +22,10 @@ export const deviceStatisticApi = () => {
 export const orderKanbanDataApi = () => {
   return request.get({ url: `/mock/api/orderKanbanApi` })
 }
-// 本地json文件
+export const deviceKanbanDataApi = () => {
+  return request.get({ url: `/mock/api/deviceKanbanApi` })
+}
+// 本地json文件 
 export const getChinaGeoJson = () => {
   return request.get({ url: `/mock/api/chinaGeoApi` })
 }

@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, unref, watch, computed, inject } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
+const deviceCategories = ref([])
+
+const loadFinish = ref(false)
 
 let bgColor = '#fff'
 let title = '总量'
@@ -63,6 +66,27 @@ let echartData = [
   }
 ]
 
+const categoriesList = inject('deviceCategories', [])
+
+watch(
+  () => categoriesList,
+  (newVal) => {
+    if (newVal !== undefined) {
+      deviceCategories.value = unref(newVal)?.map((item) => {
+        return {
+          name: item.typeName,
+          value: item.num
+        }
+      })
+    }
+
+    loadFinish.value = true
+  },
+  {
+    deep: true
+  }
+)
+
 let formatNumber = function (num) {
   let reg = /(?=(\B)(\d{3})+$)/g
   return num.toString().replace(reg, ',')
@@ -77,46 +101,55 @@ const option = computed(() => {
     tooltip: {
       trigger: 'item'
     },
-    title: [
-      {
-        text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
-        top: 'center',
-        left: 'center',
-        textStyle: {
-          rich: {
-            name: {
-              fontSize: calcFont(20),
-              fontWeight: 'normal',
-              color: '#000',
-              padding: [10, 0]
-            },
-            val: {
-              fontSize: 32,
-              fontWeight: 'bolder',
-              color: '#000'
-            }
-          }
-        }
-      },
-      {
-        text: '单位：个',
-        top: 20,
-        left: 20,
-        textStyle: {
-          fontSize: 14,
-          color: '#666666',
-          fontWeight: 400
-        },
-        show: false
-      }
-    ],
+    title: {
+      text: '设备类型统计图',
+      top: 0
+      // left: 'center',
+      // textStyle: {
+      //   color: '#999',
+      //   fontSize: 12
+      // }
+    },
+    // title: [
+    //   {
+    //     text: '{name|' + title + '}\n{val|' + formatNumber(total) + '}',
+    //     top: 'center',
+    //     left: 'center',
+    //     textStyle: {
+    //       rich: {
+    //         name: {
+    //           fontSize: calcFont(20),
+    //           fontWeight: 'normal',
+    //           color: '#000',
+    //           padding: [10, 0]
+    //         },
+    //         val: {
+    //           fontSize: 32,
+    //           fontWeight: 'bolder',
+    //           color: '#000'
+    //         }
+    //       }
+    //     }
+    //   },
+    //   {
+    //     text: '单位：个',
+    //     top: 20,
+    //     left: 20,
+    //     textStyle: {
+    //       fontSize: 14,
+    //       color: '#666666',
+    //       fontWeight: 400
+    //     },
+    //     show: false
+    //   }
+    // ],
     series: [
       {
         type: 'pie',
         roseType: 'radius',
         radius: ['25%', '60%'],
         center: ['50%', '50%'],
-        data: echartData,
+        data: unref(deviceCategories),
         itemStyle: {
           normal: {
             borderColor: bgColor,
@@ -124,8 +157,8 @@ const option = computed(() => {
           }
         },
         labelLine: {
-          length: 20,
-          length2: 50,
+          length: calcFont(20),
+          length2: calcFont(30),
           lineStyle: {
             // color: '#e6e6e6'
           }
@@ -134,6 +167,7 @@ const option = computed(() => {
           normal: {
             formatter: (params) => {
               return (
+                // '{icon|●}{name|' + params.name + '}\n{value|' + formatNumber(params.value) + '}'
                 '{icon|●}{name|' + params.name + '}\n{value|' + formatNumber(params.value) + '}'
               )
             },
@@ -144,7 +178,7 @@ const option = computed(() => {
                 color: 'inherit'
               },
               name: {
-                fontSize: calcFont(20),
+                fontSize: calcFont(16),
                 padding: [0, 0, 0, calcFont(4)],
                 color: '#fff'
               },
@@ -165,7 +199,7 @@ const option = computed(() => {
 </script>
 
 <template>
-  <DefaultChart :option="option" :autoplay="false" />
+  <DefaultChart :option="option" v-if="loadFinish" :autoplay="true" />
 </template>
 
 <style lang="less" scoped></style>

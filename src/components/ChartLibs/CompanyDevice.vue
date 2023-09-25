@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { ref, unref, watch, computed, inject } from 'vue'
 import DefaultChart from './DefaultChart.vue'
-
-import { deviceEchartCountApi } from '@/api'
-
 import hooks from '@/hooks'
-
-import { chartOneData } from '@/utils/demo'
 
 const loadFinish = ref(false)
 
@@ -16,26 +11,26 @@ const branchCount = ref<Array<number>>([]) // 品牌数量
 const typeCount = ref<Array<number>>([]) // 类型数量
 
 const { useModuleData } = hooks
-const { calcFont, contrastRatio } = useModuleData(null)
+const { calcFont } = useModuleData(null)
 
-const getDeviceEchartCount = async () => {
-  try {
-    // const res = await deviceEchartCountApi()
-    const res = chartOneData
-    res?.data.forEach((item: any) => {
-      const { deviceTypeCount, orgName, deviceCount: dC, brandCount: bC } = item
-      companyList.value.push(orgName)
+const deviceCompany = inject('deviceCompany', [])
+
+watch(
+  () => deviceCompany,
+  (newVal) => {
+    unref(newVal)?.forEach((item: any) => {
+      const { deviceTypeNum, unitName, deviceNum: dC, brandNum: bC } = item
+      companyList.value.push(unitName)
       deviceCount.value.push(dC)
       branchCount.value.push(bC)
-      typeCount.value.push(deviceTypeCount)
+      typeCount.value.push(deviceTypeNum)
     })
-    console.log('companyList.value', companyList)
     loadFinish.value = true
-    console.log('getDeviceEchartCount-res', res)
-  } catch (err) {}
-}
-
-getDeviceEchartCount()
+  },
+  {
+    deep: true
+  }
+)
 
 const option = computed(() => {
   return {

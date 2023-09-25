@@ -2,6 +2,7 @@ import type { MockMethod } from "vite-plugin-mock";
 import { config } from "../../src/config/axios/config";
 
 import orderKanbanData from "../json/orderKanbanData";
+import deviceKanbanData from "../json/deviceKanbanData"
 // import getChinaGeoJson from '/public/china_geo.json'
 
 const { result_code } = config;
@@ -12,6 +13,13 @@ export default [
         method: 'get',
         response: () => {
           return orderKanbanData;
+        },
+      },
+      {
+        url: '/mock/api/deviceKanbanApi',
+        method: 'get',
+        response: () => {
+          return deviceKanbanData;
         },
       },
       {

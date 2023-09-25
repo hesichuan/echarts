@@ -12,7 +12,12 @@ import RightContent from './components/RightContent.vue'
 
 // 接口
 // import { OrderStatisticDemo } from '@/utils/demo'
-import { orderStatisticApi, orderKanbanDataApi } from '@/api'
+import {
+  orderStatisticApi,
+  orderKanbanDataApi,
+  deviceStatisticApi,
+  deviceKanbanDataApi
+} from '@/api'
 
 const VITE_ENV = import.meta.env
 
@@ -20,44 +25,53 @@ const { useScreen, useCommon } = hooks
 const { setScreenMode } = useCommon()
 const isLoading = ref(true)
 const orderStatistic = ref({})
+const deviceStatistic = ref({})
 
 // 中上
 const regions = computed(() => orderStatistic.value.regions)
 const addNewOrder = computed(() => orderStatistic.value.addNewOrder)
 const totalAmount = computed(() => orderStatistic.value.totalAmount)
-// 右2
-const orderComplete = computed(() => orderStatistic.value.completions)
+
 // 左1
+const orderComplete = computed(() => orderStatistic.value.completions)
+// 左2
 const orderCarousel = computed(() => orderStatistic.value.unitUseOrder)
 // 左3
 const projectList = computed(() => orderStatistic.value.projectInfoList)
+// 中2
+const deviceMapCount = computed(() => deviceStatistic.value.deviceLocationAndNumList)
+// 右1
+const deviceCategories = computed(() => deviceStatistic.value.typeNameAndNums)
+// 右2
+const deviceCompany = computed(() => deviceStatistic.value.unitDeviceInfo)
+// 右3
 
 provide('orderComplete', orderComplete)
 provide('orderCarousel', orderCarousel)
 provide('projectList', projectList)
 provide('orderCount', { regions, totalAmount, addNewOrder })
+provide('deviceCategories', deviceCategories)
+provide('deviceCompany', deviceCompany)
+provide('deviceMapCount', deviceMapCount)
 
 const getOrderStatistic = async () => {
-  let orderRes = {}
-  if (VITE_ENV.VITE_API_BASEPATH === 'test') {
-    orderRes = await orderKanbanDataApi()
-    orderStatistic.value = orderRes.data
-    isLoading.value = false
-    // setTimeout(() => {
-    //   orderRes = orderKanbanDemo
-    //   orderStatistic.value = orderRes.data
-    //   isLoading.value = false
-    // }, 1000)
-  } else {
-    orderRes = await orderStatisticApi()
-    orderStatistic.value = orderRes.data
-    isLoading.value = false
-  }
+  const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? orderKanbanDataApi : orderStatisticApi
+  const orderRes = await reqApi()
+  orderStatistic.value = orderRes.data
+
+  isLoading.value = false
 
   // console.log('orderStatistic', orderStatistic.value)
 }
 
+const getDeviceStatistic = async () => {
+  const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? deviceKanbanDataApi : deviceStatisticApi
+  const deviceRes = await reqApi()
+  deviceStatistic.value = deviceRes.data
+}
+
 getOrderStatistic()
+getDeviceStatistic()
 
 // 制定html根字体大小
 const initHtmlFontSize = () => {
@@ -110,11 +124,6 @@ const { design, screen, minScreen, contrastRatio } = useScreen(initHtmlFontSize)
 // console.log('user-screnn', design, screen, minScreen, contrastRatio)
 
 setScreenMode('AdptMultiDevice')
-onMounted(() => {
-  // setTimeout(() => {
-  //
-  // }, 2000)
-})
 </script>
 
 <template>

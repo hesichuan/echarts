@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, unref, computed } from 'vue'
+import { ref, unref, computed, watch, inject, watchEffect } from 'vue'
 
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
@@ -8,9 +8,14 @@ import JEOJSON from '@/assets/json/china_geo.json'
 
 import echarts from '@/utils/echarts'
 
+const loadFinish = ref(false)
 const mapDeviceNum = ref([]) as any
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
+const geoJSON = ref(null)
+
+const deviceMapCount = inject('deviceMapCount', [])
+
 const demoData = [
   {
     name: '西藏',
@@ -33,15 +38,34 @@ const demoData = [
     deviceNum: '2'
   }
 ]
+
+watch(
+  [geoJSON, () => deviceMapCount],
+  (val) => {
+    const [flag, arr] = val
+    if (flag && unref(arr)?.length) {
+      packageData()
+    }
+  },
+  {
+    deep: true
+  }
+)
+
 const mapEmitHandle = (jeoJson: any) => {
-  var mapFeatures = jeoJson.features
+  geoJSON.value = jeoJson
+}
+
+const packageData = () => {
+  var mapFeatures = unref(geoJSON).features
+  console.log('unref(deviceMapCount.value)', unref(deviceMapCount.value))
   mapFeatures.forEach(function (v) {
     // 地区名称
     var name = v.properties.name
     // 地区经中心经纬度
     var geo = v.properties.center.concat([40])
-    for (let i = 0; i < demoData.length; i++) {
-      const item = demoData[i]
+    for (let i = 0; i < unref(deviceMapCount.value)?.length; i++) {
+      const item = unref(deviceMapCount.value)[i]
       if (name.indexOf(item.name) !== -1) {
         const deviceNum = item.deviceNum
         mapDeviceNum.value.push({
@@ -62,11 +86,8 @@ const mapEmitHandle = (jeoJson: any) => {
       }
     }
   })
-  console.log('jeoJson-arr', mapDeviceNum.value)
-}
-
-const packageData = (data) => {
-  return []
+  loadFinish.value = true
+  console.log('result-mapDeviceNum', mapDeviceNum.value)
 }
 
 // packageData()
