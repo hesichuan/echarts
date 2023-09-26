@@ -19,11 +19,11 @@ watch(
   () => deviceCompany,
   (newVal) => {
     unref(newVal)?.forEach((item: any) => {
-      const { deviceTypeNum, unitName, deviceNum: dC, brandNum: bC } = item
-      companyList.value.push(unitName)
+      const { deviceTypeCount: dTC, orgName, deviceCount: dC, brandCount: bC } = item
+      companyList.value.push(orgName)
       deviceCount.value.push(dC)
       branchCount.value.push(bC)
-      typeCount.value.push(deviceTypeNum)
+      typeCount.value.push(dTC)
     })
     loadFinish.value = true
   },

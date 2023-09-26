@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, provide, watch, computed } from 'vue'
+import { onMounted, ref, provide, watch, computed, onUnmounted } from 'vue'
 import { BorderBox1 } from '@dataview/datav-vue3'
 import hooks from '@/hooks'
 
@@ -16,7 +16,8 @@ import {
   orderStatisticApi,
   orderKanbanDataApi,
   deviceStatisticApi,
-  deviceKanbanDataApi
+  deviceKanbanDataApi,
+  remandOrderDataApi
 } from '@/api'
 
 const VITE_ENV = import.meta.env
@@ -26,6 +27,9 @@ const { setScreenMode } = useCommon()
 const isLoading = ref(true)
 const orderStatistic = ref({})
 const deviceStatistic = ref({})
+const remandOrderList = ref([])
+// 需求单轮巡
+const loopTimer = ref()
 
 // 中上
 const regions = computed(() => orderStatistic.value.regions)
@@ -45,6 +49,8 @@ const deviceCategories = computed(() => deviceStatistic.value.typeNameAndNums)
 // 右2
 const deviceCompany = computed(() => deviceStatistic.value.unitDeviceInfo)
 // 右3
+// 中下
+const remandList = computed(() => remandOrderList.value)
 
 provide('orderComplete', orderComplete)
 provide('orderCarousel', orderCarousel)
@@ -53,6 +59,7 @@ provide('orderCount', { regions, totalAmount, addNewOrder })
 provide('deviceCategories', deviceCategories)
 provide('deviceCompany', deviceCompany)
 provide('deviceMapCount', deviceMapCount)
+provide('remandList', remandList)
 
 const getOrderStatistic = async () => {
   const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? orderKanbanDataApi : orderStatisticApi
@@ -60,8 +67,6 @@ const getOrderStatistic = async () => {
   orderStatistic.value = orderRes.data
 
   isLoading.value = false
-
-  // console.log('orderStatistic', orderStatistic.value)
 }
 
 const getDeviceStatistic = async () => {
@@ -70,8 +75,26 @@ const getDeviceStatistic = async () => {
   deviceStatistic.value = deviceRes.data
 }
 
+const getRemandOrderList = async () => {
+  const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? remandOrderDataApi : orderStatisticApi
+  const deviceRes = await reqApi({ type: 1 })
+  remandOrderList.value = deviceRes.data
+}
+// 订单
 getOrderStatistic()
+// 设备
 getDeviceStatistic()
+// 需求单
+getRemandOrderList()
+
+loopTimer.value = setInterval(() => {
+  getRemandOrderList()
+}, 1000 * 60 * 1)
+
+// setTimeout(() => {
+//   // 需求单
+//   getRemandOrderList()
+// }, 5000)
 
 // 制定html根字体大小
 const initHtmlFontSize = () => {
@@ -121,9 +144,12 @@ const initHtmlFontSize = () => {
 }
 
 const { design, screen, minScreen, contrastRatio } = useScreen(initHtmlFontSize)
-// console.log('user-screnn', design, screen, minScreen, contrastRatio)
 
 setScreenMode('AdptMultiDevice')
+
+onUnmounted(() => {
+  clearInterval(loopTimer.value)
+})
 </script>
 
 <template>
@@ -176,6 +202,9 @@ setScreenMode('AdptMultiDevice')
   flex: 1;
   padding: calc(10 * var(--app-base-unit));
   box-sizing: border-box;
+  > div {
+    overflow: hidden;
+  }
   .aside-lf {
     flex: 2;
   }

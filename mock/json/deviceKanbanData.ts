@@ -3,68 +3,82 @@ export default {
     "data": {
         "unitDeviceInfo": [
             {
-                "deviceNum": 35,
-                "brandNum": 20,
-                "unitName": "工程建设公司",
-                "deviceTypeNum": 30
+                "deviceTypeCount": 22,
+                "orgName": "工程公司设备租赁分公司",
+                "deviceCount": 570,
+                "brandCount": 16
             },
             {
-                "deviceNum": 36,
-                "brandNum": 20,
-                "unitName": "河北天远",
-                "deviceTypeNum": 10
+                "deviceTypeCount": 29,
+                "orgName": "华北工程建设公司",
+                "deviceCount": 365,
+                "brandCount": 17
             },
             {
-                "deviceNum": 70,
-                "brandNum": 10,
-                "unitName": "山河智能",
-                "deviceTypeNum": 9
+                "deviceTypeCount": 5,
+                "orgName": "华北利星行",
+                "deviceCount": 38,
+                "brandCount": 1
             },
             {
-                "deviceNum": 38,
-                "brandNum": 1,
-                "unitName": "华北利星行",
-                "deviceTypeNum": 5
+                "deviceTypeCount": 5,
+                "orgName": "天远",
+                "deviceCount": 36,
+                "brandCount": 2
             },
             {
-                "deviceNum": 29,
-                "brandNum": 1,
-                "unitName": "徐工通联",
-                "deviceTypeNum": 5
+                "deviceTypeCount": 6,
+                "orgName": "四川建设工程责任公司",
+                "deviceCount": 34,
+                "brandCount": 6
             },
+            {
+                "deviceTypeCount": 5,
+                "orgName": "徐工通联",
+                "deviceCount": 29,
+                "brandCount": 1
+            }
         ],
         "typeNameAndNums": [
             {
-                "typeName": "工程机械-挖掘机",
-                "num": 203
-            },
-            {
-                "typeName": "工程机械-管道施工机械-吊管机",
+                "typeName": "吊管机",
                 "num": 389
             },
             {
-                "typeName": "工程机械-管道施工机械-坡口机",
+                "typeName": "坡口机",
                 "num": 68
             },
             {
-                "typeName": "焊接切割设备-专用焊接设备-管道焊接专用设备-内焊机",
+                "typeName": "吊篮",
+                "num": 6
+            },
+            {
+                "typeName": "挖掘机",
+                "num": 203
+            },
+            {
+                "typeName": "土方铲运机械",
+                "num": 2
+            },
+            {
+                "typeName": "内焊机",
                 "num": 21
             },
             {
-                "typeName": "动力设备-发电机组",
+                "typeName": "全位置自动焊机",
+                "num": 122
+            },
+            {
+                "typeName": "发电机组",
                 "num": 182
             },
             {
-                "typeName": "动力设备-发电机组-移动电站",
-                "num": 157
+                "typeName": "起重搬运机械",
+                "num": 39
             },
             {
-                "typeName": "动力设备-气体压缩机",
-                "num": 57
-            },
-            {
-                "typeName": "焊接切割设备",
-                "num": 146
+                "typeName": "钻井设备",
+                "num": 2
             }
         ],
         "deviceLocationAndNumList": [
