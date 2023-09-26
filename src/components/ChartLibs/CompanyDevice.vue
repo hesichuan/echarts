@@ -157,75 +157,75 @@ const option = computed(() => {
       }
     ],
     series: [
-      {
-        // 下面
-        data: [1, 1, 1, 1, 1],
-        color: '#1E7EFF',
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: calcFont(48),
-        barWidth: calcFont(48),
-        symbol: 'diamond',
-        symbolOffset: ['-50%', '50%'],
-        zlevel: 3,
-        symbolSize: [calcFont(32), calcFont(12)] // 菱形宽高
-      },
-      {
-        // 上面
-        data: deviceCount.value,
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: calcFont(48),
-        color: '#1E7EFF',
-        symbolPosition: 'end',
-        symbol: 'diamond',
-        symbolOffset: [-calcFont(24), '-50%'],
-        symbolSize: [calcFont(32), calcFont(12)],
-        zlevel: 2
-      },
-      {
-        // 阴影
-        data: deviceCount.value,
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: calcFont(48),
-        color: {
-          x: 0,
-          y: 1,
-          x2: 0,
-          y2: 0,
-          type: 'linear',
-          global: false,
-          colorStops: [
-            {
-              offset: 0,
-              color: 'rgba(0,0,0,0.2)'
-            },
-            {
-              offset: 1,
-              color: 'rgba(0,0,0,0.3)'
-            }
-          ]
-        },
-        symbolPosition: 'end',
-        symbol: 'rect',
-        symbolSize: [13, '100%'],
-        symbolOffset: [-37.699999999999996, 0],
-        zlevel: 1
-      },
+      // {
+      //   // 下面
+      //   data: [1, 1, 1, 1, 1],
+      //   color: '#1E7EFF',
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barWidth: calcFont(26),
+      //   symbol: 'diamond',
+      //   symbolPosition: 'start',
+      //   // symbolOffset: [0, 0],
+      //   symbolOffset: ['-55%', '50%'],
+      //   zlevel: 3,
+      //   symbolSize: [calcFont(26), calcFont(12)] // 菱形宽高
+      // },
+      // {
+      //   // 上面
+      //   data: deviceCount.value,
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: calcFont(48),
+      //   color: '#1E7EFF',
+      //   symbolPosition: 'end',
+      //   symbol: 'diamond',
+      //   symbolOffset: [-calcFont(24), '-50%'],
+      //   symbolSize: [calcFont(32), calcFont(12)],
+      //   zlevel: 2
+      // },
+      // {
+      //   // 阴影
+      //   data: deviceCount.value,
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: calcFont(48),
+      //   color: {
+      //     x: 0,
+      //     y: 1,
+      //     x2: 0,
+      //     y2: 0,
+      //     type: 'linear',
+      //     global: false,
+      //     colorStops: [
+      //       {
+      //         offset: 0,
+      //         color: 'rgba(0,0,0,0.2)'
+      //       },
+      //       {
+      //         offset: 1,
+      //         color: 'rgba(0,0,0,0.3)'
+      //       }
+      //     ]
+      //   },
+      //   symbolPosition: 'end',
+      //   symbol: 'rect',
+      //   symbolSize: [13, '100%'],
+      //   symbolOffset: [-37.699999999999996, 0],
+      //   zlevel: 1
+      // },
       {
         data: deviceCount.value,
         type: 'bar',
         name: '设备数量',
         barGap: '20%',
         barWidth: calcFont(26),
-        barMaxWidth: calcFont(48),
         label: {
           show: true,
           position: 'top',
@@ -235,7 +235,7 @@ const option = computed(() => {
             fontSize: calcFont(16)
           }
         },
-        showBackground: false,
+        showBackground: true,
         backgroundStyle: {
           color: {
             x: 0,
@@ -278,66 +278,66 @@ const option = computed(() => {
           }
         }
       },
-      {
-        data: [1, 1, 1, 1],
-        color: '#FFA75A',
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: calcFont(48),
-        symbol: 'diamond',
-        zlevel: 3,
-        symbolOffset: [calcFont(8), '50%'],
-        symbolSize: [calcFont(32), calcFont(12)]
-      },
-      {
-        data: branchCount.value,
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: calcFont(48),
-        color: '#FFA75A',
-        symbolPosition: 'end',
-        symbol: 'diamond',
-        // symbolOffset: [0, '-50%'],
-        // symbolSize: [26, 10.4],
-        symbolOffset: [calcFont(8), '-50%'],
-        symbolSize: [calcFont(32), calcFont(12)],
-        zlevel: 2
-      },
-      {
-        data: branchCount.value,
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: calcFont(48),
-        color: {
-          x: 0,
-          y: 1,
-          x2: 0,
-          y2: 0,
-          type: 'linear',
-          global: false,
-          colorStops: [
-            {
-              offset: 0,
-              color: 'rgba(0,0,0,0.2)'
-            },
-            {
-              offset: 1,
-              color: 'rgba(0,0,0,0.3)'
-            }
-          ]
-        },
-        symbolPosition: 'end',
-        symbol: 'rect',
-        symbolSize: [13, '100%'],
-        symbolOffset: [-6.5, 0],
-        zlevel: 1
-      },
+      // {
+      //   data: [1, 1, 1, 1],
+      //   color: '#FFA75A',
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: calcFont(48),
+      //   symbol: 'diamond',
+      //   zlevel: 3,
+      //   symbolOffset: [calcFont(8), '50%'],
+      //   symbolSize: [calcFont(32), calcFont(12)]
+      // },
+      // {
+      //   data: branchCount.value,
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: calcFont(48),
+      //   color: '#FFA75A',
+      //   symbolPosition: 'end',
+      //   symbol: 'diamond',
+      //   // symbolOffset: [0, '-50%'],
+      //   // symbolSize: [26, 10.4],
+      //   symbolOffset: [calcFont(8), '-50%'],
+      //   symbolSize: [calcFont(32), calcFont(12)],
+      //   zlevel: 2
+      // },
+      // {
+      //   data: branchCount.value,
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: calcFont(48),
+      //   color: {
+      //     x: 0,
+      //     y: 1,
+      //     x2: 0,
+      //     y2: 0,
+      //     type: 'linear',
+      //     global: false,
+      //     colorStops: [
+      //       {
+      //         offset: 0,
+      //         color: 'rgba(0,0,0,0.2)'
+      //       },
+      //       {
+      //         offset: 1,
+      //         color: 'rgba(0,0,0,0.3)'
+      //       }
+      //     ]
+      //   },
+      //   symbolPosition: 'end',
+      //   symbol: 'rect',
+      //   symbolSize: [13, '100%'],
+      //   symbolOffset: [-6.5, 0],
+      //   zlevel: 1
+      // },
       {
         data: branchCount.value,
         type: 'bar',
@@ -397,71 +397,70 @@ const option = computed(() => {
           }
         }
       },
-      {
-        data: [1, 1, 1, 1],
-        color: '#6ACC29',
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: calcFont(48),
-        symbol: 'diamond',
-        symbolOffset: [calcFont(40), '50%'],
-        zlevel: 3,
-        symbolSize: [calcFont(32), calcFont(12)]
-      },
-      {
-        data: typeCount.value,
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: 48,
-        color: '#6ACC29',
-        symbolPosition: 'end',
-        symbol: 'diamond',
-        symbolOffset: [calcFont(31), '-50%'],
-        symbolSize: [calcFont(32), calcFont(12)],
-        zlevel: 2
-      },
-      {
-        data: typeCount.value,
-        type: 'pictorialBar',
-        tooltip: {
-          show: false
-        },
-        barMaxWidth: 48,
-        color: {
-          x: 0,
-          y: 1,
-          x2: 0,
-          y2: 0,
-          type: 'linear',
-          global: false,
-          colorStops: [
-            {
-              offset: 0,
-              color: 'rgba(0,0,0,0.2)'
-            },
-            {
-              offset: 1,
-              color: 'rgba(0,0,0,0.3)'
-            }
-          ]
-        },
-        symbolPosition: 'end',
-        symbol: 'rect',
-        symbolSize: [13, '100%'],
-        symbolOffset: [24.700000000000003, 0],
-        zlevel: 1
-      },
+      // {
+      //   data: [1, 1, 1, 1],
+      //   color: '#6ACC29',
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: calcFont(48),
+      //   symbol: 'diamond',
+      //   symbolOffset: [calcFont(40), '50%'],
+      //   zlevel: 3,
+      //   symbolSize: [calcFont(32), calcFont(12)]
+      // },
+      // {
+      //   data: typeCount.value,
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: 48,
+      //   color: '#6ACC29',
+      //   symbolPosition: 'end',
+      //   symbol: 'diamond',
+      //   symbolOffset: [calcFont(31), '-50%'],
+      //   symbolSize: [calcFont(32), calcFont(12)],
+      //   zlevel: 2
+      // },
+      // {
+      //   data: typeCount.value,
+      //   type: 'pictorialBar',
+      //   tooltip: {
+      //     show: false
+      //   },
+      //   barMaxWidth: 48,
+      //   color: {
+      //     x: 0,
+      //     y: 1,
+      //     x2: 0,
+      //     y2: 0,
+      //     type: 'linear',
+      //     global: false,
+      //     colorStops: [
+      //       {
+      //         offset: 0,
+      //         color: 'rgba(0,0,0,0.2)'
+      //       },
+      //       {
+      //         offset: 1,
+      //         color: 'rgba(0,0,0,0.3)'
+      //       }
+      //     ]
+      //   },
+      //   symbolPosition: 'end',
+      //   symbol: 'rect',
+      //   symbolSize: [13, '100%'],
+      //   symbolOffset: [24.700000000000003, 0],
+      //   zlevel: 1
+      // },
       {
         data: typeCount.value,
         type: 'bar',
         name: '类型数量',
         barGap: '20%',
         barWidth: calcFont(26),
-        barMaxWidth: calcFont(48),
         label: {
           show: true,
           position: 'top',

@@ -40,10 +40,9 @@ const demoData = [
 ]
 
 watch(
-  [geoJSON, () => deviceMapCount],
+  () => deviceMapCount,
   (val) => {
-    const [flag, arr] = val
-    if (flag && unref(arr)?.length) {
+    if (unref(val)?.length) {
       packageData()
     }
   },
@@ -52,12 +51,12 @@ watch(
   }
 )
 
-const mapEmitHandle = (jeoJson: any) => {
-  geoJSON.value = jeoJson
+const mapEmitHandle = () => {
+  // geoJSON.value = jeoJson
 }
 
 const packageData = () => {
-  var mapFeatures = unref(geoJSON).features
+  var mapFeatures = JEOJSON.features
   console.log('unref(deviceMapCount.value)', unref(deviceMapCount.value))
   mapFeatures.forEach(function (v) {
     // 地区名称
@@ -104,7 +103,11 @@ const option = computed(() => {
       show: true,
       trigger: 'item',
       formatter: function (params) {
-        return `设备数量：${params?.data?.deviceNum || '--'}`
+        var dotHtml =
+          '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#0090ff"></span>'
+        return `${dotHtml}${params.name}</br>${params.marker}设备数量：${
+          params?.data?.deviceNum || '--'
+        }`
       }
     },
     // legend: {
@@ -270,6 +273,7 @@ const option = computed(() => {
   <!-- <div ref="elRef" id="main"></div> -->
   <DefaultChart
     :option="option"
+    v-if="loadFinish"
     :autoplay="true"
     :autoplayLen="8"
     :type="'map'"
