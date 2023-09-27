@@ -1,43 +1,17 @@
 <script setup lang="ts">
-import { ref, unref, computed, watch, inject, watchEffect } from 'vue'
+import { ref, unref, computed, watch, inject } from 'vue'
 
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
 import JEOJSON from '@/assets/json/china_geo.json'
 
-import echarts from '@/utils/echarts'
-
 const loadFinish = ref(false)
 const mapDeviceNum = ref([]) as any
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
-const geoJSON = ref(null)
 
 const deviceMapCount = inject('deviceMapCount', [])
-
-const demoData = [
-  {
-    name: '西藏',
-    deviceNum: '29'
-  },
-  {
-    name: '青海',
-    deviceNum: '20'
-  },
-  {
-    name: '陕西',
-    deviceNum: '80'
-  },
-  {
-    name: '山东',
-    deviceNum: '50'
-  },
-  {
-    name: '北京',
-    deviceNum: '2'
-  }
-]
 
 watch(
   () => deviceMapCount,
@@ -57,7 +31,6 @@ const mapEmitHandle = () => {
 
 const packageData = () => {
   var mapFeatures = JEOJSON.features
-  console.log('unref(deviceMapCount.value)', unref(deviceMapCount.value))
   mapFeatures.forEach(function (v) {
     // 地区名称
     var name = v.properties.name
@@ -71,25 +44,13 @@ const packageData = () => {
           name,
           deviceNum,
           value: geo
-          // label: {
-          //   normal: {
-          //     show: true,
-          //     formatter: function (params) {
-          //       console.log('params', params)
-          //       return params.name + '--' + params.data.deviceNum //地图上展示文字 + 数值
-          //     }
-          //   }
-          // }
         })
         break
       }
     }
   })
   loadFinish.value = true
-  console.log('result-mapDeviceNum', mapDeviceNum.value)
 }
-
-// packageData()
 
 const option = computed(() => {
   return {
