@@ -29,7 +29,7 @@ const commonTitle = computed(() => {
     left: 'center',
     textStyle: {
       color: '#fff',
-      fontSize: calcFont(18)
+      fontSize: calcFont(16)
     }
   }
 })

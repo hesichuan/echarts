@@ -12,7 +12,10 @@ export const orderStatisticApi = (params) => {
 export const deviceStatisticApi = () => {
   return request.get({ url: `/customer/device/deviceKanbanData` })
 }
-
+// // 区域中心以及设备超市数量
+// export const marketAreaListApi = (params?: { nationFlag: number | string }) => {
+//   return request.get({ url: `/customer/supermarket/list`, params })
+// }
 
 /****
  * 

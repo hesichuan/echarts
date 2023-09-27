@@ -194,6 +194,131 @@ export default {
                 ],
                 "deviceNum": 1
             }
+        ],
+        "supermarketVos": [
+            {
+                "id": 1,
+                "name": "全国",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [],
+                "nationFlag": 1,
+                "sort": 1
+            },
+            {
+                "id": 6,
+                "name": "东非分中心",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [
+                    {
+                        "id": 5,
+                        "name": "乌坦超市",
+                        "parentId": 6,
+                        "isDelete": 0,
+                        "level": 2,
+                        "children": [],
+                        "nationFlag": 0,
+                        "sort": 1
+                    }
+                ],
+                "nationFlag": 0,
+                "sort": 1
+            },
+            {
+                "id": 3,
+                "name": "中东分中心",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [
+                    {
+                        "id": 9,
+                        "name": "迪拜超市",
+                        "parentId": 3,
+                        "isDelete": 0,
+                        "level": 2,
+                        "children": [],
+                        "nationFlag": 0,
+                        "sort": 1
+                    }
+                ],
+                "nationFlag": 0,
+                "sort": 2
+            },
+            {
+                "id": 8,
+                "name": "东北分中心",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [],
+                "nationFlag": 1,
+                "sort": 2
+            },
+            {
+                "id": 2,
+                "name": "华北分中心",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [
+                    {
+                        "id": 4,
+                        "name": "廊坊超市",
+                        "parentId": 2,
+                        "isDelete": 0,
+                        "level": 2,
+                        "children": [],
+                        "nationFlag": 1,
+                        "sort": 1
+                    }
+                ],
+                "nationFlag": 1,
+                "sort": 3
+            },
+            {
+                "id": 7,
+                "name": "华东分中心",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [],
+                "nationFlag": 1,
+                "sort": 4
+            },
+            {
+                "id": 10,
+                "name": "华南分中心",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [],
+                "nationFlag": 1,
+                "sort": 5
+            },
+            {
+                "id": 12,
+                "name": "西北分中心",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [],
+                "nationFlag": 1,
+                "sort": 6
+            },
+            {
+                "id": 13,
+                "name": "海外",
+                "parentId": 0,
+                "isDelete": 0,
+                "level": 1,
+                "children": [],
+                "nationFlag": 0,
+                "sort": 7
+            }
         ]
     }
 }

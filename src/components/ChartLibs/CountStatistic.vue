@@ -28,7 +28,7 @@ const coverCities = reactive({
   changeNum: 0
 })
 const appSecond = reactive({
-  name: '累计覆盖区域',
+  name: '订单覆盖区域',
   img: iconApp,
   unit: '个',
   value: unref(orderCount).regions || 0,

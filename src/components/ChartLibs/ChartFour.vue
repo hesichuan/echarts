@@ -1,25 +1,15 @@
 <script setup lang="ts">
-import { ref, unref, reactive, computed, watch, inject } from 'vue'
+import { ref, unref, computed, watch, inject } from 'vue'
 import DefaultChart from './DefaultChart.vue'
-
-// import { graphic } from 'echarts'
-
-import { deviceEchartCountApi } from '@/api'
 
 import hooks from '@/hooks'
 
-import { chartOneData } from '@/utils/demo'
 import echarts from '@/utils/echarts'
 
 const loadFinish = ref(false)
 
-const companyList = ref<Array<string>>([])
-const deviceCount = ref<Array<number>>([]) // 设备数量
-const branchCount = ref<Array<number>>([]) // 品牌数量
-const typeCount = ref<Array<number>>([]) // 类型数量
-
 const { useModuleData } = hooks
-const { calcFont, contrastRatio } = useModuleData(null)
+const { calcFont } = useModuleData(null)
 const orderComplete = ref({})
 
 const completeData = ref([]) //柱状图数据 完成的
@@ -36,13 +26,10 @@ const xAxisMonth = ref([]) // x轴
 
 orderComplete.value = inject('orderComplete')
 
-// console.log('orderStatistic', orderStatistic)
-
 watch(
   () => orderComplete.value,
   () => {
     const data = unref(orderComplete.value)
-    console.log('orderComplete.value', data)
     data.forEach((item) => {
       const { completed, success, toBeContinued, yearMonth } = item
       completeData.value.push(completed)
@@ -50,30 +37,12 @@ watch(
       succRate.value.push(success)
       xAxisMonth.value.push(yearMonth)
     })
-    //  completeData.value = [22, 35, 23, 40, 15, 24, 40, 21]
-    console.log('completeData.value', completeData.value)
     loadFinish.value = true
   },
   {
     deep: true
   }
 )
-
-const getDeviceEchartCount = async () => {
-  try {
-    // const res = await deviceEchartCountApi()
-    const res = chartOneData
-    res?.data.forEach((item: any) => {
-      const { deviceTypeCount, orgName, deviceCount: dC, brandCount: bC } = item
-      companyList.value.push(orgName)
-      deviceCount.value.push(dC)
-      branchCount.value.push(bC)
-      typeCount.value.push(deviceTypeCount)
-    })
-  } catch (err) {}
-}
-
-getDeviceEchartCount()
 
 const option = computed(() => {
   return {
@@ -144,7 +113,7 @@ const option = computed(() => {
         show: true,
         textStyle: {
           color: '#0b78d5', //X轴文字颜色
-          fontSize: calcFont(12)
+          fontSize: calcFont(16)
         },
         // margin: calcFont(20),
         interval: 0
@@ -158,7 +127,7 @@ const option = computed(() => {
         splitNumber: 8,
         nameTextStyle: {
           color: '#0b78d5',
-          fontSize: calcFont(20)
+          fontSize: calcFont(16)
         },
         splitLine: {
           show: true,
@@ -177,7 +146,7 @@ const option = computed(() => {
           show: true,
           textStyle: {
             color: '#0b78d5',
-            fontSize: calcFont(20)
+            fontSize: calcFont(16)
           }
         }
       },
@@ -188,7 +157,7 @@ const option = computed(() => {
         splitNumber: 8,
         nameTextStyle: {
           color: '#0b78d5',
-          fontSize: calcFont(20)
+          fontSize: calcFont(16)
         },
         splitLine: {
           show: true,
@@ -201,7 +170,7 @@ const option = computed(() => {
           show: true,
           textStyle: {
             color: '#0b78d5',
-            fontSize: calcFont(20)
+            fontSize: calcFont(16)
           }
         },
         axisLine: {
@@ -236,7 +205,7 @@ const option = computed(() => {
           show: true,
           position: 'top',
           distance: 5,
-          fontSize: calcFont(20),
+          fontSize: calcFont(16),
           color: '#FFFFFF'
         }
       },
@@ -264,7 +233,7 @@ const option = computed(() => {
           show: true,
           position: 'top',
           distance: 5,
-          fontSize: calcFont(20),
+          fontSize: calcFont(16),
           color: '#FFFFFF'
         }
       },
@@ -276,7 +245,7 @@ const option = computed(() => {
         yAxisIndex: 1,
         showAllSymbol: true, //显示所有图形。
         symbol: 'circle', //标记的图形为实心圆
-        symbolSize: 8, //标记的大小
+        symbolSize: calcFont(8), //标记的大小
         itemStyle: {
           //折线拐点标志的样式
           color: 'rgba(88, 222, 196, 1)'

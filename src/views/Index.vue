@@ -49,6 +49,7 @@ const deviceCategories = computed(() => deviceStatistic.value.typeNameAndNums)
 // 右2
 const deviceCompany = computed(() => deviceStatistic.value.unitDeviceInfo)
 // 右3
+const supermarket = computed(() => deviceStatistic.value.supermarketVos)
 // 中下
 const remandList = computed(() => remandOrderList.value)
 
@@ -60,6 +61,7 @@ provide('deviceCategories', deviceCategories)
 provide('deviceCompany', deviceCompany)
 provide('deviceMapCount', deviceMapCount)
 provide('remandList', remandList)
+provide('supermarket', supermarket)
 
 const getOrderStatistic = async () => {
   const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? orderKanbanDataApi : orderStatisticApi

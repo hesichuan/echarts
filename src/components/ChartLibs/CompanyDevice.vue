@@ -63,12 +63,18 @@ const option = computed(() => {
       }
     },
     grid: {
-      top: 56,
-      left: 5,
-      right: 5,
-      bottom: 16,
-      containLabel: true
+      left: '10%',
+      top: '20%',
+      right: 'auto',
+      bottom: '12%'
     },
+    // grid: {
+    //   top: 56,
+    //   left: 5,
+    //   right: 5,
+    //   bottom: 0,
+    //   containLabel: true
+    // },
     legend: {
       show: true,
       data: [
@@ -91,7 +97,7 @@ const option = computed(() => {
           }
         }
       ],
-      top: 25,
+      top: calcFont(25),
       selectedMode: false,
       type: 'scroll',
       icon: 'circle',
@@ -113,7 +119,27 @@ const option = computed(() => {
       },
       axisLabel: {
         fontSize: calcFont(12),
-        color: '#87CCFF'
+        color: '#87CCFF',
+        lineHeight: calcFont(15),
+        formatter: function (value: any) {
+          var ret = '' //拼接加\n返回的类目项
+          var max = 5 //每行显示的文字字数
+          var val = value.length //X轴内容的文字字数
+          var rowN = Math.ceil(val / max) //需要换的行数
+          if (rowN > 1) {
+            //判断 如果字数大于2就换行
+            for (var i = 0; i < rowN; i++) {
+              var temp = '' //每次截取的字符串
+              var start = i * max //开始截取的位置
+              var end = start + max //结束截取的位置
+              temp = value.substring(start, end) + '\n'
+              ret += temp //最终的字符串
+            }
+            return ret
+          } else {
+            return value
+          }
+        }
       },
       splitLine: {
         show: false
@@ -225,17 +251,17 @@ const option = computed(() => {
         type: 'bar',
         name: '设备数量',
         barGap: '20%',
-        barWidth: calcFont(26),
+        barWidth: calcFont(22),
         label: {
           show: true,
           position: 'top',
           distance: 4.8,
           textStyle: {
             color: '#4084EE',
-            fontSize: calcFont(16)
+            fontSize: calcFont(14)
           }
         },
-        showBackground: true,
+        showBackground: false,
         backgroundStyle: {
           color: {
             x: 0,
@@ -343,7 +369,7 @@ const option = computed(() => {
         type: 'bar',
         name: '品牌数量',
         barGap: '20%',
-        barWidth: calcFont(26),
+        barWidth: calcFont(22),
         barMaxWidth: calcFont(48),
         label: {
           show: true,
@@ -351,7 +377,7 @@ const option = computed(() => {
           distance: 4.8,
           textStyle: {
             color: '#FF8D28',
-            fontSize: calcFont(16)
+            fontSize: calcFont(14)
           }
         },
         showBackground: true,
@@ -460,14 +486,14 @@ const option = computed(() => {
         type: 'bar',
         name: '类型数量',
         barGap: '20%',
-        barWidth: calcFont(26),
+        barWidth: calcFont(22),
         label: {
           show: true,
           position: 'top',
           distance: 4.8,
           textStyle: {
             color: '#6ACC29',
-            fontSize: calcFont(16)
+            fontSize: calcFont(14)
           }
         },
         showBackground: true,

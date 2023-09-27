@@ -2,48 +2,6 @@ export default {
     "status": "SUCCEED",
     "data": {
         "completions": [
-            // {
-            //     "yearMonth": "22-08",
-            //     "completed": 26,
-            //     "toBeContinued": 0,
-            //     "success": 100
-            // },
-            // {
-            //     "yearMonth": "22-09",
-            //     "completed": 19,
-            //     "toBeContinued": 0,
-            //     "success": 100
-            // },
-            // {
-            //     "yearMonth": "22-10",
-            //     "completed": 31,
-            //     "toBeContinued": 0,
-            //     "success": 100
-            // },
-            // {
-            //     "yearMonth": "22-11",
-            //     "completed": 36,
-            //     "toBeContinued": 0,
-            //     "success": 100
-            // },
-            // {
-            //     "yearMonth": "22-12",
-            //     "completed": 21,
-            //     "toBeContinued": 0,
-            //     "success": 100
-            // },
-            // {
-            //     "yearMonth": "23-01",
-            //     "completed": 6,
-            //     "toBeContinued": 0,
-            //     "success": 100
-            // },
-            {
-                "yearMonth": "23-02",
-                "completed": 45,
-                "toBeContinued": 40,
-                "success": 50
-            },
             {
                 "yearMonth": "23-03",
                 "completed": 64,
@@ -58,9 +16,9 @@ export default {
             },
             {
                 "yearMonth": "23-05",
-                "completed": 80,
-                "toBeContinued": 20,
-                "success": 80
+                "completed": 27,
+                "toBeContinued": 0,
+                "success": 100
             },
             {
                 "yearMonth": "23-06",
@@ -73,26 +31,32 @@ export default {
                 "completed": 14,
                 "toBeContinued": 61,
                 "success": 19
+            },
+            {
+                "yearMonth": "23-08",
+                "completed": 63,
+                "toBeContinued": 50,
+                "success": 56
             }
         ],
-        "addNewOrder": 19,
-        "totalAmount": "0",
+        "addNewOrder": 63,
+        "totalAmount": "9142.798371",
         "regions": 6,
         "projectInfoList": [
             {
                 "projectName": "西四线（吐鲁番-中卫）线路工程一标段",
                 "deviceNum": "70",
-                "ratio": "11.1"
+                "ratio": "10.9"
             },
             {
                 "projectName": "茂名-云安项目线路工程第一标段",
                 "deviceNum": "46",
-                "ratio": "7.3"
+                "ratio": "7.2"
             },
             {
                 "projectName": "管道局第四分公司设备中心",
                 "deviceNum": "37",
-                "ratio": "5.9"
+                "ratio": "5.8"
             },
             {
                 "projectName": "中俄东线南段（永清-上海）南通-甪直二标段",
@@ -113,7 +77,7 @@ export default {
         "unitUseOrder": [
             {
                 "organName": "工程建设公司",
-                "orderNum": 18
+                "orderNum": 27
             },
             {
                 "organName": "中国石油管道局工程有限公司第一分公司",

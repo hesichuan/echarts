@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, unref, inject, computed, watch } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 import { getRandomBetween } from '@/utils/commonFn'
+// import { marketAreaListApi } from '@/api'
 
 const { useModuleData } = hooks
 const { calcFont, contrastRatio } = useModuleData(null)
@@ -11,13 +12,26 @@ const loadFinish = ref(false)
 
 const data = ref([])
 
-const packageData = () => {
-  const areaMarketList = ['华北中心', '华南中心', '东非分中心', '华东中心', '东北分中心']
+const supermarket = inject('supermarket', [])
+
+watch(
+  () => supermarket,
+  (newVal) => {
+    const list = unref(newVal).filter((item) => item.id !== 1)
+    packageData(list)
+    loadFinish.value = true
+  },
+  {
+    deep: true
+  }
+)
+
+const packageData = (areaMarketList = []) => {
   for (var i = 0; i < areaMarketList.length; i++) {
     const getRandomSize = contrastRatio.value * getRandomBetween(50, 80)
     const obj = {
-      name: areaMarketList[i],
-      value: i + 5,
+      name: areaMarketList[i].name,
+      value: areaMarketList[i].children?.length,
       symbolSize: getRandomSize,
       itemStyle: {
         color:
@@ -34,17 +48,15 @@ const packageData = () => {
   }
 }
 
-packageData()
-
 const option = computed(() => {
   return {
     title: {
       top: 'auto',
-      text: '区域中心统计图',
+      text: '区域中心',
       // left: '5%',
       bottom: 0,
       textStyle: {
-        fontSize: calcFont(18),
+        fontSize: calcFont(16),
         fontWeight: 'bolder',
         color: '#fff' // 主标题文字颜色
       }
@@ -78,7 +90,7 @@ const option = computed(() => {
 </script>
 
 <template>
-  <DefaultChart :option="option" :autoplay="true" />
+  <DefaultChart :option="option" :autoplay="true" v-if="loadFinish" />
 </template>
 
 <style lang="less" scoped>

@@ -103,12 +103,13 @@ const option = computed(() => {
     },
     title: {
       text: '设备类型统计图',
-      top: 0
+      top: 'auto',
+      left: '65%',
       // left: 'center',
-      // textStyle: {
-      //   color: '#999',
-      //   fontSize: 12
-      // }
+      textStyle: {
+        color: '#fff',
+        fontSize: calcFont(16)
+      }
     },
     // title: [
     //   {
