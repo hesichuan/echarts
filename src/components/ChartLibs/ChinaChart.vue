@@ -105,7 +105,8 @@ const option = computed(() => {
             show: false
           },
           itemStyle: {
-            areaColor: '#4a80ff' // 高亮区域颜色
+            // areaColor: '#4a80ff' // 高亮区域颜色
+            areaColor: '#0b64ad' // 高亮区域颜色
           }
         },
         select: {
