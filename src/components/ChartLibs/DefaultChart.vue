@@ -7,8 +7,6 @@ import echarts from '@/utils/echarts'
 
 import hooks from '@/hooks'
 
-import { getChinaGeoJson } from '@/api'
-
 import JEOJSON from '@/assets/json/china_geo.json'
 
 const emits = defineEmits(['mapEmit'])
