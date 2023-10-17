@@ -2,9 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/echarts/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="font-src * data:;" />
     <title>设备共享平台数字大屏</title>
+    <script type="module" crossorigin src="/echarts/assets/index-4fd22e53.js"></script>
+    <link rel="modulepreload" crossorigin href="/echarts/assets/vue-demi-71ba0ef2.js">
+    <link rel="modulepreload" crossorigin href="/echarts/assets/@vue-df245e2a.js">
+    <link rel="modulepreload" crossorigin href="/echarts/assets/pinia-ea4bbe9a.js">
+    <link rel="modulepreload" crossorigin href="/echarts/assets/vue-router-6f96af58.js">
+    <link rel="stylesheet" href="/echarts/assets/index-fdb91e04.css">
   </head>
   <body>
     <div id="app">
@@ -127,7 +134,7 @@
       <div class="app-loading">
         <div class="app-loading-wrap">
           <div class="app-loading-title">
-            <img src="/logo.png" class="app-loading-logo" alt="Logo" />
+            <img src="/echarts/logo.png" class="app-loading-logo" alt="Logo" />
             <div class="app-loading-title">设备共享平台数字大屏</div>
           </div>
           <div class="app-loading-item">
@@ -137,6 +144,6 @@
         </div>
       </div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    
   </body>
 </html>
