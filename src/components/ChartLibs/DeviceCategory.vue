@@ -104,8 +104,8 @@ const option = computed(() => {
     title: {
       text: '设备类型统计图',
       top: 'auto',
-      left: '65%',
-      // left: 'center',
+      // left: '65%',
+      left: 'center',
       textStyle: {
         color: '#fff',
         fontSize: calcFont(16)

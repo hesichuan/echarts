@@ -12,7 +12,7 @@ const projectList = ref([])
 
 const legendLabel = {
   first: '设备数',
-  second: '金额'
+  second: '设备占比'
 }
 
 const tipData = ref([])
@@ -37,11 +37,13 @@ watch(
         ],
         name
       }
-      const indicatorName = { name: `${name}$${ratio}%$${ratio}%` }
+      const indicatorName = { name: `${name}$${deviceNum}$${ratio}%` }
 
       indicatorList.value.push(indicatorName)
       tipData.value.push(obj)
     })
+
+    console.log('indicatorList', indicatorList.value)
 
     loadFinish.value = true
   },
