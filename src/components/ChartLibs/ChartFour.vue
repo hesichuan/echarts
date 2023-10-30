@@ -78,7 +78,7 @@ const option = computed(() => {
       padding: [0, calcFont(100)],
       data: [
         {
-          name: '未完成',
+          name: '履行中',
           icon: 'circle',
           textStyle: { color: '#ffffff', fontSize: calcFont(14) }
         },
@@ -210,7 +210,7 @@ const option = computed(() => {
         }
       },
       {
-        name: '未完成',
+        name: '履行中',
         type: 'bar',
         barWidth: calcFont(24),
         itemStyle: {
