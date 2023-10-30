@@ -47,7 +47,7 @@ const option = computed(() => {
       show: true,
       trigger: 'axis',
       backgroundColor: 'rgba(116,176,222,0.3)',
-      extraCssText: 'box-shadow: 0 0 8px rgba(0, 128, 255, 0.27) inset;',
+      extraCssText: 'box-shadow: 0 0 8px rgba(0, 128, 255, 0.27) inset;z-index:3;',
       borderWidth: 0,
       confine: false,
       appendToBody: true,

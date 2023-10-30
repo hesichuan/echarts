@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { ref, unref, computed, watch, inject } from 'vue'
+import { propTypes } from '@/utils/propTypes'
+
 import DefaultChart from './DefaultChart.vue'
 
 import hooks from '@/hooks'
 
 import echarts from '@/utils/echarts'
+
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const loadFinish = ref(false)
 
@@ -22,22 +28,28 @@ const xAxisMonth = ref([]) // x轴
 // const succRate = ref([39, 50, 54, 49, 50, 46, 56, 54]) //折线图数据
 // const xAxisMonth = ref(['06-01', '06-02', '06-03', '06-04', '06-05', '06-06', '06-07', '06-08'])
 
-// loadFinish.value = true
-
 orderComplete.value = inject('orderComplete')
+
+const initData = () => {
+  const data = unref(orderComplete.value)
+  data.forEach((item) => {
+    const { completed, success, toBeContinued, yearMonth } = item
+    completeData.value.push(completed)
+    continuData.value.push(toBeContinued)
+    succRate.value.push(success)
+    xAxisMonth.value.push(yearMonth)
+  })
+  loadFinish.value = true
+}
+
+if (props.isScale > 1) {
+  initData()
+}
 
 watch(
   () => orderComplete.value,
   () => {
-    const data = unref(orderComplete.value)
-    data.forEach((item) => {
-      const { completed, success, toBeContinued, yearMonth } = item
-      completeData.value.push(completed)
-      continuData.value.push(toBeContinued)
-      succRate.value.push(success)
-      xAxisMonth.value.push(yearMonth)
-    })
-    loadFinish.value = true
+    initData()
   },
   {
     deep: true
@@ -65,8 +77,9 @@ const option = computed(() => {
       },
       textStyle: {
         // color: '#fff',
-        fontSize: calcFont(14)
-      }
+        fontSize: calcFont(14 * props.isScale)
+      },
+      extraCssText: 'z-index:3'
     },
     grid: {
       left: '10%',
@@ -75,29 +88,29 @@ const option = computed(() => {
       bottom: '12%'
     },
     legend: {
-      padding: [0, calcFont(100)],
+      padding: [0, calcFont(100 * props.isScale)],
       data: [
         {
           name: '履行中',
           icon: 'circle',
-          textStyle: { color: '#ffffff', fontSize: calcFont(14) }
+          textStyle: { color: '#ffffff', fontSize: calcFont(14 * props.isScale) }
         },
         {
           name: '已完成',
           icon: 'circle',
-          textStyle: { color: '#ffffff', fontSize: calcFont(14) }
+          textStyle: { color: '#ffffff', fontSize: calcFont(14 * props.isScale) }
         },
         {
           name: '成功率',
           icon: 'circle',
-          textStyle: { color: '#ffffff', fontSize: calcFont(14) }
+          textStyle: { color: '#ffffff', fontSize: calcFont(14 * props.isScale) }
         }
       ],
       top: '10%',
       // right: '3%',
       textStyle: {
         color: '#1FC3CE',
-        fontSize: calcFont(16)
+        fontSize: calcFont(16 * props.isScale)
       }
     },
     xAxis: {
@@ -113,7 +126,7 @@ const option = computed(() => {
         show: true,
         textStyle: {
           color: '#0b78d5', //X轴文字颜色
-          fontSize: calcFont(16)
+          fontSize: calcFont(16 * props.isScale)
         },
         // margin: calcFont(20),
         interval: 0
@@ -127,7 +140,7 @@ const option = computed(() => {
         splitNumber: 8,
         nameTextStyle: {
           color: '#0b78d5',
-          fontSize: calcFont(16)
+          fontSize: calcFont(16 * props.isScale)
         },
         splitLine: {
           show: true,
@@ -146,7 +159,7 @@ const option = computed(() => {
           show: true,
           textStyle: {
             color: '#0b78d5',
-            fontSize: calcFont(16)
+            fontSize: calcFont(16 * props.isScale)
           }
         }
       },
@@ -157,7 +170,7 @@ const option = computed(() => {
         splitNumber: 8,
         nameTextStyle: {
           color: '#0b78d5',
-          fontSize: calcFont(16)
+          fontSize: calcFont(16 * props.isScale)
         },
         splitLine: {
           show: true,
@@ -170,7 +183,7 @@ const option = computed(() => {
           show: true,
           textStyle: {
             color: '#0b78d5',
-            fontSize: calcFont(16)
+            fontSize: calcFont(16 * props.isScale)
           }
         },
         axisLine: {
@@ -185,7 +198,7 @@ const option = computed(() => {
       {
         name: '已完成',
         type: 'bar',
-        barWidth: calcFont(24),
+        barWidth: calcFont(24 * props.isScale),
         itemStyle: {
           normal: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -205,14 +218,14 @@ const option = computed(() => {
           show: true,
           position: 'top',
           distance: 5,
-          fontSize: calcFont(16),
+          fontSize: calcFont(16 * props.isScale),
           color: '#FFFFFF'
         }
       },
       {
         name: '履行中',
         type: 'bar',
-        barWidth: calcFont(24),
+        barWidth: calcFont(24 * props.isScale),
         itemStyle: {
           normal: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -233,7 +246,7 @@ const option = computed(() => {
           show: true,
           position: 'top',
           distance: 5,
-          fontSize: calcFont(16),
+          fontSize: calcFont(16 * props.isScale),
           color: '#FFFFFF'
         }
       },
@@ -245,7 +258,7 @@ const option = computed(() => {
         yAxisIndex: 1,
         showAllSymbol: true, //显示所有图形。
         symbol: 'circle', //标记的图形为实心圆
-        symbolSize: calcFont(8), //标记的大小
+        symbolSize: calcFont(8 * props.isScale), //标记的大小
         itemStyle: {
           //折线拐点标志的样式
           color: 'rgba(88, 222, 196, 1)'

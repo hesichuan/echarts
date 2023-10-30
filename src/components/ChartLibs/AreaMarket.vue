@@ -62,7 +62,8 @@ const option = computed(() => {
       }
     },
     tooltip: {
-      show: true
+      show: true,
+      extraCssText: 'z-index:3'
     },
     grid: {
       bottom: '10%'

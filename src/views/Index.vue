@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, provide, watch, computed, onUnmounted } from 'vue'
-import { BorderBox1 } from '@dataview/datav-vue3'
+import { onMounted, ref, provide, watch, computed, onUnmounted, nextTick } from 'vue'
+import { BorderBox1, BorderBox11 } from '@dataview/datav-vue3'
+
 import hooks from '@/hooks'
+
+import CurrentChart from './components/CurrentChart.vue'
 
 import Header from '@/components/Header/index.vue'
 import Loading from '@/components/GlobalLoading/index.vue'
@@ -22,6 +25,8 @@ import {
 
 const VITE_ENV = import.meta.env
 
+const currentCompsTitle = ref('')
+const currentChartRef = ref()
 const { useScreen, useCommon } = hooks
 const { setScreenMode } = useCommon()
 const isLoading = ref(true)
@@ -147,6 +152,23 @@ const initHtmlFontSize = () => {
 
 const { design, screen, minScreen, contrastRatio } = useScreen(initHtmlFontSize)
 
+const showCurrComps = ref(false)
+
+const curCompsEmits = ({ compsName, title }: { compsName: string; title: string }) => {
+  showCurrComps.value = true
+  currentCompsTitle.value = title
+  nextTick(() => {
+    currentChartRef.value.init({
+      compsName,
+      title
+    })
+  })
+}
+
+const currentPropsCloseHandle = () => {
+  showCurrComps.value = false
+}
+
 setScreenMode('AdptMultiDevice')
 
 onUnmounted(() => {
@@ -156,12 +178,26 @@ onUnmounted(() => {
 
 <template>
   <div class="digital-screen-container">
-    <header class="header"><Header /></header>
+    <div class="cur-big-comps" :class="{ 'is-show': showCurrComps }">
+      <BorderBox11
+        :title="currentCompsTitle"
+        class="custome-orderbox11"
+        style="width: 100vw; height: 100vh"
+      >
+        <div style="width: 100vw; height: 100vh"></div>
+      </BorderBox11>
+      <div v-if="showCurrComps" class="cur-comps-container">
+        <CurrentChart ref="currentChartRef" @close="currentPropsCloseHandle" />
+      </div>
+    </div>
+    <header class="header">
+      <Header />
+    </header>
     <section class="section">
       <div class="aside-lf">
         <BorderBox1>
           <div class="container">
-            <LeftContent />
+            <LeftContent @curComps="curCompsEmits" />
           </div>
         </BorderBox1>
       </div>
@@ -194,6 +230,25 @@ onUnmounted(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+.cur-big-comps {
+  z-index: -111;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  &.is-show {
+    display: flex;
+    background: #06032f;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 1111111;
+  }
+  .cur-comps-container {
+    position: fixed;
+  }
 }
 .header {
   height: calc(55 * var(--app-base-unit));

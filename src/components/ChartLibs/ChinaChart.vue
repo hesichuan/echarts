@@ -69,7 +69,8 @@ const option = computed(() => {
         return `${dotHtml}${params.name}</br>${params.marker}设备数量：${
           params?.data?.deviceNum || '--'
         }`
-      }
+      },
+      extraCssText: 'z-index:3'
     },
     geo: {
       type: 'map',

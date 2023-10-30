@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, unref, onMounted, onUnmounted, markRaw, computed, nextTick } from 'vue'
+import { ref, unref, onMounted, onUnmounted, markRaw, computed, nextTick, inject } from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
 
@@ -21,6 +21,8 @@ const props = defineProps({
   type: propTypes.string.def('')
 })
 
+const showTile = inject('showTitle', true)
+
 const commonTitle = computed(() => {
   return {
     top: calcFont(25),
@@ -28,7 +30,8 @@ const commonTitle = computed(() => {
     textStyle: {
       color: '#fff',
       fontSize: calcFont(16)
-    }
+    },
+    show: showTile
   }
 })
 

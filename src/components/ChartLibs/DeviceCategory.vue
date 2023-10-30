@@ -99,7 +99,8 @@ const option = computed(() => {
   return {
     color: color,
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
+      extraCssText: 'z-index:3'
     },
     title: {
       text: '设备类型统计图',

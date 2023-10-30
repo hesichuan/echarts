@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref, unref, inject, watch, computed } from 'vue'
+import { propTypes } from '@/utils/propTypes'
+
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
+
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const loadFinish = ref(false)
 
@@ -9,6 +15,7 @@ const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
 const projectList = ref([])
+const legendFirstList = ref([])
 
 const legendLabel = {
   first: '设备数',
@@ -20,32 +27,38 @@ const indicatorList = ref([])
 
 projectList.value = inject('projectList', [])
 
+const initData = () => {
+  const data = unref(projectList.value) as []
+  data.forEach((item, index) => {
+    const { projectName: name, deviceNum, ratio, totalAmount } = item
+    const obj = {
+      data: [deviceNum, totalAmount],
+      value: [
+        index === 0 ? 100 : 0,
+        index === 1 ? 100 : 0,
+        index === 2 ? 100 : 0,
+        index === 3 ? 100 : 0,
+        index === 4 ? 100 : 0
+      ],
+      name
+    }
+    const indicatorName = { name: `${name}$${deviceNum}$${ratio}%` }
+
+    indicatorList.value.push(indicatorName)
+    tipData.value.push(obj)
+  })
+
+  loadFinish.value = true
+}
+
+if (props.isScale > 1) {
+  initData()
+}
+
 watch(
   () => projectList.value,
   () => {
-    const data = unref(projectList.value) as []
-    data.forEach((item, index) => {
-      const { projectName: name, deviceNum, ratio, totalAmount } = item
-      const obj = {
-        data: [deviceNum, totalAmount],
-        value: [
-          index === 0 ? 100 : 0,
-          index === 1 ? 100 : 0,
-          index === 2 ? 100 : 0,
-          index === 3 ? 100 : 0,
-          index === 4 ? 100 : 0
-        ],
-        name
-      }
-      const indicatorName = { name: `${name}$${deviceNum}$${ratio}%` }
-
-      indicatorList.value.push(indicatorName)
-      tipData.value.push(obj)
-    })
-
-    console.log('indicatorList', indicatorList.value)
-
-    loadFinish.value = true
+    initData()
   },
   {
     deep: true
@@ -59,7 +72,7 @@ const option = computed(() => {
       text: '项目统计图',
       left: '5%',
       textStyle: {
-        fontSize: calcFont(14),
+        fontSize: calcFont(14 * props.isScale),
         color: '#fff'
       }
       // bottom: 0
@@ -67,12 +80,12 @@ const option = computed(() => {
     // 图例
     legend: {
       show: true,
-      right: '3%',
+      right: `${3 * props.isScale}%`,
       icon: 'circle',
       data: [{ name: legendLabel.first }, { name: legendLabel.second }],
       textStyle: {
         color: '#C3E3F9',
-        fontSize: calcFont(14)
+        fontSize: calcFont(14 * props.isScale)
       },
       selectedMode: false
     },
@@ -96,7 +109,7 @@ const option = computed(() => {
           lineStyle: {
             color: '#969696',
             type: 'dotted',
-            width: 2
+            width: 2 * props.isScale
           }
         },
         axisLine: {
@@ -109,26 +122,26 @@ const option = computed(() => {
           // 分割指标名后，文字样式
           rich: {
             a: {
-              fontSize: calcFont(16), // 标题名称
-              lineHeight: calcFont(25)
+              fontSize: calcFont(16 * props.isScale), // 标题名称
+              lineHeight: calcFont(25 * props.isScale)
             },
             b: {
-              fontSize: calcFont(16), // 第一个指标
-              lineHeight: calcFont(25)
+              fontSize: calcFont(16 * props.isScale), // 第一个指标
+              lineHeight: calcFont(25 * props.isScale)
             },
             c: {
-              fontSize: calcFont(16), // 第一个圆点背景
+              fontSize: calcFont(16 * props.isScale), // 第一个圆点背景
               color: '#478DFF',
-              lineHeight: calcFont(25)
+              lineHeight: calcFont(25 * props.isScale)
             },
             d: {
-              fontSize: calcFont(16), // 第二个圆点背景
+              fontSize: calcFont(16 * props.isScale), // 第二个圆点背景
               color: '#1FD9D1',
-              lineHeight: calcFont(25)
+              lineHeight: calcFont(25 * props.isScale)
             },
             e: {
-              fontSize: calcFont(16), // 第二个指标
-              lineHeight: calcFont(25)
+              fontSize: calcFont(16 * props.isScale), // 第二个指标
+              lineHeight: calcFont(25 * props.isScale)
             }
           },
           // 分割上方写的指标名。
@@ -164,7 +177,7 @@ const option = computed(() => {
         },
         itemStyle: {
           borderColor: '#fff',
-          borderWidth: 1
+          borderWidth: 1 * props.isScale
         },
         label: {
           show: false,
@@ -194,6 +207,7 @@ const option = computed(() => {
           show: true,
           // 自定义显示x轴提示，主要在第二个雷达图中实现，echarts官方tootips设置trigger：axis不生效。
           formatter: (params) => {
+            console.log('params', params)
             let { data } = params.data
             return `${params.name}<br />${legendLabel.first}： ${data[0]}个<br />${legendLabel.second}： ${data[1]}元<br/>`
           }
