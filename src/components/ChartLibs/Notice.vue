@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref, unref, reactive, watch, inject, nextTick } from 'vue'
+import { ref, unref, reactive, watch, inject, nextTick, computed } from 'vue'
+import { propTypes } from '@/utils/propTypes'
 // swiper
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, EffectCoverflow } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/autoplay'
+
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const modules = [Autoplay, EffectCoverflow]
 
@@ -19,16 +24,28 @@ const autoplayOptions = reactive({
   autoplay: true
 })
 
+const slidesPerViewNum = computed(() => {
+  return props.isScale > 1 ? 8 : 3
+})
+
 const mySwiper = ref()
 const swiperList = ref([])
+
+const initData = (newVal) => {
+  swiperList.value = []
+  nextTick(() => {
+    swiperList.value = unref(newVal)
+  })
+}
+
+if (props.isScale > 1) {
+  initData(remandList)
+}
 
 watch(
   () => remandList,
   (newVal) => {
-    swiperList.value = []
-    nextTick(() => {
-      swiperList.value = unref(newVal)
-    })
+    initData(newVal)
   },
   {
     deep: true
@@ -37,7 +54,7 @@ watch(
 </script>
 
 <template>
-  <div class="notie-center left">
+  <div class="notie-center left" :class="{ 'is-big-chart': props.isScale > 1 }">
     <Swiper
       class="swiper-container mt-40px"
       v-if="swiperList.length"
@@ -46,7 +63,7 @@ watch(
       :autoplay="autoplayOptions"
       :speed="1000"
       :direction="'vertical'"
-      :slidesPerView="3"
+      :slidesPerView="slidesPerViewNum"
       :centeredSlides="true"
       ref="mySwiper"
     >
@@ -103,6 +120,18 @@ watch(
     &::after {
       right: calc(-1 * var(--app-base-unit));
       transform: rotate(180deg);
+    }
+  }
+  &.is-big-chart {
+    width: 90vw;
+    height: 75vh;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-45%);
+    :deep(.swiper-slide) {
+      .item {
+        font-size: calc(35 * var(--app-base-unit)) !important;
+      }
     }
   }
 

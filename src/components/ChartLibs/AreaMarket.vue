@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, unref, inject, computed, watch } from 'vue'
+import { propTypes } from '@/utils/propTypes'
+
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 import { getRandomBetween } from '@/utils/commonFn'
@@ -14,21 +16,14 @@ const data = ref([])
 
 const supermarket = inject('supermarket', [])
 
-watch(
-  () => supermarket,
-  (newVal) => {
-    const list = unref(newVal).filter((item) => item.id !== 1)
-    packageData(list)
-    loadFinish.value = true
-  },
-  {
-    deep: true
-  }
-)
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const packageData = (areaMarketList = []) => {
   for (var i = 0; i < areaMarketList.length; i++) {
-    const getRandomSize = contrastRatio.value * getRandomBetween(50, 80)
+    const getRandomSize =
+      contrastRatio.value * getRandomBetween(50 * props.isScale, 80 * props.isScale)
     const obj = {
       name: areaMarketList[i].name,
       value: areaMarketList[i].children?.length,
@@ -48,6 +43,28 @@ const packageData = (areaMarketList = []) => {
   }
 }
 
+const initData = (newVal) => {
+  const list = unref(newVal).filter((item) => item.id !== 1)
+  packageData(list)
+  loadFinish.value = true
+
+  console.log('area-initdata')
+}
+
+if (props.isScale > 1) {
+  initData(supermarket)
+}
+
+watch(
+  () => supermarket,
+  (newVal) => {
+    initData(newVal)
+  },
+  {
+    deep: true
+  }
+)
+
 const option = computed(() => {
   return {
     title: {
@@ -56,7 +73,7 @@ const option = computed(() => {
       // left: '5%',
       bottom: 0,
       textStyle: {
-        fontSize: calcFont(16),
+        fontSize: calcFont(16 * props.isScale),
         fontWeight: 'bolder',
         color: '#fff' // 主标题文字颜色
       }
@@ -73,8 +90,11 @@ const option = computed(() => {
         type: 'graph', // 关系图
         layout: 'force', //图的布局，类型为力导图，'circular' 采用环形布局
         force: {
-          repulsion: [50, 140], //节点之间的斥力因子。支持数组表达斥力范围，值越大斥力越大。
-          edgeLength: 10 //边的两个节点之间的距离，这个距离也会受 repulsion。[10, 50] 。值越小则长度越长
+          repulsion: [
+            props.isScale > 1 ? 50 * props.isScale * 2 : 50,
+            props.isScale > 1 ? 140 * props.isScale * 2 : 140
+          ], //节点之间的斥力因子。支持数组表达斥力范围，值越大斥力越大。
+          edgeLength: 10 * props.isScale //边的两个节点之间的距离，这个距离也会受 repulsion。[10, 50] 。值越小则长度越长
         },
         roam: true,
         label: {

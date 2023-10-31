@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { ref, unref, inject, watch } from 'vue'
+import { propTypes } from '@/utils/propTypes'
 import hooks from '@/hooks'
 
 import { Vue3SeamlessScroll } from 'vue3-seamless-scroll'
+
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const { useFilter } = hooks
 const { toThousands } = useFilter()
@@ -28,6 +33,9 @@ const getBackgroundClassName = ({ type }) => {
       break
     default:
       className += ' web'
+  }
+  if (props.isScale > 1) {
+    className += ' big-icon'
   }
   return className
 }
@@ -55,10 +63,11 @@ const getIconClassName = ({ type }) => {
 </script>
 
 <template>
-  <div class="project-scroll">
+  <div class="project-scroll" :class="{ 'is-big-chart': isScale > 1 }">
     <Vue3SeamlessScroll :list="orderCarousel.value" :step="0.3" :hover="true" class="project-list">
       <div
         class="project-list-item"
+        :class="{ 'is-big-chart': isScale > 1 }"
         v-for="(item, index) in orderCarousel.value"
         :key="'project-item' + index"
       >
@@ -87,6 +96,13 @@ const getIconClassName = ({ type }) => {
 .project-scroll {
   // height:  calc(250 * var(--app-base-unit));
   height: 32vh;
+  &.is-big-chart {
+    height: 95vh;
+    width: 90vw;
+  }
+}
+.font-24 {
+  font-size: calc(24 * var(--app-base-unit));
 }
 .project-list {
   padding: 0 calc(20 * var(--app-base-unit));
@@ -111,6 +127,18 @@ const getIconClassName = ({ type }) => {
     .iconfont {
       font-size: calc(22 * var(--app-base-unit));
     }
+  }
+  .is-big-icon {
+    height: calc(60 * var(--app-base-unit));
+    width: calc(60 * var(--app-base-unit));
+    min-width: calc(60 * var(--app-base-unit));
+    .iconfont {
+      font-size: calc(44 * var(--app-base-unit));
+    }
+  }
+  .is-big-name {
+    margin-left: calc(20 * var(--app-base-unit));
+    .font-24();
   }
   &-item {
     margin-bottom: 15 calc(15 * var(--app-base-unit));
@@ -166,6 +194,25 @@ const getIconClassName = ({ type }) => {
       flex: 1;
       font-size: calc(16 * var(--app-base-unit));
       min-width: calc(120 * var(--app-base-unit));
+    }
+
+    &.is-big-chart {
+      .big-icon {
+        .is-big-icon();
+      }
+      .project-list-item__name {
+        .is-big-name();
+      }
+      .statistics-card {
+        &__text {
+          font-size: calc(20 * var(--app-base-unit));
+        }
+        &__num {
+          font-size: calc(28 * var(--app-base-unit));
+          height: calc(28 * var(--app-base-unit));
+          line-height: calc(28 * var(--app-base-unit));
+        }
+      }
     }
   }
 }

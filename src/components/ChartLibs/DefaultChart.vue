@@ -35,6 +35,7 @@ const commonTitle = computed(() => {
   }
 })
 
+const timer = ref(null)
 const chartDom = ref<any>() // 获取元素实例
 const myChart = ref<any>(null) // 获取echarts
 const chartTitle = computed(() => {
@@ -47,7 +48,7 @@ const chartTitle = computed(() => {
 
 const outoPaly = (myChart) => {
   let currentIndex = -1
-  setInterval(function () {
+  timer.value = setInterval(function () {
     var dataLen = props.autoplayLen !== 1 ? props.autoplayLen : props.option.series[0].data.length
     // 取消之前高亮的图形
     myChart.dispatchAction({
@@ -70,6 +71,8 @@ const outoPaly = (myChart) => {
       // position: 'top'
     })
   }, 2000)
+
+  console.log('timer.value', timer.value)
 }
 
 const init = async () => {
@@ -79,10 +82,6 @@ const init = async () => {
   option.title = chartTitle.value
 
   if (props.type === 'map') {
-    // const JEOJSON = await getChinaGeoJson().catch((err) => {
-    //   console.log('JEOJSON-err', err)
-    // })
-
     echarts.registerMap('china', JEOJSON)
 
     emits('mapEmit', JEOJSON)
@@ -90,9 +89,9 @@ const init = async () => {
   myChart.value.setOption(option)
 
   //过渡完成后开始动画
-  myChart.value.on('finished', () => {
-    // outoPaly(myChart)
-  })
+  // myChart.value.on('finished', () => {
+  //   outoPaly(myChart)
+  // })
   props.autoplay && outoPaly(myChart.value)
 }
 
@@ -108,6 +107,9 @@ onMounted(() => {
 onUnmounted(() => {
   myChart.value.dispose()
   window.removeEventListener('resize', myChart.value)
+
+  clearInterval(timer.value)
+  timer.value = null
 })
 </script>
 

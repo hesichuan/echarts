@@ -155,6 +155,7 @@ const { design, screen, minScreen, contrastRatio } = useScreen(initHtmlFontSize)
 const showCurrComps = ref(false)
 
 const curCompsEmits = ({ compsName, title }: { compsName: string; title: string }) => {
+  console.log('curCompsEmits')
   showCurrComps.value = true
   currentCompsTitle.value = title
   nextTick(() => {
@@ -184,7 +185,6 @@ onUnmounted(() => {
         class="custome-orderbox11"
         style="width: 100vw; height: 100vh"
       >
-        <div style="width: 100vw; height: 100vh"></div>
       </BorderBox11>
       <div v-if="showCurrComps" class="cur-comps-container">
         <CurrentChart ref="currentChartRef" @close="currentPropsCloseHandle" />
@@ -202,12 +202,12 @@ onUnmounted(() => {
         </BorderBox1>
       </div>
       <div class="center">
-        <CenterContent />
+        <CenterContent @curComps="curCompsEmits" />
       </div>
       <div class="aside-rt">
         <BorderBox1>
           <div class="container">
-            <RightContent />
+            <RightContent @curComps="curCompsEmits" />
           </div>
         </BorderBox1>
       </div>
@@ -232,10 +232,11 @@ onUnmounted(() => {
   flex-direction: column;
 }
 .cur-big-comps {
-  z-index: -111;
+  z-index: -100;
   width: 100%;
   height: 100%;
   position: fixed;
+  opacity: 0;
   &.is-show {
     display: flex;
     background: #06032f;
@@ -245,6 +246,7 @@ onUnmounted(() => {
     bottom: 0;
     top: 0;
     z-index: 1111111;
+    opacity: 1;
   }
   .cur-comps-container {
     position: fixed;

@@ -1,21 +1,28 @@
 <script setup lang="ts">
 import DeviceCategory from '@/components/ChartLibs/DeviceCategory.vue'
-import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 import AreaMarket from '@/components/ChartLibs/AreaMarket.vue'
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
+
+import { chartTitle } from '@/utils/enum'
+
+const emits = defineEmits(['curComps'])
+
+const chartClicked = (compsName: string, title: string) => {
+  console.log('chartClicked', compsName, title)
+  emits('curComps', { compsName, title })
+}
 </script>
 
 <template>
   <div class="right-content">
     <div class="right-content__item">
-      <DeviceCategory />
+      <DeviceCategory @click="chartClicked('DeviceCategory', chartTitle['DeviceCategory'])" />
     </div>
     <div class="right-content__item">
-      <!-- <ChartFour/> -->
-      <CompanyDevice />
+      <CompanyDevice @click="chartClicked('CompanyDevice', chartTitle['CompanyDevice'])" />
     </div>
     <div class="right-content__item">
-      <AreaMarket />
+      <AreaMarket @click="chartClicked('AreaMarket', chartTitle['AreaMarket'])" />
     </div>
   </div>
 </template>

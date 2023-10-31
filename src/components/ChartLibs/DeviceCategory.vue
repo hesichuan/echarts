@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref, unref, watch, computed, inject } from 'vue'
+import { propTypes } from '@/utils/propTypes'
+
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
+
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
@@ -10,7 +16,6 @@ const deviceCategories = ref([])
 const loadFinish = ref(false)
 
 let bgColor = '#fff'
-let title = '总量'
 let color = [
   '#c065e7',
   '#765deb',
@@ -68,19 +73,26 @@ let echartData = [
 
 const categoriesList = inject('deviceCategories', [])
 
+const initData = (newVal) => {
+  deviceCategories.value = unref(newVal)?.map((item) => {
+    return {
+      name: item.typeName,
+      value: item.num
+    }
+  })
+  loadFinish.value = true
+}
+
+if (props.isScale > 1) {
+  initData(categoriesList)
+}
+
 watch(
   () => categoriesList,
   (newVal) => {
     if (newVal !== undefined) {
-      deviceCategories.value = unref(newVal)?.map((item) => {
-        return {
-          name: item.typeName,
-          value: item.num
-        }
-      })
+      initData(newVal)
     }
-
-    loadFinish.value = true
   },
   {
     deep: true
@@ -100,6 +112,10 @@ const option = computed(() => {
     color: color,
     tooltip: {
       trigger: 'item',
+      textStyle: {
+        // color: '#fff',
+        fontSize: calcFont(14 * props.isScale)
+      },
       extraCssText: 'z-index:3'
     },
     title: {
@@ -109,7 +125,7 @@ const option = computed(() => {
       left: 'center',
       textStyle: {
         color: '#fff',
-        fontSize: calcFont(16)
+        fontSize: calcFont(16 * props.isScale)
       }
     },
     // title: [
@@ -155,12 +171,12 @@ const option = computed(() => {
         itemStyle: {
           normal: {
             borderColor: bgColor,
-            borderWidth: 2
+            borderWidth: 2 * props.isScale
           }
         },
         labelLine: {
-          length: calcFont(20),
-          length2: calcFont(30),
+          length: calcFont(20 * props.isScale),
+          length2: calcFont(30 * props.isScale),
           lineStyle: {
             // color: '#e6e6e6'
           }
@@ -176,18 +192,18 @@ const option = computed(() => {
             // padding: [0 , -100, 25, -100],
             rich: {
               icon: {
-                fontSize: calcFont(18),
+                fontSize: calcFont(18 * props.isScale),
                 color: 'inherit'
               },
               name: {
-                fontSize: calcFont(16),
-                padding: [0, 0, 0, calcFont(4)],
+                fontSize: calcFont(16 * props.isScale),
+                padding: [0, 0, 0, calcFont(4 * props.isScale)],
                 color: '#fff'
               },
               value: {
-                fontSize: calcFont(16),
+                fontSize: calcFont(16 * props.isScale),
                 fontWeight: 'bolder',
-                padding: [calcFont(10), 0, 0, calcFont(20)],
+                padding: [calcFont(10 * props.isScale), 0, 0, calcFont(20 * props.isScale)],
                 color: 'inherit'
                 // color: '#333333'
               }

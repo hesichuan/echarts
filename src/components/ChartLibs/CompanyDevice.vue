@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref, unref, watch, computed, inject } from 'vue'
+import { propTypes } from '@/utils/propTypes'
+
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
+
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const loadFinish = ref(false)
 
@@ -15,17 +21,25 @@ const { calcFont } = useModuleData(null)
 
 const deviceCompany = inject('deviceCompany', [])
 
+const initData = (newVal) => {
+  unref(newVal)?.forEach((item: any) => {
+    const { deviceTypeCount: dTC, orgName, deviceCount: dC, brandCount: bC } = item
+    companyList.value.push(orgName)
+    deviceCount.value.push(dC)
+    branchCount.value.push(bC)
+    typeCount.value.push(dTC)
+  })
+  loadFinish.value = true
+}
+
+if (props.isScale > 1) {
+  initData(deviceCompany)
+}
+
 watch(
   () => deviceCompany,
   (newVal) => {
-    unref(newVal)?.forEach((item: any) => {
-      const { deviceTypeCount: dTC, orgName, deviceCount: dC, brandCount: bC } = item
-      companyList.value.push(orgName)
-      deviceCount.value.push(dC)
-      branchCount.value.push(bC)
-      typeCount.value.push(dTC)
-    })
-    loadFinish.value = true
+    initData(newVal)
   },
   {
     deep: true
@@ -47,10 +61,10 @@ const option = computed(() => {
       show: true,
       trigger: 'axis',
       backgroundColor: 'rgba(116,176,222,0.3)',
-      extraCssText: 'box-shadow: 0 0 8px rgba(0, 128, 255, 0.27) inset;z-index:3;',
+      extraCssText: 'box-shadow: 0 0 8px rgba(0, 128, 255, 0.27) inset; z-index:3;',
       borderWidth: 0,
-      confine: false,
-      appendToBody: true,
+      // confine: false,
+      // appendToBody: true,
       axisPointer: {
         type: 'shadow',
         shadowStyle: {
@@ -59,8 +73,9 @@ const option = computed(() => {
       },
       textStyle: {
         color: '#fff',
-        fontSize: calcFont(14)
+        fontSize: calcFont(14 * props.isScale)
       }
+      // extraCssText: 'z-index:30'
     },
     grid: {
       left: '10%',
@@ -97,15 +112,15 @@ const option = computed(() => {
           }
         }
       ],
-      top: calcFont(25),
+      top: calcFont(25 * props.isScale),
       selectedMode: false,
       type: 'scroll',
       icon: 'circle',
-      itemWidth: calcFont(16),
-      itemHeight: calcFont(16),
+      itemWidth: calcFont(16 * props.isScale),
+      itemHeight: calcFont(16 * props.isScale),
       textStyle: {
         color: '#C3E3F9',
-        fontSize: calcFont(14)
+        fontSize: calcFont(14 * props.isScale)
       }
     },
     xAxis: {
@@ -118,9 +133,9 @@ const option = computed(() => {
         }
       },
       axisLabel: {
-        fontSize: calcFont(12),
+        fontSize: calcFont(12 * props.isScale),
         color: '#87CCFF',
-        lineHeight: calcFont(15),
+        lineHeight: calcFont(15 * props.isScale),
         formatter: function (value: any) {
           var ret = '' //拼接加\n返回的类目项
           var max = 5 //每行显示的文字字数
@@ -156,7 +171,7 @@ const option = computed(() => {
         nameGap: 24,
         nameTextStyle: {
           align: 'center',
-          fontSize: calcFont(16),
+          fontSize: calcFont(16 * props.isScale),
           color: '#2869A9'
         },
         splitNumber: 4,
@@ -171,7 +186,7 @@ const option = computed(() => {
         },
         axisLabel: {
           margin: 10,
-          fontSize: calcFont(16),
+          fontSize: calcFont(16 * props.isScale),
           color: '#2869A9'
         },
         axisTick: {
@@ -251,14 +266,14 @@ const option = computed(() => {
         type: 'bar',
         name: '设备数量',
         barGap: '20%',
-        barWidth: calcFont(22),
+        barWidth: calcFont(22 * props.isScale),
         label: {
           show: true,
           position: 'top',
           distance: 4.8,
           textStyle: {
             color: '#4084EE',
-            fontSize: calcFont(14)
+            fontSize: calcFont(14 * props.isScale)
           }
         },
         showBackground: false,
@@ -369,15 +384,15 @@ const option = computed(() => {
         type: 'bar',
         name: '品牌数量',
         barGap: '20%',
-        barWidth: calcFont(22),
-        barMaxWidth: calcFont(48),
+        barWidth: calcFont(22 * props.isScale),
+        barMaxWidth: calcFont(48 * props.isScale),
         label: {
           show: true,
           position: 'top',
           distance: 4.8,
           textStyle: {
             color: '#FF8D28',
-            fontSize: calcFont(14)
+            fontSize: calcFont(14 * props.isScale)
           }
         },
         showBackground: true,
@@ -486,14 +501,14 @@ const option = computed(() => {
         type: 'bar',
         name: '类型数量',
         barGap: '20%',
-        barWidth: calcFont(22),
+        barWidth: calcFont(22 * props.isScale),
         label: {
           show: true,
           position: 'top',
           distance: 4.8,
           textStyle: {
             color: '#6ACC29',
-            fontSize: calcFont(14)
+            fontSize: calcFont(14 * props.isScale)
           }
         },
         showBackground: true,

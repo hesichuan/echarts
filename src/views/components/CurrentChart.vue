@@ -2,19 +2,21 @@
 import { ref, provide, computed, shallowRef } from 'vue'
 import { BorderBox11, Decoration5 } from '@dataview/datav-vue3'
 
+import CloseBtn from '@/assets/imgs/close_btn.png'
+
 import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 import ChartThree from '@/components/ChartLibs/ChartThree.vue'
+import DeviceCategory from '@/components/ChartLibs/DeviceCategory.vue'
+import AreaMarket from '@/components/ChartLibs/AreaMarket.vue'
+import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
+import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
 
 import CountStatistic from '@/components/ChartLibs/CountStatistic.vue'
 import ChinaChart from '@/components/ChartLibs/ChinaChart.vue'
 import Notice from '@/components/ChartLibs/Notice.vue'
 
-import hooks from '@/hooks'
-
 const emits = defineEmits(['close'])
 
-const { useModuleData } = hooks
-const { calcFont } = useModuleData(null)
 const currentCompsTitle = ref('')
 const showCurComps = ref(false)
 const parentComps = ref('')
@@ -24,6 +26,20 @@ const currentComp = computed(() => {
     return ChartFour
   } else if (parentComps.value === 'ChartThree') {
     return ChartThree
+  } else if (parentComps.value === 'DeviceCategory') {
+    return DeviceCategory
+  } else if (parentComps.value === 'CompanyDevice') {
+    return CompanyDevice
+  } else if (parentComps.value === 'AreaMarket') {
+    return AreaMarket
+  } else if (parentComps.value === 'ChinaChart') {
+    return ChinaChart
+  } else if (parentComps.value === 'CountStatistic') {
+    return CountStatistic
+  } else if (parentComps.value === 'Notice') {
+    return Notice
+  } else if (parentComps.value === 'OrderCarousel') {
+    return OrderCarousel
   } else return null
 })
 
@@ -51,7 +67,9 @@ defineExpose({ init })
         <component :is="currentComp" :isScale="2"></component>
       </div>
     </div>
-    <div class="close" @click="closeHandle">关闭</div>
+    <div class="close" @click="closeHandle">
+      <img :src="CloseBtn" class="img_btn" />
+    </div>
   </div>
 </template>
 
@@ -85,8 +103,13 @@ defineExpose({ init })
   }
   .close {
     position: absolute;
-    right: calc(20 * var(--app-base-unit));
-    top: calc(70 * var(--app-base-unit));
+    right: calc(40 * var(--app-base-unit));
+    top: calc(80 * var(--app-base-unit));
+    cursor: pointer;
+    .img_btn {
+      width: calc(60 * var(--app-base-unit));
+      height: calc(60 * var(--app-base-unit));
+    }
   }
 }
 </style>

@@ -8,7 +8,6 @@ import { chartTitle } from '@/utils/enum'
 const emits = defineEmits(['curComps'])
 
 const chartClicked = (compsName: string, title: string) => {
-  console.log('chartClicked', compsName, title)
   emits('curComps', { compsName, title })
 }
 </script>
@@ -19,7 +18,7 @@ const chartClicked = (compsName: string, title: string) => {
       <ChartFour @click="chartClicked('ChartFour', chartTitle['ChartFour'])" />
     </div>
     <div class="left-content__item">
-      <OrderCarousel />
+      <OrderCarousel @click="chartClicked('OrderCarousel', chartTitle['OrderCarousel'])" />
     </div>
     <div class="left-content__item">
       <ChartThree @click="chartClicked('ChartThree', chartTitle['ChartThree'])" />

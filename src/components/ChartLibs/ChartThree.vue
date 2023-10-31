@@ -16,6 +16,7 @@ const { calcFont } = useModuleData(null)
 
 const projectList = ref([])
 const legendFirstList = ref([])
+const legendSecondList = ref([])
 
 const legendLabel = {
   first: '设备数',
@@ -32,7 +33,7 @@ const initData = () => {
   data.forEach((item, index) => {
     const { projectName: name, deviceNum, ratio, totalAmount } = item
     const obj = {
-      data: [deviceNum, totalAmount],
+      data: [deviceNum, ratio],
       value: [
         index === 0 ? 100 : 0,
         index === 1 ? 100 : 0,
@@ -44,6 +45,8 @@ const initData = () => {
     }
     const indicatorName = { name: `${name}$${deviceNum}$${ratio}%` }
 
+    legendFirstList.value.push(`${deviceNum}`)
+    legendSecondList.value.push(`${ratio * 10}`)
     indicatorList.value.push(indicatorName)
     tipData.value.push(obj)
   })
@@ -90,7 +93,8 @@ const option = computed(() => {
       selectedMode: false
     },
     tooltip: {
-      show: true
+      show: true,
+      extraCssText: 'z-index:3'
     },
     color: ['rgba(71, 141, 255, 0.83)', 'rgba(31, 217, 208, 0.83)'],
     radar: [
@@ -185,11 +189,13 @@ const option = computed(() => {
         },
         data: [
           {
-            value: ['23.42', '30.94', '10.68', '22.12', '12.83'],
+            // value: ['23.42', '30.94', '10.68', '22.12', '12.83'],
+            value: legendFirstList.value,
             name: legendLabel.first
           },
           {
-            value: ['48.57', '13.31', '3.14', '14.07', '20.92'],
+            // value: ['48.57', '13.31', '3.14', '14.07', '20.92'],
+            value: legendSecondList.value,
             name: legendLabel.second
           }
         ]
@@ -209,7 +215,7 @@ const option = computed(() => {
           formatter: (params) => {
             console.log('params', params)
             let { data } = params.data
-            return `${params.name}<br />${legendLabel.first}： ${data[0]}个<br />${legendLabel.second}： ${data[1]}元<br/>`
+            return `${params.name}<br />${legendLabel.first}： ${data[0]}个<br />${legendLabel.second}： ${data[1]}%<br/>`
           }
         },
         data: tipData.value

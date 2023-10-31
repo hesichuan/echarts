@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { ref, unref, computed, watch, inject } from 'vue'
+import { propTypes } from '@/utils/propTypes'
 
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
 import JEOJSON from '@/assets/json/china_geo.json'
+
+const props = defineProps({
+  isScale: propTypes.number.def(1)
+})
 
 const loadFinish = ref(false)
 const mapDeviceNum = ref([]) as any
@@ -12,22 +17,6 @@ const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
 const deviceMapCount = inject('deviceMapCount', [])
-
-watch(
-  () => deviceMapCount,
-  (val) => {
-    if (unref(val)?.length) {
-      packageData()
-    }
-  },
-  {
-    deep: true
-  }
-)
-
-const mapEmitHandle = () => {
-  // geoJSON.value = jeoJson
-}
 
 const packageData = () => {
   var mapFeatures = JEOJSON.features
@@ -50,6 +39,30 @@ const packageData = () => {
     }
   })
   loadFinish.value = true
+}
+
+const initData = (val) => {
+  if (unref(val)?.length) {
+    packageData()
+  }
+}
+
+if (props.isScale > 1) {
+  packageData()
+}
+
+watch(
+  () => deviceMapCount,
+  (val) => {
+    initData(val)
+  },
+  {
+    deep: true
+  }
+)
+
+const mapEmitHandle = () => {
+  // geoJSON.value = jeoJson
 }
 
 const option = computed(() => {
@@ -90,7 +103,11 @@ const option = computed(() => {
     series: [
       {
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          textStyle: {
+            // color: '#fff',
+            fontSize: calcFont(14 * props.isScale)
+          }
         },
         type: 'map',
         map: 'china',
@@ -98,7 +115,7 @@ const option = computed(() => {
         z: 100,
         itemStyle: {
           areaColor: '#142957',
-          borderWidth: 1, //设置外层边框
+          borderWidth: 1 * props.isScale, //设置外层边框
           borderColor: '#086b77'
         },
         emphasis: {
@@ -125,7 +142,10 @@ const option = computed(() => {
             show: true,
             color: '#fff',
             position: 'bottom',
-            formatter: '{b}'
+            formatter: '{b}',
+            textStyle: {
+              fontSize: calcFont(14 * props.isScale)
+            }
           }
         },
         // emphasis: {
@@ -134,7 +154,7 @@ const option = computed(() => {
         itemStyle: { normal: { color: '#3ed4ff' } },
         data: mapDeviceNum.value,
         symbolSize: function (val) {
-          return val[2] / 10
+          return (val[2] / 10) * props.isScale
         }
       }
     ]

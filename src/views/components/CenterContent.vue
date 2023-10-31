@@ -3,6 +3,15 @@ import { ref } from 'vue'
 import CountStatistic from '@/components/ChartLibs/CountStatistic.vue'
 import ChinaChart from '@/components/ChartLibs/ChinaChart.vue'
 import Notice from '@/components/ChartLibs/Notice.vue'
+
+import { chartTitle } from '@/utils/enum'
+
+const emits = defineEmits(['curComps'])
+
+const chartClicked = (compsName: string, title: string) => {
+  console.log('chartClicked', compsName, title)
+  emits('curComps', { compsName, title })
+}
 </script>
 
 <template>
@@ -11,10 +20,10 @@ import Notice from '@/components/ChartLibs/Notice.vue'
       <CountStatistic />
     </div>
     <div class="center-content__center">
-      <ChinaChart />
+      <ChinaChart @click="chartClicked('ChinaChart', chartTitle['ChinaChart'])" />
     </div>
     <div class="center-content__bottom" style="fontsize: 30px">
-      <Notice />
+      <Notice @click="chartClicked('Notice', chartTitle['Notice'])" />
     </div>
   </div>
 </template>
