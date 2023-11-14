@@ -137,7 +137,8 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
           // target: "http://11.54.87.224:31617/",
           // target: "http://portal.c.cloudos.cnpc.com.cn/",
           // target: "http://share.c.cloudos.cnpc.com.cn/",
-          target: "http://d.c.cloudos.cnpc.com.cn/",
+          // target: "http://d.c.cloudos.cnpc.com.cn/",
+          target: 'http://218.205.135.163:8090/',
           // target: "http://dev.c.cloudos.cnpc.com.cn",
           // target: 'http://t.c.cloudos.cnpc.com.cn/',
           changeOrigin: true, //开启代理

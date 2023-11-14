@@ -15,7 +15,7 @@ const getCurBranch = async () => {
   console.log(chalk.green('正在发布至远程仓库...'))
   
   ghpages.publish(
-    'dist',
+    'echarts',
     {
       dest: '.',
       branch: 'gh-pages',

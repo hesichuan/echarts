@@ -138,7 +138,7 @@ const option = computed(() => {
         lineHeight: calcFont(15 * props.isScale),
         formatter: function (value: any) {
           var ret = '' //拼接加\n返回的类目项
-          var max = 5 //每行显示的文字字数
+          var max = 6 //每行显示的文字字数
           var val = value.length //X轴内容的文字字数
           var rowN = Math.ceil(val / max) //需要换的行数
           if (rowN > 1) {
