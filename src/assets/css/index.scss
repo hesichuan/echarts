@@ -38,7 +38,8 @@
 .contents {
   width: 100%;
   display: flex;
-  min-height: calc(100% - 60px);
+  // min-height: calc(100% - 60px);
+  height: calc(100% - 60px);
   justify-content: space-between;
 }
 
@@ -358,4 +359,10 @@ $type in $spacing-types {
   .#{$typekey} {
     #{$type}: 0;
   }
+}
+
+.ellipsis{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -23,16 +23,16 @@
           <div class="guang"></div>
           <div class="d-flex jc-center">
             <div class="title">
-              <span class="title-text">互联网设备可视化平台</span>
+              <span class="title-text">设备维修平台</span>
             </div>
           </div>
           <div class="timers">
             {{ dateYear }} {{ dateWeek }} {{ dateDay }}
-            <i
+            <!-- <i
               class="blq-icon-shezhi02"
               style="margin-left: 10px"
               @click="showSetting"
-            ></i>
+            ></i> -->
           </div>
         </div>
         <!-- 头部 e-->

@@ -6,62 +6,101 @@
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-center.vue
 -->
 <template>
-  <div v-if="pageflag" class="right_center_wrap beautify-scroll-def" :class="{ 'overflow-y-auto': !sbtxSwiperFlag }">
-    <component :is="components" :data="list" :class-option="defaultOption">
-      <ul class="right_center ">
+  <div
+    v-if="pageflag"
+    class="right_center_wrap beautify-scroll-def right_scroll_wap custome-table"
+    :class="{ 'overflow-y-auto': !sbtxSwiperFlag }"
+  >
+    <div class="custome-table__header_container">
+      <div class="custome-table__header">
+        <div class="custome-table__td">姓名</div>
+        <div class="custome-table__td">技师等级</div>
+        <div class="custome-table__td">所在地</div>
+        <div class="custome-table__td">工作任务</div>
+        <div class="custome-table__td">完成进度</div>
+        <div class="custome-table__td">累计工时</div>
+        <div class="custome-table__td">当前状态</div>
+        <!-- 空闲（绿色）、工作（蓝色），紧急（红色） -->
+      </div>
+    </div>
+    <component
+      :is="components"
+      :data="list"
+      :class-option="defaultOption"
+      class="scroll-wrap-container"
+    >
+      <ul class="right_center">
         <li class="right_center_item" v-for="(item, i) in list" :key="i">
-          <span class="orderNum">{{ i + 1 }}</span>
+          <div class="custome-table__td ellipsis">{{ item.repaireOrder }}</div>
+          <div class="custome-table__td ellipsis">{{ item.person }}</div>
+          <div class="custome-table__td ellipsis">{{ item.phone }}</div>
+          <div class="custome-table__td ellipsis">{{ item.missing }}</div>
+          <div class="custome-table__td ellipsis">{{ item.processIn }}</div>
+          <div class="custome-table__td ellipsis">{{ item.workingTime }}</div>
+          <div class="custome-table__td ellipsis status__style">
+            <span :class="`status-common style__${item.status}`">{{
+              item.status == 1 ? "空闲" : item.status == 2 ? "工作" : "紧急"
+            }}</span>
+          </div>
+          <!-- <span class="orderNum">{{ i + 1 }}</span>
           <div class="inner_right">
             <div class="dibu"></div>
             <div class="flex">
               <div class="info">
-                <span class="labels ">设备ID：</span>
+                <span class="labels">设备ID：</span>
                 <span class="contents zhuyao"> {{ item.gatewayno }}</span>
               </div>
               <div class="info">
                 <span class="labels">型号：</span>
-                <span class="contents "> {{ item.terminalno }}</span>
+                <span class="contents"> {{ item.terminalno }}</span>
               </div>
               <div class="info">
                 <span class="labels">告警值：</span>
-                <span class="contents warning"> {{ item.alertvalue | montionFilter }}</span>
+                <span class="contents warning">
+                  {{ item.alertvalue | montionFilter }}</span
+                >
               </div>
             </div>
 
-
             <div class="flex">
-
               <div class="info">
                 <span class="labels"> 地址：</span>
-                <span class="contents ciyao" style="font-size:12px"> {{ item.provinceName }}/{{ item.cityName }}/{{ item.countyName }}</span>
+                <span class="contents ciyao" style="font-size: 12px">
+                  {{ item.provinceName }}/{{ item.cityName }}/{{
+                    item.countyName
+                  }}</span
+                >
               </div>
               <div class="info time">
                 <span class="labels">时间：</span>
-                <span class="contents" style="font-size:12px"> {{ item.createtime }}</span>
+                <span class="contents" style="font-size: 12px">
+                  {{ item.createtime }}</span
+                >
               </div>
-
             </div>
             <div class="flex">
-
               <div class="info">
                 <span class="labels">报警内容：</span>
-                <span class="contents ciyao" :class="{ warning: item.alertdetail }"> {{ item.alertdetail || '无'
-                }}</span>
+                <span
+                  class="contents ciyao"
+                  :class="{ warning: item.alertdetail }"
+                >
+                  {{ item.alertdetail || "无" }}</span
+                >
               </div>
             </div>
-          </div>
+          </div> -->
         </li>
       </ul>
     </component>
   </div>
-  <Reacquire v-else @onclick="getData" style="line-height:200px" />
-
+  <Reacquire v-else @onclick="getData" style="line-height: 200px" />
 </template>
 
 <script>
-import { currentGET } from 'api/modules'
-import vueSeamlessScroll from 'vue-seamless-scroll'  // vue2引入方式
-import Kong from '../../components/kong.vue'
+import { currentGET } from "api/modules";
+import vueSeamlessScroll from "vue-seamless-scroll"; // vue2引入方式
+import Kong from "../../components/kong.vue";
 export default {
   components: { vueSeamlessScroll, Kong },
 
@@ -69,54 +108,138 @@ export default {
     return {
       list: [],
       pageflag: true,
-      defaultOption: {
-        ...this.$store.state.setting.defaultOption,
-        limitMoveNum: 3, 
-        singleHeight: 250, 
-        step:0,
-      }
-
+      // defaultOption: {
+      //   ...this.$store.state.setting.defaultOption,
+      //   limitMoveNum: 3,
+      //   singleHeight: 250,
+      //   step: 0,
+      // },
     };
   },
   computed: {
+    defaultOption() {
+      return {
+        ...this.$store.state.setting.defaultOption,
+        singleHeight: 0,
+        limitMoveNum: 10,
+        step: 1,
+      };
+    },
     sbtxSwiperFlag() {
-      let ssyjSwiper = this.$store.state.setting.ssyjSwiper
+      let ssyjSwiper = this.$store.state.setting.ssyjSwiper;
       if (ssyjSwiper) {
-        this.components = vueSeamlessScroll
+        this.components = vueSeamlessScroll;
       } else {
-        this.components = Kong
+        this.components = Kong;
       }
-      return ssyjSwiper
-    }
+      return ssyjSwiper;
+    },
   },
   created() {
-    this.getData()
+    this.getData();
   },
 
-  mounted() { },
+  mounted() {},
   methods: {
+    getRandom(n, m) {
+      return Math.floor(Math.random() * (m - n + 1)) + n;
+    },
     getData() {
-      this.pageflag = true
+      this.pageflag = true;
       // this.pageflag =false
-      currentGET('big5', { limitNum: 50 }).then(res => {
-        console.log('实时预警', res);
+      currentGET("big5", { limitNum: 50 }).then((res) => {
+        console.log("实时预警", res);
         if (res.success) {
-          this.list = res.data.list
+          // this.list = res.data.list;
+          const data = [];
+          for (let i = 0; i < 30; i++) {
+            const obj = {
+              repaireOrder: `工单-00${i + 1}`,
+              person: "李元芳",
+              phone: "15591611111",
+              missing: `任务${i + 1}`,
+              processIn: "进度",
+              workingTime: "工时",
+              status: this.getRandom(1, 3),
+            };
+            data.push(obj);
+          }
+
+          this.list = data;
+
           let timer = setTimeout(() => {
-              clearTimeout(timer)
-              this.defaultOption.step=this.$store.state.setting.defaultOption.step
+            clearTimeout(timer);
+            this.defaultOption.step =
+              this.$store.state.setting.defaultOption.step;
           }, this.$store.state.setting.defaultOption.waitTime);
         } else {
-          this.pageflag = false
-          this.$Message.warning(res.msg)
+          this.pageflag = false;
+          this.$Message.warning(res.msg);
         }
-      })
+      });
     },
-
   },
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
+.custome-table__header_container {
+  height: 42px;
+  width: 96%;
+  // background: #0982f2;
+  // background: rgba(8, 90, 111, 0.7);
+  // background-color: #263b40;
+  background: linear-gradient(
+    180deg,
+    rgba(46, 144, 241, 0.3),
+    rgba(51, 161, 219, 0.5)
+  );
+  position: absolute;
+  z-index: 999;
+  left: 2%;
+  top: 3px;
+  display: flex;
+  justify-content: center;
+  border-radius: 12px 12px 0 0;
+}
+.scroll-wrap-container {
+}
+
+.custome-table {
+  &__header {
+    width: 488px;
+
+    display: flex;
+    align-items: center;
+    // color: #000;
+
+    // left: 50%;
+    // transform: translateX(-50%);
+  }
+  &__td {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    &.status__style {
+      .status-common {
+        width: 50px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+      }
+      .style__1 {
+        background: #67c23a;
+      }
+      .style__2 {
+        background: #409eff;
+      }
+      .style__3 {
+        background: #f56c6c;
+      }
+    }
+  }
+}
 .right_center {
   width: 100%;
   height: 100%;
@@ -126,14 +249,16 @@ export default {
     align-items: center;
     justify-content: center;
     height: auto;
-    padding: 10px;
-    font-size: 14px;
-    color: #fff;
+    padding: 4px 10px;
+    font-size: 16px;
+    margin: 10px 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
 
     .orderNum {
       margin: 0 20px 0 -20px;
     }
-
 
     .inner_right {
       position: relative;
@@ -174,18 +299,21 @@ export default {
       }
 
       .warning {
-        color: #E6A23C;
+        color: #e6a23c;
         font-size: 15px;
       }
     }
-
   }
 }
 
 .right_center_wrap {
   overflow: hidden;
   width: 100%;
-  height: 250px;
+}
+
+.right_scroll_wap {
+  max-height: calc(100% - 70px);
+  margin-top: 40px;
 }
 
 .overflow-y-auto {

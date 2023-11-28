@@ -11,6 +11,41 @@
 <script>
 import { currentGET } from "api";
 import { graphic } from "echarts";
+const demoData = {
+  barData: [41, 147, 84, 92, 132, 141, 153, 83, 50, 118, 154, 136], // 收入
+  category: [
+    "22-12",
+    "23-01",
+    "23-02",
+    "23-03",
+    "23-04",
+    "23-05",
+    "23-06",
+    "23-07",
+    "23-08",
+    "23-09",
+    "23-10",
+    "23-11",
+  ],
+  lineData: [23, 80, 80, 45, 41, 52, 80, 53, 19, 81, 77, 94], // 成本
+};
+const packageData = ({ barData = [], lineData = [], category = [] }) => {
+  const rateData = [];
+  for (let i = 0; i < barData.length; i++) {
+    const curBar = barData[i];
+    const curLine = lineData[i];
+    const curRate = Math.floor(((curBar - curLine) / curLine) * 100);
+
+    rateData.push(curRate);
+  }
+
+  return {
+    barData,
+    lineData,
+    category,
+    rateData,
+  };
+};
 export default {
   data() {
     return {
@@ -25,9 +60,10 @@ export default {
     getData() {
       this.pageflag = true;
       currentGET("big6", { companyName: this.companyName }).then((res) => {
-        console.log("安装计划", res);
         if (res.success) {
-          this.init(res.data);
+          const _data = packageData(demoData);
+          console.log("月度利润率", _data);
+          this.init(_data);
         } else {
           this.pageflag = false;
           this.$Message({
@@ -58,7 +94,7 @@ export default {
                     item.seriesName +
                     " : " +
                     item.value +
-                    "%</br>";
+                    "</br>";
                 } else {
                   result +=
                     item.marker +
@@ -66,7 +102,7 @@ export default {
                     item.seriesName +
                     " : " +
                     item.value +
-                    "个</br>";
+                    "</br>";
                 }
               } else {
                 result += item.marker + " " + item.seriesName + " :  - </br>";
@@ -76,7 +112,7 @@ export default {
           },
         },
         legend: {
-          data: ["已安装", "计划安装", "安装率"],
+          data: ["收入", "成本", "利润率"],
           textStyle: {
             color: "#B4B4B4",
           },
@@ -86,7 +122,7 @@ export default {
           left: "50px",
           right: "40px",
           bottom: "30px",
-          top: "20px",
+          top: "30px",
         },
         xAxis: {
           data: newData.category,
@@ -102,7 +138,12 @@ export default {
         yAxis: [
           {
             splitLine: { show: false },
+            name: "单位：万元",
+            nameTextStyle: {
+              padding: [10, 0, 0, 10],
+            },
             axisLine: {
+              show: true,
               lineStyle: {
                 color: "#B4B4B4",
               },
@@ -126,7 +167,7 @@ export default {
         ],
         series: [
           {
-            name: "已安装",
+            name: "收入",
             type: "bar",
             barWidth: 10,
             itemStyle: {
@@ -139,7 +180,7 @@ export default {
             data: newData.barData,
           },
           {
-            name: "计划安装",
+            name: "成本",
             type: "bar",
             barGap: "-100%",
             barWidth: 10,
@@ -155,7 +196,7 @@ export default {
             data: newData.lineData,
           },
           {
-            name: "安装率",
+            name: "利润率",
             type: "line",
             smooth: true,
             showAllSymbol: true,

@@ -6,14 +6,20 @@
  * @FilePath: \web-pc\src\pages\big-screen\view\indexs\left-center.vue
 -->
 <template>
-  <Echart id="leftCenter" :options="options" class="left_center_inner" v-if="pageflag" ref="charts" />
-  <Reacquire v-else @onclick="getData" style="line-height:200px">
+  <Echart
+    id="leftCenter"
+    :options="options"
+    class="left_center_inner"
+    v-if="pageflag"
+    ref="charts"
+  />
+  <Reacquire v-else @onclick="getData" style="line-height: 200px">
     重新获取
   </Reacquire>
 </template>
 
 <script>
-import { currentGET } from 'api/modules'
+import { currentGET } from "api/modules";
 export default {
   data() {
     return {
@@ -22,74 +28,77 @@ export default {
         lockNum: 0,
         onlineNum: 0,
         offlineNum: 0,
-        totalNum: 0
+        totalNum: 0,
       },
       pageflag: true,
-      timer: null
+      timer: null,
     };
   },
   created() {
-    this.getData()
+    this.getData();
   },
-  mounted() {
-  },
+  mounted() {},
   beforeDestroy() {
-    this.clearData()
-
+    this.clearData();
   },
   methods: {
     clearData() {
       if (this.timer) {
-        clearInterval(this.timer)
-        this.timer = null
+        clearInterval(this.timer);
+        this.timer = null;
       }
     },
     getData() {
-      this.pageflag = true
+      this.pageflag = true;
       // this.pageflag =false
 
-      currentGET('big1').then(res => {
+      currentGET("big1").then((res) => {
         //只打印一次
         if (!this.timer) {
           console.log("设备总览", res);
         }
         if (res.success) {
-          this.countUserNumData = res.data
+          this.countUserNumData = res.data;
           this.$nextTick(() => {
-            this.init()
-          })
-
+            this.init();
+          });
         } else {
-          this.pageflag = false
+          this.pageflag = false;
           this.$Message({
             text: res.msg,
-            type: 'warning'
-          })
+            type: "warning",
+          });
         }
-      })
+      });
     },
     //轮询
     switper() {
       if (this.timer) {
-        return
+        return;
       }
       let looper = (a) => {
-        this.getData()
+        this.getData();
       };
-      this.timer = setInterval(looper, this.$store.state.setting.echartsAutoTime);
-      let myChart = this.$refs.charts.chart
-      myChart.on('mouseover', params => {
-        this.clearData()
+      this.timer = setInterval(
+        looper,
+        this.$store.state.setting.echartsAutoTime
+      );
+      let myChart = this.$refs.charts.chart;
+      myChart.on("mouseover", (params) => {
+        this.clearData();
       });
-      myChart.on('mouseout', params => {
-        this.timer = setInterval(looper, this.$store.state.setting.echartsAutoTime);
+      myChart.on("mouseout", (params) => {
+        this.timer = setInterval(
+          looper,
+          this.$store.state.setting.echartsAutoTime
+        );
       });
     },
     init() {
       let total = this.countUserNumData.totalNum;
-      let colors = ["#ECA444", "#33A1DB", "#56B557"];
+      let colors = ["#ECA444", "#33A1DB", "#56B557", "#e4393c"];
       let piedata = {
-        name: "用户总览",
+        name: "设备总览",
         type: "pie",
         radius: ["42%", "65%"],
         avoidLabelOverlap: false,
@@ -110,27 +119,32 @@ export default {
           // },
           {
             value: this.countUserNumData.lockNum,
-            name: "锁定",
+            name: "现场保障",
             label: {
               shadowColor: colors[0],
             },
           },
           {
             value: this.countUserNumData.onlineNum,
-            name: "在线",
+            name: "基地维修",
             label: {
               shadowColor: colors[2],
             },
           },
           {
             value: this.countUserNumData.offlineNum,
-            name: "离线",
+            name: "对外承揽",
             label: {
               shadowColor: colors[1],
             },
           },
-
-
+          {
+            value: 50,
+            name: "再制造",
+            label: {
+              shadowColor: colors[3],
+            },
+          },
         ],
       };
       this.options = {
@@ -195,11 +209,10 @@ export default {
               length: 20, // 第一段线 长度
               length2: 36, // 第二段线 长度
               show: true,
-            
             },
-              emphasis: {
-                show: true,
-              },
+            emphasis: {
+              show: true,
+            },
           },
           {
             ...piedata,
@@ -227,5 +240,4 @@ export default {
   },
 };
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

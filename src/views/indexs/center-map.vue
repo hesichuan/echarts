@@ -7,11 +7,11 @@
 -->
 <template>
   <div class="centermap">
-    <div class="maptitle">
+    <!-- <div class="maptitle">
       <div class="zuo"></div>
       <span class="titletext">{{ maptitle }}</span>
       <div class="you"></div>
-    </div>
+    </div> -->
     <div class="mapwrap">
       <dv-border-box-13>
         <div class="quanguo" @click="getData('china')" v-if="code !== 'china'">
@@ -29,14 +29,49 @@ import xzqCode from "../../utils/map/xzqCode";
 import { currentGET } from "api/modules";
 import * as echarts from "echarts";
 import { GETNOBASE } from "api";
+const provinceList = [
+  {
+    name: "陕西省", // 铜川
+    value: 1,
+  },
+  {
+    name: "河南省", // 郑州
+    value: 2,
+  },
+  {
+    name: "江苏省", // 南通
+    value: 3,
+  },
+  {
+    name: "福建省", // 漳州
+    value: 4,
+  },
+  {
+    name: "四川省", // 川二线
+    value: 5,
+  },
+  {
+    name: "甘肃省", // 泾川
+    value: 6,
+  },
+];
 export default {
   data() {
     return {
+      timer: null,
       maptitle: "设备分布图",
       options: {},
       code: "china", //china 代表中国 其他地市是行政编码
       echartBindClick: false,
       isSouthChinaSea: false, //是否要展示南海群岛  修改此值请刷新页面
+      categories: [
+        "铜川-潼关保障组",
+        "郑州保障组",
+        "南通保障组",
+        "漳州保障组",
+        "川二线保障组",
+        "甘肃泾川保障组",
+      ],
     };
   },
   created() {},
@@ -47,10 +82,17 @@ export default {
   },
   methods: {
     getData(code) {
+      // src/mock/mock.js
       currentGET("big8", { regionCode: code }).then((res) => {
         console.log("设备分布", res);
+        const demoArea = {
+          data: {
+            dataList: provinceList,
+            regionCode: "china",
+          },
+        };
         if (res.success) {
-          this.getGeojson(res.data.regionCode, res.data.dataList);
+          this.getGeojson(demoArea.data.regionCode, demoArea.data.dataList); // 'china, [{name: "陕西省",value: 879}]'
           this.mapclick();
         } else {
           this.$Message.warning(res.msg);
@@ -66,7 +108,7 @@ export default {
     async getGeojson(name, mydata) {
       this.code = name;
       //如果要展示南海群岛并且展示的是中国的话
-      let geoname=name
+      let geoname = name;
       if (this.isSouthChinaSea && name == "china") {
         geoname = "chinaNanhai";
       }
@@ -75,9 +117,11 @@ export default {
       if (mapjson) {
         mapjson = mapjson.geoJSON;
       } else {
-        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then((res) => {
-          return res;
-        });
+        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then(
+          (res) => {
+            return res;
+          }
+        );
         echarts.registerMap(name, mapjson);
       }
       let cityCenter = {};
@@ -88,48 +132,188 @@ export default {
           item.properties.centroid || item.properties.center;
       });
       let newData = [];
-      mydata.map((item) => {
+      mydata.map((item, index) => {
+        const projectList = [
+          {
+            projectName: "铜川-潼关保障组",
+            desc: "保障五公司2台",
+          },
+          {
+            projectName: "郑州保障组",
+            desc: "保障弯管机2台",
+          },
+          {
+            projectName: "南通保障组",
+            desc: "维修人员2名，车辆1辆。保障南通三公司设备28台。",
+          },
+          {
+            projectName: "漳州保障组",
+            desc: "维修人员2名，车辆1台。保障漳州三公司设备12台。",
+          },
+          {
+            projectName: "川二线保障组",
+            desc: "维修人员2名，车辆1辆，保障一公司12台，三公司2台。",
+          },
+          {
+            projectName: "甘肃泾川保障组",
+            desc: "维修人员2名，车辆1辆。保障西三五公司10台。",
+          },
+        ];
         if (cityCenter[item.name]) {
           newData.push({
             name: item.name,
-            value: cityCenter[item.name].concat(item.value),
+            value: [
+              cityCenter[item.name].concat(item.value),
+              this.categories[index],
+            ],
+            projectName: projectList[index] && projectList[index].projectName,
+            desc: projectList[index] && projectList[index].desc,
           });
         }
       });
+      console.log("newData", newData);
       this.init(name, mydata, newData);
     },
+    outoPaly(myChart) {
+      let currentIndex = -1;
+      // 启动定时器开始轮播
+      this.timer = setInterval(function () {
+        var dataLen = provinceList.length;
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: currentIndex,
+        });
+        currentIndex = (currentIndex + 1) % dataLen;
+        // // 高亮当前图形
+        myChart.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: currentIndex,
+        });
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: currentIndex,
+          // position: 'top'
+        });
+      }, 5000);
+      // 鼠标移入停止轮播
+      myChart.on("mouseover", (params) => {
+        clearInterval(this.timer);
+        this.timer = null;
+
+        console.log("this.timer", this.timer);
+
+        myChart.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+        });
+        myChart.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: params.dataIndex,
+        });
+        myChart.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: params.dataIndex,
+        });
+      });
+      // 鼠标移出 在上一次count的位置后继续轮播
+      myChart.on("mouseout", () => {
+        this.timer && clearInterval(this.timer);
+        this.timer = setInterval(function () {
+          var dataLen = provinceList.length;
+          // 取消之前高亮的图形
+          myChart.dispatchAction({
+            type: "downplay",
+            seriesIndex: 0,
+            dataIndex: currentIndex,
+          });
+          currentIndex = (currentIndex + 1) % dataLen;
+          // // 高亮当前图形
+          myChart.dispatchAction({
+            type: "highlight",
+            seriesIndex: 0,
+            dataIndex: currentIndex,
+          });
+          // 显示 tooltip
+          myChart.dispatchAction({
+            type: "showTip",
+            seriesIndex: 0,
+            dataIndex: currentIndex,
+            // position: 'top'
+          });
+        }, 5000);
+      });
+    },
     init(name, data, data2) {
-      // console.log(data2);
-      let top = 45;
-      let zoom = 1.05;
+      let top = 90;
+      let zoom = 1.15;
       let option = {
-        backgroundColor: "rgba(0,0,0,0)",
+        // backgroundColor: "rgba(0,0,0,0)",
         tooltip: {
-          show: false,
+          show: true,
         },
+        // tooltip: {
+        //   trigger: "item",
+        //   backgroundColor: "rgba(0,0,0,0.4)", // 提示框浮层的背景颜色。
+        //   axisPointer: {
+        //     // 坐标轴指示器配置项。
+        //     type: "shadow", // 'line' 直线指示器  'shadow' 阴影指示器  'none' 无指示器  'cross' 十字准星指示器。
+        //     axis: "auto", // 指示器的坐标轴。
+        //     snap: true, // 坐标轴指示器是否自动吸附到点上
+        //   },
+        //   textStyle: {
+        //     // 提示框浮层的文本样式。
+        //     color: "#41feff",
+        //     fontStyle: "normal",
+        //     fontWeight: "normal",
+        //     fontFamily: "sans-serif",
+        //     fontSize: 14,
+        //   },
+        //   padding: 0, // 提示框浮层内边距，
+        //   formatter: function (params) {
+        //     console.log("params", params);
+        //     let showname = params;
+        //     return `
+        //         <div style='width:150px;height:150px'>
+        //             <p  style="width:100%;height:30px; background: linear-gradient(#2caaab, #136692);  text-align: center;line-height: 30px;">${showname.data.name}</p>
+        //             <p  style="line-height: 30px; text-indent: 10px;">补助人数:${showname.data.num}人</p>
+        //             <p style="line-height: 30px; text-indent: 10px;">补助金额:${showname.data.money}万元</p>
+        //             <p style="line-height: 30px; text-indent: 10px;" >支出比例:${showname.data.zc}%</p>
+        //             <p style="line-height: 30px; text-indent: 10px;">补助发生率:${showname.data.bz}%</p>
+        //       </div>
+        //       `;
+        //   },
+        // },
         legend: {
           show: false,
         },
         visualMap: {
           left: 20,
           bottom: 20,
-          pieces: [
-            { gte: 1000, label: "1000个以上" }, // 不指定 max，表示 max 为无限大（Infinity）。
-            { gte: 600, lte: 999, label: "600-999个" },
-            { gte: 200, lte: 599, label: "200-599个" },
-            { gte: 50, lte: 199, label: "49-199个" },
-            { gte: 10, lte: 49, label: "10-49个" },
-            { lte: 9, label: "1-9个" }, // 不指定 min，表示 min 为无限大（-Infinity）。
-          ],
+          categories: this.categories,
+          // pieces: [
+          //   { gte: 1000, label: "潼关项目" }, // 不指定 max，表示 max 为无限大（Infinity）。
+          //   { gte: 600, lte: 999, label: "600-999个" },
+          //   { gte: 200, lte: 599, label: "200-599个" },
+          //   { gte: 50, lte: 199, label: "49-199个" },
+          //   { gte: 10, lte: 49, label: "10-49个" },
+          //   { lte: 9, label: "1-9个" }, // 不指定 min，表示 min 为无限大（-Infinity）。
+          // ],
           inRange: {
             // 渐变颜色，从小到大
             color: [
-              "#c3d7df",
-              "#5cb3cc",
-              "#8abcd1",
-              "#66a9c9",
-              "#2f90b9",
-              "#1781b5",
+              "#e4393c",
+              "orange",
+              "#e6a23c",
+              "#67c23a",
+              "#e09eff",
+              "#626aef",
             ],
           },
           textStyle: {
@@ -144,6 +328,12 @@ export default {
           top: top,
           // aspectScale: 0.78,
           show: false,
+          itemStyle: {
+            normal: {
+              areaColor: "#142957",
+              borderColor: "#0692a4",
+            },
+          },
         },
         series: [
           {
@@ -151,33 +341,46 @@ export default {
             type: "map",
             map: name,
             // aspectScale: 0.78,
-            data: data,
+            data: data2,
             // data: [1,100],
             selectedMode: false, //是否允许选中多个区域
             zoom: zoom,
             geoIndex: 1,
             top: top,
             tooltip: {
-              show: true,
-              formatter: function (params) {
-                if (params.data) {
-                  return params.name + "：" + params.data["value"];
-                } else {
-                  return params.name;
-                }
+              trigger: "item",
+              backgroundColor: "rgba(0,0,0,0.4)", // 提示框浮层的背景颜色。
+              axisPointer: {
+                // 坐标轴指示器配置项。
+                type: "shadow", // 'line' 直线指示器  'shadow' 阴影指示器  'none' 无指示器  'cross' 十字准星指示器。
+                axis: "auto", // 指示器的坐标轴。
+                snap: true, // 坐标轴指示器是否自动吸附到点上
               },
-              backgroundColor: "rgba(0,0,0,.6)",
-              borderColor: "rgba(147, 235, 248, .8)",
               textStyle: {
-                color: "#FFF",
+                // 提示框浮层的文本样式。
+                color: "#41feff",
+                fontStyle: "normal",
+                fontWeight: "normal",
+                fontFamily: "sans-serif",
+                fontSize: 14,
+              },
+              padding: 0, // 提示框浮层内边距，
+              formatter: function (params) {
+                if (!params.data) return;
+
+                return `
+                <div style='width:150px;'>
+                    <p  style="width:100%;height:30px; background: linear-gradient(#2caaab, #136692);  text-align: center;line-height: 30px;">${params.data.projectName}</p>
+                    <div style="display:block;word-break: break-all;word-wrap: break-word;white-space:pre-wrap;padding: 10px;">${params.data.desc}</div>
+              </div>
+              `;
               },
             },
             label: {
               show: false,
-              color: "#000",
+              color: "#e4393c",
               // position: [-10, 0],
               formatter: function (val) {
-                // console.log(val)
                 if (val.data !== undefined) {
                   return val.name.slice(0, 2);
                 } else {
@@ -191,7 +394,8 @@ export default {
                 show: false,
               },
               itemStyle: {
-                areaColor: "#389BB7",
+                // areaColor: "#389BB7", // 高亮区域颜色
+                areaColor: "#0b64ad",
                 borderWidth: 1,
               },
             },
@@ -238,19 +442,17 @@ export default {
               brushType: "fill",
             },
             tooltip: {
-              show: true,
+              show: false,
+              trigger: "item",
               formatter: function (params) {
-                if (params.data) {
-                  return params.name + "：" + params.data["value"][2];
-                } else {
-                  return params.name;
-                }
+                var dotHtml =
+                  '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#0090ff"></span>';
+                // return `${dotHtml}${params.name}</br>${
+                //   params.marker
+                // }设备数量：${params?.data?.deviceNum || "--"}`;
+                return "000";
               },
-              backgroundColor: "rgba(0,0,0,.6)",
-              borderColor: "rgba(147, 235, 248, .8)",
-              textStyle: {
-                color: "#FFF",
-              },
+              extraCssText: "z-index:3",
             },
             label: {
               formatter: (param) => {
@@ -276,13 +478,90 @@ export default {
               shadowBlur: 10,
             },
           },
+          // {
+          //   type: "lines",
+          //   zlevel: 3,
+          //   symbol: "circle",
+          //   symbolSize: [5, 5],
+          //   color: "#ff8003",
+          //   opacity: 1,
+          //   label: {
+          //     show: true,
+          //     padding: [10, 20],
+          //     color: "#fff",
+          //     backgroundColor: "#1a3961",
+          //     borderColor: "#aee9fb",
+          //     borderWidth: 1,
+          //     borderRadius: 6,
+          //     formatter(params) {
+          //       let arr = [
+          //         params.name,
+          //         "废水污染：" + params.value[1] + "家",
+          //         "废气污染：" + params.value[0] + "家",
+          //       ];
+          //       return arr.join("\n");
+          //     },
+          //     textStyle: {
+          //       align: "left",
+          //       lineHeight: 20,
+          //     },
+          //   },
+          //   lineStyle: {
+          //     type: "solid",
+          //     color: "#fff",
+          //     width: 0.5,
+          //     opacity: 1,
+          //   },
+          //   data: [
+          //     {
+          //       name: "北京",
+          //       coords: [
+          //         [116.24, 39.55, 100],
+          //         [120.24, 46.55, 100],
+          //       ], // 线条位置[开始位置，结束位置]
+          //       value: [1021, 120],
+          //     },
+          //     {
+          //       name: "深圳",
+          //       coords: [
+          //         [114.271522, 22.753644],
+          //         [118.24, 18.55, 100],
+          //       ], // 线条位置[开始位置，结束位置]
+          //       value: [1021, 120],
+          //     },
+          //     {
+          //       name: "重庆",
+          //       coords: [
+          //         [106.54, 29.59],
+          //         [104.24, 35.55],
+          //       ], // 线条位置[开始位置，结束位置]
+          //       value: [1021, 120],
+          //     },
+          //     {
+          //       name: "浙江",
+          //       coords: [
+          //         [120.19, 30.26],
+          //         [125.24, 27.55, 100],
+          //       ], // 线条位置[开始位置，结束位置]
+          //       value: [1021, 120],
+          //     },
+          //     {
+          //       name: "上海",
+          //       coords: [
+          //         [121.4648, 31.2891],
+          //         [122.4648, 32.2891],
+          //       ], // 线条位置[开始位置，结束位置]
+          //       value: [1201, 60],
+          //     },
+          //   ],
+          // },
         ],
-         //动画效果
-            // animationDuration: 1000,
-            // animationEasing: 'linear',
-            // animationDurationUpdate: 1000
       };
       this.options = option;
+
+      // echarts.on("finished", () => {
+      // });
+      this.outoPaly(this.$refs.CenterMap.chart);
     },
     message(text) {
       this.$Message({
@@ -309,7 +588,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .centermap {
-  margin-bottom: 30px;
+  // margin-bottom: 30px;
 
   .maptitle {
     height: 60px;
@@ -351,7 +630,7 @@ export default {
   }
 
   .mapwrap {
-    height: 548px;
+    height: 630px;
     width: 100%;
     // padding: 0 0 10px 0;
     box-sizing: border-box;

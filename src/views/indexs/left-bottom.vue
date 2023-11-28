@@ -8,13 +8,34 @@
 <template>
   <div
     v-if="pageflag"
-    class="left_boottom_wrap beautify-scroll-def"
+    class="left_boottom_wrap beautify-scroll-def custome-table"
     :class="{ 'overflow-y-auto': !sbtxSwiperFlag }"
   >
-    <component :is="components" :data="list" :class-option="defaultOption">
+    <div class="custome-table__header_container">
+      <div class="custome-table__header">
+        <div class="custome-table__td">设备名称</div>
+        <div class="custome-table__td">设备编号</div>
+        <div class="custome-table__td">报修原因</div>
+        <div class="custome-table__td">报修人</div>
+        <div class="custome-table__td">所在保障组</div>
+        <div class="custome-table__td">时间</div>
+      </div>
+    </div>
+    <component
+      :is="components"
+      :data="list"
+      :class-option="defaultOption"
+      class="scroll-comps"
+    >
       <ul class="left_boottom">
         <li class="left_boottom_item" v-for="(item, i) in list" :key="i">
-          <span class="orderNum doudong">{{ i + 1 }}</span>
+          <div class="custome-table__td ellipsis">{{ item.deviceName }}</div>
+          <div class="custome-table__td ellipsis">{{ item.deviceNum }}</div>
+          <div class="custome-table__td ellipsis">{{ item.resson }}</div>
+          <div class="custome-table__td ellipsis">{{ item.person }}</div>
+          <div class="custome-table__td ellipsis">{{ item.group }}</div>
+          <div class="custome-table__td ellipsis">{{ item.time }}</div>
+          <!-- <span class="orderNum doudong">{{ i + 1 }}</span>
           <div class="inner_right">
             <div class="dibu"></div>
             <div class="flex">
@@ -26,20 +47,20 @@
               </div>
               <div class="info">
                 <span class="labels">时间：</span>
-                <span class="contents " style="font-size: 12px">
+                <span class="contents" style="font-size: 12px">
                   {{ item.createTime }}</span
                 >
               </div>
             </div>
 
-              <span
-                class="types doudong"
-                :class="{
-                  typeRed: item.onlineState == 0,
-                  typeGreen: item.onlineState == 1,
-                }"
-                >{{ item.onlineState == 1 ? "上线" : "下线" }}</span
-              >
+            <span
+              class="types doudong"
+              :class="{
+                typeRed: item.onlineState == 0,
+                typeGreen: item.onlineState == 1,
+              }"
+              >{{ item.onlineState == 1 ? "上线" : "下线" }}</span
+            >
 
             <div class="info addresswrap">
               <span class="labels">地址：</span>
@@ -47,7 +68,7 @@
                 {{ addressHandle(item) }}</span
               >
             </div>
-          </div>
+          </div> -->
         </li>
       </ul>
     </component>
@@ -67,15 +88,23 @@ export default {
       list: [],
       pageflag: true,
       components: vueSeamlessScroll,
-      defaultOption: {
-        ...this.$store.state.setting.defaultOption,
-        singleHeight: 240,
-        limitMoveNum: 5, 
-        step: 0,
-      },
+      // defaultOption: {
+      //   ...this.$store.state.setting.defaultOption,
+      //   singleHeight: 0,
+      //   limitMoveNum: 10,
+      //   step: 1,
+      // },
     };
   },
   computed: {
+    defaultOption() {
+      return {
+        ...this.$store.state.setting.defaultOption,
+        singleHeight: 0,
+        limitMoveNum: 10,
+        step: 1,
+      };
+    },
     sbtxSwiperFlag() {
       let sbtxSwiper = this.$store.state.setting.sbtxSwiper;
       if (sbtxSwiper) {
@@ -86,9 +115,7 @@ export default {
       return sbtxSwiper;
     },
   },
-  created() {
-    
-  },
+  created() {},
 
   mounted() {
     this.getData();
@@ -111,7 +138,99 @@ export default {
         console.log("设备提醒", res);
         if (res.success) {
           this.countUserNumData = res.data;
-          this.list = res.data.list;
+          // this.list = res.data.list;
+          this.list = [
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              group: "保障组1",
+              person: "李元芳",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              person: "李元芳",
+              group: "保障组1",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              person: "李元芳",
+              group: "保障组1",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              person: "李元芳",
+              group: "保障组1",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              group: "保障组1",
+              person: "李元芳",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              person: "李元芳",
+              phone: "15591611111",
+              group: "保障组1",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              group: "保障组1",
+              person: "李元芳",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              person: "李元芳",
+              group: "保障组1",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              group: "保障组1",
+              person: "李元芳",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+            {
+              deviceName: "挖掘机-1",
+              deviceNum: "SHT-001",
+              resson: "报修原因",
+              group: "保障组1",
+              person: "李元芳",
+              phone: "15591611111",
+              time: "2022-02-22 16:40:01",
+            },
+          ];
           let timer = setTimeout(() => {
             clearTimeout(timer);
             this.defaultOption.step =
@@ -129,11 +248,46 @@ export default {
   },
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .left_boottom_wrap {
   overflow: hidden;
   width: 100%;
-  height: 100%;
+  max-height: calc(100% - 60px);
+  margin-top: 40px;
+}
+.custome-table__header_container {
+  height: 40px;
+  width: 100%;
+  // background: #0982f2;
+  // background: #263b40;
+  background: linear-gradient(
+    180deg,
+    rgba(46 144 241 / 30%),
+    rgba(51 161 219 / 50%)
+  );
+  position: absolute;
+  z-index: 999;
+  left: 0;
+  top: 12px;
+  display: flex;
+  justify-content: center;
+  border-radius: 12px 12px 0 0;
+}
+
+.custome-table {
+  &__header {
+    width: 488px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+
+    // left: 50%;
+    // transform: translateX(-50%);
+  }
+  &__td {
+    flex: 1;
+    text-align: center;
+  }
 }
 
 .doudong {
@@ -157,9 +311,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
-    font-size: 14px;
+    padding: 4px 10px;
+    font-size: 16px;
     margin: 10px 0;
+    &:last-child {
+      margin-bottom: 0;
+    }
     .orderNum {
       margin: 0 16px 0 -20px;
     }
@@ -224,7 +381,6 @@ export default {
       width: 80px;
       flex-shrink: 0;
     }
-
 
     .time {
       font-size: 12px;

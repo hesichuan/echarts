@@ -6,7 +6,7 @@
  * @FilePath: \web-pc\src\pages\big-screen\components\item-wrap\item-wrap.vue
 -->
 <template>
-  <dv-border-box-13 class="lr_titles">
+  <div class="lr_titles">
     <div class="item_title" v-if="title !== ''">
       <div class="zuo"></div>
       <span class="title-inner"> &nbsp;&nbsp;{{ title }}&nbsp;&nbsp; </span>
@@ -17,7 +17,7 @@
     >
       <slot></slot>
     </div>
-  </dv-border-box-13>
+  </div>
 </template>
 
 <script>
@@ -43,7 +43,7 @@ $item_title_content-height: calc(100% - 38px);
 
 .lr_titles {
   box-sizing: border-box;
-
+  height: 100%;
   :deep(.border-box-content) {
     box-sizing: border-box;
     padding: 6px 16px 0px;
