@@ -23,7 +23,7 @@
           <div class="guang"></div>
           <div class="d-flex jc-center">
             <div class="title">
-              <span class="title-text">设备维修平台</span>
+              <span class="title-text">设备维修监控中心</span>
             </div>
           </div>
           <div class="timers">

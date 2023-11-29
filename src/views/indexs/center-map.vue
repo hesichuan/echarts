@@ -58,7 +58,7 @@ const provinceList = [
 export default {
   data() {
     return {
-      timer: null,
+      mapTimer: null,
       maptitle: "设备分布图",
       options: {},
       code: "china", //china 代表中国 其他地市是行政编码
@@ -132,6 +132,7 @@ export default {
           item.properties.centroid || item.properties.center;
       });
       let newData = [];
+      let effectScatterData = [];
       mydata.map((item, index) => {
         const projectList = [
           {
@@ -169,15 +170,19 @@ export default {
             projectName: projectList[index] && projectList[index].projectName,
             desc: projectList[index] && projectList[index].desc,
           });
+          effectScatterData.push({
+            name: item.name,
+            value: cityCenter[item.name].concat(item.value),
+          });
         }
       });
-      console.log("newData", newData);
-      this.init(name, mydata, newData);
+      console.log("data2", newData);
+      this.init(name, mydata, newData, effectScatterData);
     },
     outoPaly(myChart) {
       let currentIndex = -1;
       // 启动定时器开始轮播
-      this.timer = setInterval(function () {
+      this.mapTimer = setInterval(function () {
         var dataLen = provinceList.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
@@ -202,10 +207,10 @@ export default {
       }, 5000);
       // 鼠标移入停止轮播
       myChart.on("mouseover", (params) => {
-        clearInterval(this.timer);
-        this.timer = null;
+        clearInterval(this.mapTimer);
+        this.mapTimer = null;
 
-        console.log("this.timer", this.timer);
+        console.log("this.mapTimer", this.mapTimer);
 
         myChart.dispatchAction({
           type: "downplay",
@@ -224,8 +229,8 @@ export default {
       });
       // 鼠标移出 在上一次count的位置后继续轮播
       myChart.on("mouseout", () => {
-        this.timer && clearInterval(this.timer);
-        this.timer = setInterval(function () {
+        this.mapTimer && clearInterval(this.mapTimer);
+        this.mapTimer = setInterval(function () {
           var dataLen = provinceList.length;
           // 取消之前高亮的图形
           myChart.dispatchAction({
@@ -250,7 +255,7 @@ export default {
         }, 5000);
       });
     },
-    init(name, data, data2) {
+    init(name, data, data2, effectScatterData) {
       let top = 90;
       let zoom = 1.15;
       let option = {
@@ -377,9 +382,9 @@ export default {
               },
             },
             label: {
-              show: false,
-              color: "#e4393c",
-              // position: [-10, 0],
+              show: true,
+              color: "#ffffff",
+              position: [0, 20],
               formatter: function (val) {
                 if (val.data !== undefined) {
                   return val.name.slice(0, 2);
@@ -391,7 +396,7 @@ export default {
             },
             emphasis: {
               label: {
-                show: false,
+                show: true,
               },
               itemStyle: {
                 // areaColor: "#389BB7", // 高亮区域颜色
@@ -426,9 +431,11 @@ export default {
             },
           },
           {
-            data: data2,
+            data: effectScatterData,
+            // data: data2,
             type: "effectScatter",
             coordinateSystem: "geo",
+            zlevel: 2,
             symbolSize: function (val) {
               return 4;
               // return val[2] / 50;
@@ -441,24 +448,25 @@ export default {
               color: "rgba(255,255,255, 1)",
               brushType: "fill",
             },
-            tooltip: {
-              show: false,
-              trigger: "item",
-              formatter: function (params) {
-                var dotHtml =
-                  '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#0090ff"></span>';
-                // return `${dotHtml}${params.name}</br>${
-                //   params.marker
-                // }设备数量：${params?.data?.deviceNum || "--"}`;
-                return "000";
-              },
-              extraCssText: "z-index:3",
-            },
+            // tooltip: {
+            //   show: false,
+            //   trigger: "item",
+            //   formatter: function (params) {
+            //     var dotHtml =
+            //       '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#0090ff"></span>';
+            //     // return `${dotHtml}${params.name}</br>${
+            //     //   params.marker
+            //     // }设备数量：${params?.data?.deviceNum || "--"}`;
+            //     return "000";
+            //   },
+            //   extraCssText: "z-index:3",
+            // },
             label: {
-              formatter: (param) => {
-                return param.name.slice(0, 2);
-              },
-
+              // formatter: (param) => {
+              //   console.log("paream", param);
+              //   return param.name.slice(0, 2);
+              // },
+              formatter: "{b}",
               fontSize: 11,
               offset: [0, 2],
               position: "bottom",
