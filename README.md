@@ -62,3 +62,7 @@ npm run lint
    ```sh
       git checkout echarts-clear
    ```
+2. 设备共享平台
+   ```sh
+      git checkout echarts-2.0
+   ```
