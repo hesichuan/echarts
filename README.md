@@ -55,3 +55,10 @@ npm run lint
 ### req
 
     引入DataV组件后，启动报错 参考[https://blog.csdn.net/weixin_43832353/article/details/129228896]
+
+### git brach info
+
+1. clear template
+   ```sh
+      git checkout echarts-clear
+   ```
