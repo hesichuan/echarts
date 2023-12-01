@@ -92,8 +92,8 @@ export default {
           },
         };
         if (res.success) {
-          this.getGeojson(demoArea.data.regionCode, demoArea.data.dataList); // 'china, [{name: "陕西省",value: 879}]'
-          this.mapclick();
+          this.getGeojson(demoArea.data.regionCode, demoArea.data.dataList); // ('china, [{name: "陕西省",value: 879}]')
+          // this.mapclick();
         } else {
           this.$Message.warning(res.msg);
         }
@@ -117,6 +117,7 @@ export default {
       if (mapjson) {
         mapjson = mapjson.geoJSON;
       } else {
+        // mapjson = await GETNOBASE(`./map-geojson/word.json`).then(
         mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then(
           (res) => {
             return res;
@@ -210,17 +211,15 @@ export default {
         clearInterval(this.mapTimer);
         this.mapTimer = null;
 
-        console.log("this.mapTimer", this.mapTimer);
-
         myChart.dispatchAction({
           type: "downplay",
           seriesIndex: 0,
         });
-        myChart.dispatchAction({
-          type: "highlight",
-          seriesIndex: 0,
-          dataIndex: params.dataIndex,
-        });
+        // myChart.dispatchAction({
+        //   type: "highlight",
+        //   seriesIndex: 0,
+        //   dataIndex: params.dataIndex,
+        // });
         myChart.dispatchAction({
           type: "showTip",
           seriesIndex: 0,
@@ -261,40 +260,34 @@ export default {
       let option = {
         // backgroundColor: "rgba(0,0,0,0)",
         tooltip: {
-          show: true,
+          trigger: "item",
+          backgroundColor: "rgba(0,0,0,0.4)", // 提示框浮层的背景颜色。
+          axisPointer: {
+            // 坐标轴指示器配置项。
+            type: "shadow", // 'line' 直线指示器  'shadow' 阴影指示器  'none' 无指示器  'cross' 十字准星指示器。
+            axis: "auto", // 指示器的坐标轴。
+            snap: true, // 坐标轴指示器是否自动吸附到点上
+          },
+          textStyle: {
+            // 提示框浮层的文本样式。
+            color: "#41feff",
+            fontStyle: "normal",
+            fontWeight: "normal",
+            fontFamily: "sans-serif",
+            fontSize: 14,
+          },
+          padding: 0, // 提示框浮层内边距，
+          formatter: function (params) {
+            if (!params.data) return;
+
+            return `
+                <div style='width:150px;'>
+                    <p  style="width:100%;height:30px; background: linear-gradient(#2caaab, #136692);  text-align: center;line-height: 30px;">${params.data.projectName}</p>
+                    <div style="display:block;word-break: break-all;word-wrap: break-word;white-space:pre-wrap;padding: 10px;">${params.data.desc}</div>
+              </div>
+              `;
+          },
         },
-        // tooltip: {
-        //   trigger: "item",
-        //   backgroundColor: "rgba(0,0,0,0.4)", // 提示框浮层的背景颜色。
-        //   axisPointer: {
-        //     // 坐标轴指示器配置项。
-        //     type: "shadow", // 'line' 直线指示器  'shadow' 阴影指示器  'none' 无指示器  'cross' 十字准星指示器。
-        //     axis: "auto", // 指示器的坐标轴。
-        //     snap: true, // 坐标轴指示器是否自动吸附到点上
-        //   },
-        //   textStyle: {
-        //     // 提示框浮层的文本样式。
-        //     color: "#41feff",
-        //     fontStyle: "normal",
-        //     fontWeight: "normal",
-        //     fontFamily: "sans-serif",
-        //     fontSize: 14,
-        //   },
-        //   padding: 0, // 提示框浮层内边距，
-        //   formatter: function (params) {
-        //     console.log("params", params);
-        //     let showname = params;
-        //     return `
-        //         <div style='width:150px;height:150px'>
-        //             <p  style="width:100%;height:30px; background: linear-gradient(#2caaab, #136692);  text-align: center;line-height: 30px;">${showname.data.name}</p>
-        //             <p  style="line-height: 30px; text-indent: 10px;">补助人数:${showname.data.num}人</p>
-        //             <p style="line-height: 30px; text-indent: 10px;">补助金额:${showname.data.money}万元</p>
-        //             <p style="line-height: 30px; text-indent: 10px;" >支出比例:${showname.data.zc}%</p>
-        //             <p style="line-height: 30px; text-indent: 10px;">补助发生率:${showname.data.bz}%</p>
-        //       </div>
-        //       `;
-        //   },
-        // },
         legend: {
           show: false,
         },
@@ -302,14 +295,6 @@ export default {
           left: 20,
           bottom: 20,
           categories: this.categories,
-          // pieces: [
-          //   { gte: 1000, label: "潼关项目" }, // 不指定 max，表示 max 为无限大（Infinity）。
-          //   { gte: 600, lte: 999, label: "600-999个" },
-          //   { gte: 200, lte: 599, label: "200-599个" },
-          //   { gte: 50, lte: 199, label: "49-199个" },
-          //   { gte: 10, lte: 49, label: "10-49个" },
-          //   { lte: 9, label: "1-9个" }, // 不指定 min，表示 min 为无限大（-Infinity）。
-          // ],
           inRange: {
             // 渐变颜色，从小到大
             color: [
@@ -345,58 +330,21 @@ export default {
             name: "MAP",
             type: "map",
             map: name,
-            // aspectScale: 0.78,
             data: data2,
-            // data: [1,100],
             selectedMode: false, //是否允许选中多个区域
             zoom: zoom,
             geoIndex: 1,
             top: top,
             tooltip: {
               trigger: "item",
-              backgroundColor: "rgba(0,0,0,0.4)", // 提示框浮层的背景颜色。
-              axisPointer: {
-                // 坐标轴指示器配置项。
-                type: "shadow", // 'line' 直线指示器  'shadow' 阴影指示器  'none' 无指示器  'cross' 十字准星指示器。
-                axis: "auto", // 指示器的坐标轴。
-                snap: true, // 坐标轴指示器是否自动吸附到点上
-              },
               textStyle: {
-                // 提示框浮层的文本样式。
-                color: "#41feff",
-                fontStyle: "normal",
-                fontWeight: "normal",
-                fontFamily: "sans-serif",
+                // color: '#fff',
                 fontSize: 14,
               },
-              padding: 0, // 提示框浮层内边距，
-              formatter: function (params) {
-                if (!params.data) return;
-
-                return `
-                <div style='width:150px;'>
-                    <p  style="width:100%;height:30px; background: linear-gradient(#2caaab, #136692);  text-align: center;line-height: 30px;">${params.data.projectName}</p>
-                    <div style="display:block;word-break: break-all;word-wrap: break-word;white-space:pre-wrap;padding: 10px;">${params.data.desc}</div>
-              </div>
-              `;
-              },
-            },
-            label: {
-              show: true,
-              color: "#ffffff",
-              position: [0, 20],
-              formatter: function (val) {
-                if (val.data !== undefined) {
-                  return val.name.slice(0, 2);
-                } else {
-                  return "";
-                }
-              },
-              rich: {},
             },
             emphasis: {
               label: {
-                show: true,
+                show: false,
               },
               itemStyle: {
                 // areaColor: "#389BB7", // 高亮区域颜色
@@ -447,6 +395,9 @@ export default {
               scale: 6,
               color: "rgba(255,255,255, 1)",
               brushType: "fill",
+            },
+            tooltip: {
+              show: false,
             },
             // tooltip: {
             //   show: false,
@@ -567,8 +518,6 @@ export default {
       };
       this.options = option;
 
-      // echarts.on("finished", () => {
-      // });
       this.outoPaly(this.$refs.CenterMap.chart);
     },
     message(text) {
