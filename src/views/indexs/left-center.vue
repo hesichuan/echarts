@@ -21,21 +21,33 @@
 <script>
 import { currentGET } from "api/modules";
 export default {
+  props: {
+    dataInfo: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  watch: {
+    dataInfo(val) {
+      this.getData(val);
+    },
+  },
   data() {
     return {
       options: {},
-      countUserNumData: {
-        lockNum: 0,
-        onlineNum: 0,
-        offlineNum: 0,
-        totalNum: 0,
+      repairData: {
+        guarantee: 0,
+        baseRepair: 0,
+        carryOn: 0,
+        reCreate: 0,
+        total: 0,
       },
       pageflag: true,
       timer: null,
     };
   },
   created() {
-    this.getData();
+    // this.getData();
   },
   mounted() {},
   beforeDestroy() {
@@ -48,28 +60,23 @@ export default {
         this.timer = null;
       }
     },
-    getData() {
-      this.pageflag = true;
-      // this.pageflag =false
+    getData(data) {
+      this.pageflag = false;
 
-      currentGET("big1").then((res) => {
-        //只打印一次
-        if (!this.timer) {
-          console.log("设备总览", res);
-        }
-        if (res.success) {
-          this.countUserNumData = res.data;
-          this.$nextTick(() => {
-            this.init();
-          });
-        } else {
-          this.pageflag = false;
-          this.$Message({
-            text: res.msg,
-            type: "warning",
-          });
-        }
+      this.repairData = {
+        ...this.repairData,
+        guarantee: Number(data.guarantee.orderNum),
+        baseRepair: Number(data.baseRepair.orderNum),
+        reCreate: Number(data.reCreate.orderNum),
+        carryOn: Number(data.carryOn.orderNum),
+        total: Number(data.total.orderNum),
+      };
+
+      this.$nextTick(() => {
+        this.init();
       });
+
+      this.pageflag = true;
     },
     //轮询
     switper() {
@@ -95,10 +102,10 @@ export default {
       });
     },
     init() {
-      let total = this.countUserNumData.totalNum;
+      let total = this.repairData.total;
       let colors = ["#ECA444", "#33A1DB", "#56B557", "#e4393c"];
       let piedata = {
-        name: "设备总览",
+        name: "订单数量",
         type: "pie",
         radius: ["42%", "65%"],
         avoidLabelOverlap: false,
@@ -110,36 +117,29 @@ export default {
 
         color: colors,
         data: [
-          // {
-          //   value: 0,
-          //   name: "告警",
-          //   label: {
-          //     shadowColor: colors[0],
-          //   },
-          // },
           {
-            value: this.countUserNumData.lockNum,
+            value: this.repairData.guarantee,
             name: "现场保障",
             label: {
               shadowColor: colors[0],
             },
           },
           {
-            value: this.countUserNumData.onlineNum,
+            value: this.repairData.baseRepair,
             name: "基地维修",
             label: {
               shadowColor: colors[2],
             },
           },
           {
-            value: this.countUserNumData.offlineNum,
+            value: this.repairData.carryOn,
             name: "对外承揽",
             label: {
               shadowColor: colors[1],
             },
           },
           {
-            value: 50,
+            value: this.repairData.reCreate,
             name: "再制造",
             label: {
               shadowColor: colors[3],

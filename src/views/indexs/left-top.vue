@@ -9,14 +9,17 @@
   <ul class="user_Overview flex" v-if="pageflag">
     <li class="user_Overview-item" style="color: #00fdfa">
       <div class="user_Overview_nums allnum">
-        <dv-digital-flop :config="config" style="width: 100%; height: 100%" />
+        <dv-digital-flop
+          :config="inLeaseConfig"
+          style="width: 100%; height: 100%"
+        />
       </div>
       <p>在租设备数</p>
     </li>
     <li class="user_Overview-item" style="color: #07f7a8">
       <div class="user_Overview_nums online">
         <dv-digital-flop
-          :config="onlineconfig"
+          :config="perfectConfig"
           style="width: 100%; height: 100%"
         />
       </div>
@@ -26,7 +29,7 @@
     <li class="user_Overview-item" style="color: #f5023d">
       <div class="user_Overview_nums laramnum">
         <dv-digital-flop
-          :config="laramnumconfig"
+          :config="inRepairConfig"
           style="width: 100%; height: 100%"
         />
       </div>
@@ -36,7 +39,7 @@
     <li class="user_Overview-item" style="color: #e3b337">
       <div class="user_Overview_nums offline">
         <dv-digital-flop
-          :config="offlineconfig"
+          :config="waitRepairConfig"
           style="width: 100%; height: 100%"
         />
       </div>
@@ -54,6 +57,19 @@ let style = {
   fontSize: 24,
 };
 export default {
+  props: {
+    dataInfo: {
+      type: Object,
+      default: () => {
+        return {
+          inLeaseNum: 0,
+          perfectNum: 0,
+          inRepairNum: 0,
+          waitRepairNum: 0,
+        };
+      },
+    },
+  },
   data() {
     return {
       options: {},
@@ -65,8 +81,8 @@ export default {
       },
       pageflag: true,
       timer: null,
-      config: {
-        number: [100],
+      inLeaseConfig: {
+        number: [0],
         content: "{nt}",
         style: {
           ...style,
@@ -74,7 +90,7 @@ export default {
           fill: "#00fdfa",
         },
       },
-      onlineconfig: {
+      perfectConfig: {
         number: [0],
         content: "{nt}",
         style: {
@@ -83,7 +99,7 @@ export default {
           fill: "#07f7a8",
         },
       },
-      offlineconfig: {
+      waitRepairConfig: {
         number: [0],
         content: "{nt}",
         style: {
@@ -92,7 +108,7 @@ export default {
           fill: "#e3b337",
         },
       },
-      laramnumconfig: {
+      inRepairConfig: {
         number: [0],
         content: "{nt}",
         style: {
@@ -109,11 +125,16 @@ export default {
     },
   },
   created() {
-    this.getData();
+    // this.getData();
   },
   mounted() {},
   beforeDestroy() {
     this.clearData();
+  },
+  watch: {
+    dataInfo(val) {
+      this.packageData(val);
+    },
   },
   methods: {
     clearData() {
@@ -122,36 +143,54 @@ export default {
         this.timer = null;
       }
     },
+    packageData(data) {
+      this.inLeaseConfig = {
+        ...this.inLeaseConfig,
+        number: [Number(data.inLeaseNum)],
+      };
+      this.perfectConfig = {
+        ...this.perfectConfig,
+        number: [Number(data.perfectNum)],
+      };
+      this.waitRepairConfig = {
+        ...this.waitRepairConfig,
+        number: [Number(data.waitRepairNum)],
+      };
+      this.inRepairConfig = {
+        ...this.inRepairConfig,
+        number: [Number(data.inRepairNum)],
+      };
+    },
     getData() {
       this.pageflag = true;
-      currentGET("big2").then((res) => {
-        if (!this.timer) {
-          console.log("设备总览", res);
-        }
-        if (res.success) {
-          this.userOverview = res.data;
-          this.onlineconfig = {
-            ...this.onlineconfig,
-            number: [res.data.onlineNum],
-          };
-          this.config = {
-            ...this.config,
-            number: [res.data.totalNum],
-          };
-          this.offlineconfig = {
-            ...this.offlineconfig,
-            number: [res.data.offlineNum],
-          };
-          this.laramnumconfig = {
-            ...this.laramnumconfig,
-            number: [res.data.alarmNum],
-          };
-          this.switper();
-        } else {
-          this.pageflag = false;
-          this.$Message.warning(res.msg);
-        }
-      });
+      // currentGET("big2").then((res) => {
+      //   if (!this.timer) {
+      //     console.log("设备总览", res);
+      //   }
+      //   if (res.success) {
+      //     this.userOverview = res.data;
+      //     this.perfectConfig = {
+      //       ...this.perfectConfig,
+      //       number: [res.data.onlineNum],
+      //     };
+      //     this.config = {
+      //       ...this.config,
+      //       number: [res.data.totalNum],
+      //     };
+      //     this.waitRepairConfig = {
+      //       ...this.waitRepairConfig,
+      //       number: [res.data.offlineNum],
+      //     };
+      //     this.inRepairConfig = {
+      //       ...this.inRepairConfig,
+      //       number: [res.data.alarmNum],
+      //     };
+      //     this.switper();
+      //   } else {
+      //     this.pageflag = false;
+      //     this.$Message.warning(res.msg);
+      //   }
+      // });
     },
     //轮询
     switper() {

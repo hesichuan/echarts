@@ -1,13 +1,6 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 15:27:58
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 11:24:14
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-center.vue
--->
 <template>
   <div
-    v-if="pageflag"
+    v-if="dataList.length"
     class="right_center_wrap beautify-scroll-def right_scroll_wap custome-table"
     :class="{ 'overflow-y-auto': !sbtxSwiperFlag }"
   >
@@ -25,71 +18,33 @@
     </div>
     <component
       :is="components"
-      :data="list"
+      :data="dataList"
       :class-option="defaultOption"
       class="scroll-wrap-container"
     >
       <ul class="right_center">
-        <li class="right_center_item" v-for="(item, i) in list" :key="i">
-          <div class="custome-table__td ellipsis">{{ item.repaireOrder }}</div>
-          <div class="custome-table__td ellipsis">{{ item.person }}</div>
-          <div class="custome-table__td ellipsis">{{ item.phone }}</div>
-          <div class="custome-table__td ellipsis">{{ item.missing }}</div>
-          <div class="custome-table__td ellipsis">{{ item.processIn }}</div>
-          <div class="custome-table__td ellipsis">{{ item.workingTime }}</div>
-          <div class="custome-table__td ellipsis status__style">
-            <span :class="`status-common style__${item.status}`">{{
-              item.status == 1 ? "空闲" : item.status == 2 ? "工作" : "紧急"
-            }}</span>
+        <li class="right_center_item" v-for="(item, i) in dataList" :key="i">
+          <div class="custome-table__td ellipsis">{{ item.name }}</div>
+          <div class="custome-table__td ellipsis">{{ item.level }}</div>
+          <div class="custome-table__td ellipsis">{{ item.address }}</div>
+          <div class="custome-table__td ellipsis">{{ item.workTasks }}</div>
+          <div class="custome-table__td ellipsis">
+            {{ item.completeProgress }}
           </div>
-          <!-- <span class="orderNum">{{ i + 1 }}</span>
-          <div class="inner_right">
-            <div class="dibu"></div>
-            <div class="flex">
-              <div class="info">
-                <span class="labels">设备ID：</span>
-                <span class="contents zhuyao"> {{ item.gatewayno }}</span>
-              </div>
-              <div class="info">
-                <span class="labels">型号：</span>
-                <span class="contents"> {{ item.terminalno }}</span>
-              </div>
-              <div class="info">
-                <span class="labels">告警值：</span>
-                <span class="contents warning">
-                  {{ item.alertvalue | montionFilter }}</span
-                >
-              </div>
-            </div>
-
-            <div class="flex">
-              <div class="info">
-                <span class="labels"> 地址：</span>
-                <span class="contents ciyao" style="font-size: 12px">
-                  {{ item.provinceName }}/{{ item.cityName }}/{{
-                    item.countyName
-                  }}</span
-                >
-              </div>
-              <div class="info time">
-                <span class="labels">时间：</span>
-                <span class="contents" style="font-size: 12px">
-                  {{ item.createtime }}</span
-                >
-              </div>
-            </div>
-            <div class="flex">
-              <div class="info">
-                <span class="labels">报警内容：</span>
-                <span
-                  class="contents ciyao"
-                  :class="{ warning: item.alertdetail }"
-                >
-                  {{ item.alertdetail || "无" }}</span
-                >
-              </div>
-            </div>
-          </div> -->
+          <div class="custome-table__td ellipsis">{{ item.accruedHours }}</div>
+          <div class="custome-table__td ellipsis status__style">
+            <span
+              :class="[
+                'status-common',
+                item.currentStatus == '空闲'
+                  ? 'style__1'
+                  : item.currentStatus == '工作'
+                  ? 'style__2'
+                  : 'style__3',
+              ]"
+              >{{ item.currentStatus }}</span
+            >
+          </div>
         </li>
       </ul>
     </component>
@@ -103,7 +58,12 @@ import vueSeamlessScroll from "vue-seamless-scroll"; // vue2引入方式
 import Kong from "../../components/kong.vue";
 export default {
   components: { vueSeamlessScroll, Kong },
-
+  props: {
+    dataList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       list: [],
@@ -122,7 +82,7 @@ export default {
         ...this.$store.state.setting.defaultOption,
         singleHeight: 0,
         limitMoveNum: 10,
-        step: 1,
+        step: 0.6,
       };
     },
     sbtxSwiperFlag() {
@@ -136,7 +96,7 @@ export default {
     },
   },
   created() {
-    this.getData();
+    // this.getData();
   },
 
   mounted() {},

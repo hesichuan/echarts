@@ -29,49 +29,74 @@ const demoData = {
   ],
   lineData: [23, 80, 80, 45, 41, 52, 80, 53, 19, 81, 77, 94], // 成本
 };
-const packageData = ({ barData = [], lineData = [], category = [] }) => {
-  const rateData = [];
-  for (let i = 0; i < barData.length; i++) {
-    const curBar = barData[i];
-    const curLine = lineData[i];
-    const curRate = Math.floor(((curBar - curLine) / curLine) * 100);
 
-    rateData.push(curRate);
-  }
-
-  return {
-    barData,
-    lineData,
-    category,
-    rateData,
-  };
-};
 export default {
+  props: {
+    dataList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       options: {},
     };
   },
-  props: {},
+  watch: {
+    dataList: {
+      handler(newValue, oldValue) {
+        // 这里是当 myArray 发生变化时的处理逻辑
+        this.getData(newValue);
+      },
+      deep: true,
+    },
+  },
   mounted() {
-    this.getData();
+    // this.getData();
   },
   methods: {
-    getData() {
+    packageData(arr = []) {
+      const barData = []; // 收入
+      const lineData = []; // 成本
+      const category = [];
+      const rateData = [];
+      for (let i = 0; i < arr.length; i++) {
+        const cur = arr[i];
+        // const curLine = lineData[i];
+        // const curRate = Math.floor(((curBar - curLine) / curLine) * 100);
+
+        // rateData.push(curRate);
+        barData.push(cur.revenue);
+        lineData.push(cur.cost);
+        category.push(cur.yearMonth);
+        rateData.push(cur.margins.replace(/%/, ""));
+      }
+
+      return {
+        barData,
+        lineData,
+        category,
+        rateData,
+      };
+    },
+    getData(originData) {
       this.pageflag = true;
-      currentGET("big6", { companyName: this.companyName }).then((res) => {
-        if (res.success) {
-          const _data = packageData(demoData);
-          console.log("月度利润率", _data);
-          this.init(_data);
-        } else {
-          this.pageflag = false;
-          this.$Message({
-            text: res.msg,
-            type: "warning",
-          });
-        }
-      });
+      const data = this.packageData(originData);
+      console.log("data---", data);
+      this.init(data);
+      // currentGET("big6", { companyName: this.companyName }).then((res) => {
+      //   if (res.success) {
+      //     const _data = packageData(demoData);
+      //     console.log("月度利润率", _data);
+      //     this.init(_data);
+      //   } else {
+      //     this.pageflag = false;
+      //     this.$Message({
+      //       text: res.msg,
+      //       type: "warning",
+      //     });
+      //   }
+      // });
     },
     init(newData) {
       this.options = {

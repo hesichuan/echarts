@@ -7,7 +7,7 @@
 -->
 <template>
   <div
-    v-if="pageflag"
+    v-if="dataList.length"
     class="left_boottom_wrap beautify-scroll-def custome-table"
     :class="{ 'overflow-y-auto': !sbtxSwiperFlag }"
   >
@@ -23,52 +23,18 @@
     </div>
     <component
       :is="components"
-      :data="list"
+      :data="dataList"
       :class-option="defaultOption"
       class="scroll-comps"
     >
       <ul class="left_boottom">
         <li class="left_boottom_item" v-for="(item, i) in dataList" :key="i">
-          <div class="custome-table__td ellipsis">{{ item.repairNum }}</div>
+          <div class="custome-table__td ellipsis">{{ item.deviceCode }}</div>
           <div class="custome-table__td ellipsis">{{ item.deviceName }}</div>
           <div class="custome-table__td ellipsis">{{ item.repairer }}</div>
           <div class="custome-table__td ellipsis">{{ item.repairType }}</div>
           <div class="custome-table__td ellipsis">{{ item.time }}</div>
-          <div class="custome-table__td ellipsis">{{ item.type }}</div>
-          <!-- <span class="orderNum doudong">{{ i + 1 }}</span>
-          <div class="inner_right">
-            <div class="dibu"></div>
-            <div class="flex">
-              <div class="info">
-                <span class="labels">设备ID：</span>
-                <span class="contents zhuyao doudong wangguan">
-                  {{ item.gatewayno }}</span
-                >
-              </div>
-              <div class="info">
-                <span class="labels">时间：</span>
-                <span class="contents" style="font-size: 12px">
-                  {{ item.createTime }}</span
-                >
-              </div>
-            </div>
-
-            <span
-              class="types doudong"
-              :class="{
-                typeRed: item.onlineState == 0,
-                typeGreen: item.onlineState == 1,
-              }"
-              >{{ item.onlineState == 1 ? "上线" : "下线" }}</span
-            >
-
-            <div class="info addresswrap">
-              <span class="labels">地址：</span>
-              <span class="contents ciyao" style="font-size: 12px">
-                {{ addressHandle(item) }}</span
-              >
-            </div>
-          </div> -->
+          <div class="custome-table__td ellipsis">{{ item.currentStatus }}</div>
         </li>
       </ul>
     </component>
@@ -94,12 +60,6 @@ export default {
       list: [],
       pageflag: true,
       components: vueSeamlessScroll,
-      // defaultOption: {
-      //   ...this.$store.state.setting.defaultOption,
-      //   singleHeight: 0,
-      //   limitMoveNum: 10,
-      //   step: 1,
-      // },
     };
   },
   computed: {
@@ -124,7 +84,7 @@ export default {
   created() {},
 
   mounted() {
-    this.getData();
+    // this.getData();
   },
   methods: {
     addressHandle(item) {
@@ -241,7 +201,7 @@ export default {
             clearTimeout(timer);
             this.defaultOption.step =
               this.$store.state.setting.defaultOption.step;
-          }, this.$store.state.setting.defaultOption.waitTime);
+          }, 0);
         } else {
           this.pageflag = false;
           this.$Message({

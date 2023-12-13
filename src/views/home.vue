@@ -14,7 +14,7 @@
     :selfAdaption="$store.state.setting.isScale"
   >
     <div class="bg">
-      <dv-loading v-if="loading">Loading...</dv-loading>
+      <dv-loading v-if="isLoading">Loading...</dv-loading>
       <div v-else class="host-body">
         <!-- 头部 s -->
         <div class="d-flex jc-center title_wrap">
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { formatTime } from "../utils/index.js";
 import Setting from "./setting.vue";
 import ScaleScreen from "@/components/scale-screen/scale-screen.vue";
@@ -67,7 +68,9 @@ export default {
       return msg || 0;
     },
   },
-  computed: {},
+  computed: {
+    ...mapGetters("setting", ["isLoading"]),
+  },
   created() {},
   mounted() {
     this.timeFn();
@@ -89,7 +92,8 @@ export default {
     },
     cancelLoading() {
       let timer = setTimeout(() => {
-        this.loading = false;
+        // this.loading = false;
+        this.$store.commit("setting/setIsLoading", false);
         clearTimeout(timer);
       }, 500);
     },

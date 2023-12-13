@@ -1,10 +1,3 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-04 09:23:59
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 11:05:02
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\index.vue
--->
 <template>
   <div class="contents">
     <div class="contetn_left">
@@ -18,7 +11,7 @@
               class="contetn_left-top contetn_lr-item"
               title="设备状态总览"
             >
-              <LeftTop />
+              <LeftTop :dataInfo="deviceStatusInfo" />
             </ItemWrap2>
           </div>
           <div class="item l-c">
@@ -26,7 +19,7 @@
               class="contetn_left-top contetn_lr-item"
               title="维修订单类别"
             >
-              <LeftCenter />
+              <LeftCenter :dataInfo="repairOrder" />
             </ItemWrap2>
           </div>
           <div class="item l-b">
@@ -51,14 +44,14 @@
     <div class="contetn_center">
       <CenterMap class="contetn_center_top" />
       <ItemWrap class="contetn_center-bottom" title="月度利润率">
-        <CenterBottom />
+        <CenterBottom :dataList="profitMargin" />
       </ItemWrap>
     </div>
     <div class="contetn_right">
       <dv-border-Box-1>
         <div class="container">
           <div class="item">
-            <RightBottom />
+            <RightBottom :dataList="repairMachinistList" />
           </div>
         </div>
       </dv-border-Box-1>
@@ -86,6 +79,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import LeftTop from "./left-top.vue";
 import LeftCenter from "./left-center.vue";
 import LeftBottom from "./left-bottom.vue";
@@ -112,6 +107,9 @@ export default {
     return {
       repairDataList: [],
       repairMachinistList: [],
+      deviceStatusInfo: {},
+      repairOrder: {},
+      profitMargin: [],
     };
   },
   filters: {
@@ -119,7 +117,11 @@ export default {
       return msg || 0;
     },
   },
+  computed: {
+    ...mapGetters("setting", ["isLoading"]),
+  },
   created() {
+    console.log("creatd");
     this.getKanbanData();
   },
 
@@ -130,6 +132,13 @@ export default {
         const data = res.data || {};
         this.repairDataList = data.repairDataList;
         this.repairMachinistList = data.repairMachinistList;
+        this.deviceStatusInfo = data.deviceStatusNumMap;
+        this.repairOrder = data.repairOrderMap;
+        this.profitMargin = data.monthlyProfitMarginList;
+
+        console.log("this.profitMargin", this.profitMargin);
+
+        this.$store.commit("setting/setIsLoading", false);
       });
     },
   },

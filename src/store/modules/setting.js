@@ -22,9 +22,11 @@ export default {
       waitTime: 1000, // 单步运动停止的时间(默认值1000ms)
     },
     echartsAutoTime: 3000, //echarts 图自动请求接口时间
+    isLoading: true,
   }),
   getters: {
     //根据菜单路径获取 菜单信息
+    isLoading: (state) => state.isLoading,
   },
   mutations: {
     initSwipers(state) {
@@ -53,6 +55,9 @@ export default {
           isScale: state.isScale,
         })
       );
+    },
+    setIsLoading(state, flag) {
+      state.isLoading = flag;
     },
   },
   actions: {},
