@@ -30,7 +30,7 @@
             </ItemWrap2>
           </div>
           <div class="item l-b">
-            <LeftBottom />
+            <LeftBottom :dataList="repairDataList" />
           </div>
         </div>
       </dv-border-Box-1>
@@ -95,6 +95,8 @@ import RightTop from "./right-top.vue";
 import RightCenter from "./right-center.vue";
 import RightBottom from "./right-bottom.vue";
 
+import { repaiKanbanApi } from "api/modules/kanban";
+
 export default {
   components: {
     LeftTop,
@@ -107,17 +109,30 @@ export default {
     CenterBottom,
   },
   data() {
-    return {};
+    return {
+      repairDataList: [],
+      repairMachinistList: [],
+    };
   },
   filters: {
     numsFilter(msg) {
       return msg || 0;
     },
   },
-  created() {},
+  created() {
+    this.getKanbanData();
+  },
 
   mounted() {},
-  methods: {},
+  methods: {
+    getKanbanData() {
+      repaiKanbanApi().then((res) => {
+        const data = res.data || {};
+        this.repairDataList = data.repairDataList;
+        this.repairMachinistList = data.repairMachinistList;
+      });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

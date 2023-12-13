@@ -13,12 +13,12 @@
   >
     <div class="custome-table__header_container">
       <div class="custome-table__header">
+        <div class="custome-table__td">维修工单号</div>
         <div class="custome-table__td">设备名称</div>
-        <div class="custome-table__td">设备编号</div>
-        <div class="custome-table__td">报修原因</div>
         <div class="custome-table__td">报修人</div>
-        <div class="custome-table__td">所在保障组</div>
-        <div class="custome-table__td">时间</div>
+        <div class="custome-table__td">维修类型</div>
+        <div class="custome-table__td">维修日期</div>
+        <div class="custome-table__td">订单状态</div>
       </div>
     </div>
     <component
@@ -28,13 +28,13 @@
       class="scroll-comps"
     >
       <ul class="left_boottom">
-        <li class="left_boottom_item" v-for="(item, i) in list" :key="i">
+        <li class="left_boottom_item" v-for="(item, i) in dataList" :key="i">
+          <div class="custome-table__td ellipsis">{{ item.repairNum }}</div>
           <div class="custome-table__td ellipsis">{{ item.deviceName }}</div>
-          <div class="custome-table__td ellipsis">{{ item.deviceNum }}</div>
-          <div class="custome-table__td ellipsis">{{ item.resson }}</div>
-          <div class="custome-table__td ellipsis">{{ item.person }}</div>
-          <div class="custome-table__td ellipsis">{{ item.group }}</div>
+          <div class="custome-table__td ellipsis">{{ item.repairer }}</div>
+          <div class="custome-table__td ellipsis">{{ item.repairType }}</div>
           <div class="custome-table__td ellipsis">{{ item.time }}</div>
+          <div class="custome-table__td ellipsis">{{ item.type }}</div>
           <!-- <span class="orderNum doudong">{{ i + 1 }}</span>
           <div class="inner_right">
             <div class="dibu"></div>
@@ -83,6 +83,12 @@ import vueSeamlessScroll from "vue-seamless-scroll"; // vue2引入方式
 import Kong from "../../components/kong.vue";
 export default {
   components: { vueSeamlessScroll, Kong },
+  props: {
+    dataList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data() {
     return {
       list: [],
@@ -102,7 +108,7 @@ export default {
         ...this.$store.state.setting.defaultOption,
         singleHeight: 0,
         limitMoveNum: 10,
-        step: 1,
+        step: 0.6,
       };
     },
     sbtxSwiperFlag() {

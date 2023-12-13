@@ -10,9 +10,9 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: './',
-  outputDir: process.env.VUE_APP_outputDir || 'dist',
-  assetsDir: 'static',
+  publicPath: "./",
+  outputDir: process.env.VUE_APP_outputDir || "dist",
+  assetsDir: "static",
   filenameHashing: true,
   lintOnSave: false,
   runtimeCompiler: false,
@@ -20,12 +20,12 @@ module.exports = {
   productionSourceMap: false,
   css: {
     // 是否使用css分离插件 ExtractTextPlugin
-    extract: process.env.NODE_ENV === "production" ? true : false,//是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
-    sourceMap: false,//是否为 CSS 开启 source map。设置为 true 之后可能会影响构建的性能。
+    extract: process.env.NODE_ENV === "production" ? true : false, //是否将组件中的 CSS 提取至一个独立的 CSS 文件中 (而不是动态注入到 JavaScript 中的 inline 代码)。
+    sourceMap: false, //是否为 CSS 开启 source map。设置为 true 之后可能会影响构建的性能。
     loaderOptions: {
       sass: {
-        prependData: `@import "@/assets/css/variable.scss";`
-      }
+        prependData: `@import "@/assets/css/variable.scss";`,
+      },
     },
     requireModuleExtension: true,
   },
@@ -33,13 +33,13 @@ module.exports = {
   chainWebpack: (config) => {
     // 配置别名
     config.resolve.alias
-      .set('@', resolve('src'))
-      .set('assets', resolve('src/assets'))
-      .set('assetsBig', resolve('src/pages/big-screen/assets'))
-      .set('components', resolve('src/components'))
-      .set('views', resolve('src/views'))
-      .set('api', resolve('src/api'))
-      .set('lib', resolve('src/lib'))
+      .set("@", resolve("src"))
+      .set("assets", resolve("src/assets"))
+      .set("assetsBig", resolve("src/pages/big-screen/assets"))
+      .set("components", resolve("src/components"))
+      .set("views", resolve("src/views"))
+      .set("api", resolve("src/api"))
+      .set("lib", resolve("src/lib"));
 
     if (process.env.NODE_ENV === "production") {
       // 删除系统默认的splitChunk
@@ -56,7 +56,7 @@ module.exports = {
     //     return args
     //   })
   },
-  configureWebpack: config => {
+  configureWebpack: (config) => {
     // 给输出的js名称添加hash
     config.output.filename = "static/js/[name].[hash].js";
     config.output.chunkFilename = "static/js/[name].[hash].js";
@@ -72,7 +72,7 @@ module.exports = {
             minSize: 0,
             priority: 1,
             reuseExistingChunk: true,
-            enforce: true
+            enforce: true,
           },
           // 抽离node_modules下的库为一个chunk
           // vendors: {
@@ -89,7 +89,7 @@ module.exports = {
             chunks: "all",
             priority: 3,
             reuseExistingChunk: true,
-            enforce: true
+            enforce: true,
           },
           yhhtUi: {
             name: "chunk-yhht-ui",
@@ -97,7 +97,7 @@ module.exports = {
             chunks: "all",
             priority: 4,
             reuseExistingChunk: true,
-            enforce: true
+            enforce: true,
           },
           datav: {
             name: "chunk-datav",
@@ -105,18 +105,40 @@ module.exports = {
             chunks: "all",
             priority: 4,
             reuseExistingChunk: true,
-            enforce: true
+            enforce: true,
           },
-        }
-      }
+        },
+      },
     };
   },
   // 是否为 Babel 或 TypeScript 使用 thread-loader。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建。
-  parallel: require('os').cpus().length > 1,
+  parallel: require("os").cpus().length > 1,
 
   devServer: {
     // 配置多个代理
+    host: "0.0.0.0",
+    proxy: {
+      // 本地开发环境通过代理实现跨域，生产环境使用 nginx 转发
+      // 正则表达式写法
+      "^/customer": {
+        // target: 'http://172.20.10.9:8084',
+        target: "http://172.16.16.166:8084",
+        // target: 'http://192.168.1.145:8084',
+        // target: "http://10.100.182.125:8084",
+        // target: "http://10.177.105.25:8084/",
+        // target: "http://10.177.105.24:8084",
+        // target: "http://11.54.93.94:32573/",
+        // target: "http://11.54.87.224:31617/",
+        // target: "http://portal.c.cloudos.cnpc.com.cn/",
+        // target: "http://share.c.cloudos.cnpc.com.cn/",
+        // target: "http://d.c.cloudos.cnpc.com.cn/",
+        // target: 'http://218.205.135.163:8090/',
+        // target: "http://dev.c.cloudos.cnpc.com.cn",
+        // target: 'http://t.c.cloudos.cnpc.com.cn/',
+        changeOrigin: true, //开启代理
+        // rewrite: (path) => path.replace(/^\/customer/, 'customer')
+      },
+    },
   },
-  pluginOptions: {
-  }
-}
+  pluginOptions: {},
+};
