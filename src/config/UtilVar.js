@@ -15,7 +15,7 @@ const runtimeType = {
     /**
      * 通过打包配置打某个环境的api地址
      */
-    UtilVar.baseUrl = `http://localhost:8888`;
+    UtilVar.baseUrl = "";
   },
   //测试环境
   test: () => {},
