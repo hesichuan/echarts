@@ -73,6 +73,7 @@ export default {
   },
   created() {},
   mounted() {
+    console.log(this.$route);
     this.timeFn();
     this.cancelLoading();
   },

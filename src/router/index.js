@@ -24,6 +24,7 @@ const routes = [
       {
         path: "/index",
         name: "index",
+        props: (router) => ({ query: "yyq" }),
         component: () =>
           import(
             /* webpackChunkName: "LSD.bighome" */ "../views/indexs/index.vue"

@@ -137,7 +137,8 @@ export default {
           },
         },
         legend: {
-          data: ["收入", "成本", "利润率"],
+          // data: ["收入", "成本", "利润率"],
+          data: ["收入", "数量"],
           textStyle: {
             color: "#B4B4B4",
           },
@@ -180,13 +181,14 @@ export default {
           },
           {
             splitLine: { show: false },
+            name: "单位：个",
             axisLine: {
               lineStyle: {
                 color: "#B4B4B4",
               },
             },
             axisLabel: {
-              formatter: "{value}% ",
+              formatter: "{value} ",
             },
           },
         ],
@@ -204,24 +206,24 @@ export default {
             },
             data: newData.barData,
           },
+          // {
+          //   name: "成本",
+          //   type: "bar",
+          //   barGap: "-100%",
+          //   barWidth: 10,
+          //   itemStyle: {
+          //     borderRadius: 5,
+          //     color: new graphic.LinearGradient(0, 0, 0, 1, [
+          //       { offset: 0, color: "rgba(156,107,211,0.8)" },
+          //       { offset: 0.2, color: "rgba(156,107,211,0.5)" },
+          //       { offset: 1, color: "rgba(156,107,211,0.2)" },
+          //     ]),
+          //   },
+          //   z: -12,
+          //   data: newData.lineData,
+          // },
           {
-            name: "成本",
-            type: "bar",
-            barGap: "-100%",
-            barWidth: 10,
-            itemStyle: {
-              borderRadius: 5,
-              color: new graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "rgba(156,107,211,0.8)" },
-                { offset: 0.2, color: "rgba(156,107,211,0.5)" },
-                { offset: 1, color: "rgba(156,107,211,0.2)" },
-              ]),
-            },
-            z: -12,
-            data: newData.lineData,
-          },
-          {
-            name: "利润率",
+            name: "数量",
             type: "line",
             smooth: true,
             showAllSymbol: true,
