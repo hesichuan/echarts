@@ -10,7 +10,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: "./",
+  publicPath: "/repair/",
   outputDir: process.env.VUE_APP_outputDir || "dist",
   assetsDir: "static",
   filenameHashing: true,
