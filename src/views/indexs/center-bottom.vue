@@ -82,21 +82,8 @@ export default {
     getData(originData) {
       this.pageflag = true;
       const data = this.packageData(originData);
-      console.log("data---", data);
+
       this.init(data);
-      // currentGET("big6", { companyName: this.companyName }).then((res) => {
-      //   if (res.success) {
-      //     const _data = packageData(demoData);
-      //     console.log("月度利润率", _data);
-      //     this.init(_data);
-      //   } else {
-      //     this.pageflag = false;
-      //     this.$Message({
-      //       text: res.msg,
-      //       type: "warning",
-      //     });
-      //   }
-      // });
     },
     init(newData) {
       this.options = {

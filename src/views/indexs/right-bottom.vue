@@ -29,9 +29,11 @@
           <div class="custome-table__td ellipsis">{{ item.address }}</div>
           <div class="custome-table__td ellipsis">{{ item.workTasks }}</div>
           <div class="custome-table__td ellipsis">
-            {{ item.completeProgress }}
+            {{ item.completeProgress || "暂无" }}
           </div>
-          <div class="custome-table__td ellipsis">{{ item.accruedHours }}</div>
+          <div class="custome-table__td ellipsis">
+            {{ item.accruedHours || "暂无" }}
+          </div>
           <div class="custome-table__td ellipsis status__style">
             <span
               :class="[
