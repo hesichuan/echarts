@@ -43,7 +43,7 @@
     </div>
     <div class="contetn_center">
       <CenterMap class="contetn_center_top" />
-      <ItemWrap class="contetn_center-bottom" title="月度利润率">
+      <ItemWrap class="contetn_center-bottom" title="月度维修利润">
         <CenterBottom :dataList="profitMargin" />
       </ItemWrap>
     </div>
