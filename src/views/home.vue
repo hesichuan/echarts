@@ -37,7 +37,7 @@
         </div>
         <!-- 头部 e-->
         <!-- 内容  s-->
-        <router-view></router-view>
+        <ContentView />
         <!-- 内容 e -->
       </div>
     </div>
@@ -51,8 +51,9 @@ import { mapGetters } from "vuex";
 import { formatTime } from "../utils/index.js";
 import Setting from "./setting.vue";
 import ScaleScreen from "@/components/scale-screen/scale-screen.vue";
+import ContentView from "./indexs/index.vue";
 export default {
-  components: { Setting, ScaleScreen },
+  components: { Setting, ScaleScreen, ContentView },
   data() {
     return {
       timing: null,
