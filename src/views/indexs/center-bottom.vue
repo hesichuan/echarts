@@ -46,9 +46,10 @@ export default {
     dataList: {
       handler(newValue, oldValue) {
         // 这里是当 myArray 发生变化时的处理逻辑
+        console.log("newValue", newValue);
         this.getData(newValue);
       },
-      deep: true,
+      immediate: true,
     },
   },
   mounted() {

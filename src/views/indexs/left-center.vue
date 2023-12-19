@@ -28,8 +28,11 @@ export default {
     },
   },
   watch: {
-    dataInfo(val) {
-      this.getData(val);
+    dataInfo: {
+      handler(val) {
+        this.getData(val);
+      },
+      immediate: true,
     },
   },
   data() {
@@ -61,20 +64,23 @@ export default {
       }
     },
     getData(data) {
+      console.log("data----", data.guarantee);
       this.pageflag = false;
 
-      this.repairData = {
-        ...this.repairData,
-        guarantee: Number(data.guarantee.orderNum),
-        baseRepair: Number(data.baseRepair.orderNum),
-        reCreate: Number(data.reCreate.orderNum),
-        carryOn: Number(data.carryOn.orderNum),
-        total: Number(data.total.orderNum),
-      };
+      if (data.guarantee !== undefined) {
+        this.repairData = {
+          ...this.repairData,
+          guarantee: Number(data.guarantee.orderNum),
+          baseRepair: Number(data.baseRepair.orderNum),
+          reCreate: Number(data.reCreate.orderNum),
+          carryOn: Number(data.carryOn.orderNum),
+          total: Number(data.total.orderNum),
+        };
 
-      this.$nextTick(() => {
-        this.init();
-      });
+        this.$nextTick(() => {
+          this.init();
+        });
+      }
 
       this.pageflag = true;
     },

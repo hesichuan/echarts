@@ -100,10 +100,13 @@ export const GETNOBASE = async (url, params) => {
     return error;
   }
 };
-export const POST = async (url, params) => {
+export const POST = async (url, params, extendParams) => {
   try {
     params = isEncryptionParam(params);
-    const data = await axios.post(`${baseUrl}${url}`, params, configs_ENC);
+    const data = await axios.post(`${baseUrl}${url}`, params, {
+      ...configs_ENC,
+      ...extendParams,
+    });
     return data;
   } catch (error) {
     return error;

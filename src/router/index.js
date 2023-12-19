@@ -1,10 +1,3 @@
-/*
- * @Author: daidai
- * @Date: 2022-01-12 14:22:29
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-04-28 14:53:02
- * @FilePath: \web-pc\src\pages\big-screen\router\index.js
- */
 import Vue from "vue";
 import VueRouter from "vue-router";
 
@@ -18,16 +11,15 @@ const routes = [
       import(/* webpackChunkName: "LSD.bighome" */ "../views/home.vue"),
     children: [
       {
-        path: "/index",
-        name: "index",
+        path: "/setting",
+        name: "Setting",
         props: (router) => ({ query: "yyq" }),
         component: () =>
-          import(
-            /* webpackChunkName: "LSD.bighome" */ "../views/indexs/index.vue"
-          ),
+          import(/* webpackChunkName: "LSD.bighome" */ "../views/home.vue"),
       },
     ],
   },
+
   // {
   //   path: "/home",
   //   name: "home",

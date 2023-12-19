@@ -17,7 +17,7 @@ import {
   borderBox8,
   borderBox1,
 } from "@jiaminghi/data-view";
-import { Radio, Button, RadioGroup } from "element-ui";
+import { Radio, Button, RadioGroup, Upload } from "element-ui";
 import Echart from "./components/echart/index.vue";
 import ItemWrap from "./components/item-wrap/item-wrap.vue";
 import ItemWrap2 from "./components/item-wrap/item-wrap2.vue";
@@ -44,6 +44,7 @@ Vue.prototype.$Message = Messages;
 Vue.use(Radio);
 Vue.use(Button);
 Vue.use(RadioGroup);
+Vue.use(Upload);
 
 // datav组件
 Vue.use(loading);

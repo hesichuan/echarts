@@ -18,6 +18,8 @@
       <div v-else class="host-body">
         <!-- 头部 s -->
         <div class="d-flex jc-center title_wrap">
+          <UploadFile v-if="showUpload" />
+
           <div class="zuojuxing"></div>
           <div class="youjuxing"></div>
           <div class="guang"></div>
@@ -51,9 +53,10 @@ import { mapGetters } from "vuex";
 import { formatTime } from "../utils/index.js";
 import Setting from "./setting.vue";
 import ScaleScreen from "@/components/scale-screen/scale-screen.vue";
+import UploadFile from "@/components/upload/index.vue";
 import ContentView from "./indexs/index.vue";
 export default {
-  components: { Setting, ScaleScreen, ContentView },
+  components: { Setting, ScaleScreen, ContentView, UploadFile },
   data() {
     return {
       timing: null,
@@ -71,6 +74,10 @@ export default {
   },
   computed: {
     ...mapGetters("setting", ["isLoading"]),
+    showUpload() {
+      const query = this.$route.query;
+      return query.name === "yyq";
+    },
   },
   created() {},
   mounted() {
