@@ -7,8 +7,10 @@
     :http-request="uploadRequestHandle"
     :before-remove="beforeRemove"
     :show-file-list="false"
+    :disabled="isLoading"
     :limit="1"
     :file-list="fileList"
+    ref="upload"
   >
     <el-button size="small" type="primary">上传Excel</el-button>
   </el-upload>
@@ -19,6 +21,7 @@ export default {
   data() {
     return {
       fileList: [],
+      isLoading: false,
     };
   },
   methods: {
@@ -31,23 +34,40 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
+    clearFiles() {
+      // 调用 clearFiles 方法清空已上传的文件列表
+      this.$refs.upload.clearFiles();
+    },
     uploadRequestHandle(params) {
       const formdata = new FormData();
       formdata.append("file", params.file);
       formdata.append("type", 0);
 
+      this.isLoading = true;
       exportRepairKanbanApi(formdata)
         .then((res) => {
-          console.log("上传文件-res", res);
+          console.log("上传文件-res", res.errorMessage);
           if (res.status === "SUCCEED") {
-            console.log("上传成功");
-            this.$forceUpdate();
+            this.$ElMessage({
+              message: "上传成功~",
+              type: "success",
+              onClose: () => {
+                window.location.reload();
+              },
+            });
           } else {
-            this.$Message.warning(res.errorMessage || "上传出错~");
+            this.$ElMessage({
+              message: `${res.errorMessage}` || "上传出错~",
+              type: "warning",
+            });
           }
         })
         .catch((err) => {
-          consoe.log("上传错误", err);
+          console.log("上传错误", err);
+        })
+        .finally(() => {
+          this.clearFiles();
+          this.isLoading = false;
         });
     },
   },
