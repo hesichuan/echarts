@@ -74,6 +74,8 @@ export default {
                 "ratio": "0.9"
             }
         ],
+        "projectNum": 19,
+        "inRentDeviceNum": 461,
         "unitUseOrder": [
             {
                 "organName": "工程建设公司",
