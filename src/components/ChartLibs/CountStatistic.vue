@@ -28,10 +28,18 @@ const coverCities = reactive({
   changeNum: 0
 })
 const appSecond = reactive({
-  name: '订单覆盖区域',
+  name: '项目数量',
   img: iconApp,
   unit: '个',
-  value: unref(orderCount).regions || 0,
+  value: unref(orderCount).projectNum || 0,
+  valueColor: '#71ffaa',
+  changeNum: 0
+})
+const hasRent = reactive({
+  name: '已租设备',
+  img: iconApp,
+  unit: '个',
+  value: unref(orderCount).inRentDeviceNum || 0,
   valueColor: '#71ffaa',
   changeNum: 0
 })
@@ -110,6 +118,29 @@ const countTimer = ref()
             </span>
           </div>
           <div class="count-item__name mt-5">{{ appSecond.name }}</div>
+        </div>
+      </div>
+      <div class="count-item">
+        <div class="count-item__icon">
+          <div class="icon__circle animate-rotation"></div>
+          <img class="icon__content" :src="coverCities.img" />
+        </div>
+        <div class="count-item__content ml-20">
+          <div class="count-item__number number">
+            <span class="number__value mr-5" :style="{ color: hasRent.valueColor }">
+              <FadeNum v-model:value="hasRent.changeNum">
+                <CountUp
+                  :delay="countUpOption.delay"
+                  :endVal="hasRent.value"
+                  :options="countUpOption"
+                />
+              </FadeNum>
+            </span>
+            <span class="number__unit">
+              {{ hasRent.unit }}
+            </span>
+          </div>
+          <div class="count-item__name mt-5">{{ hasRent.name }}</div>
         </div>
       </div>
       <div class="count-item">

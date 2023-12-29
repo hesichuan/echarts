@@ -131,6 +131,7 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
         '^/customer': {
           // target: 'http://172.20.10.9:8084', 
           // target: 'http://10.100.182.125:8084', // jj
+          target: 'http://172.16.16.147:8084',
           // target: 'http://192.168.0.145:8084', 
           // target: "http://10.177.105.25:8084/",
           // target: "http://11.54.93.94:32573/",
@@ -138,7 +139,7 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
           // target: "http://portal.c.cloudos.cnpc.com.cn/",
           // target: "http://share.c.cloudos.cnpc.com.cn/",
           // target: "http://d.c.cloudos.cnpc.com.cn/",
-          target: 'http://218.205.135.163:8090/',
+          // target: 'http://218.205.135.163:8090/',
           // target: "http://dev.c.cloudos.cnpc.com.cn",
           // target: 'http://t.c.cloudos.cnpc.com.cn/',
           changeOrigin: true, //开启代理
