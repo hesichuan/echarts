@@ -125,7 +125,7 @@ export default {
         data: [
           {
             value: this.repairData.guarantee,
-            name: "现场保障",
+            name: "现场维保",
             label: {
               shadowColor: colors[0],
             },
@@ -146,7 +146,7 @@ export default {
           },
           {
             value: this.repairData.reCreate,
-            name: "再制造",
+            name: "改造再制造",
             label: {
               shadowColor: colors[3],
             },
@@ -198,16 +198,16 @@ export default {
               rich: {
                 b: {
                   color: "#fff",
-                  fontSize: 12,
+                  fontSize: 16,
                   lineHeight: 26,
                 },
                 c: {
                   color: "#31ABE3",
-                  fontSize: 14,
+                  fontSize: 16,
                 },
                 per: {
                   color: "#31ABE3",
-                  fontSize: 14,
+                  fontSize: 16,
                 },
               },
             },

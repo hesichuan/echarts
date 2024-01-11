@@ -23,7 +23,8 @@
             </ItemWrap2>
           </div>
           <div class="item l-b">
-            <LeftBottom :dataList="repairDataList" />
+            <RightBottom :dataList="repairMachinistList" />
+            <!-- <LeftBottom :dataList="repairDataList" /> -->
           </div>
         </div>
       </dv-border-Box-1>
@@ -43,15 +44,20 @@
     </div>
     <div class="contetn_center">
       <CenterMap class="contetn_center_top" />
-      <ItemWrap class="contetn_center-bottom" title="月度维修利润">
+      <ItemWrap class="contetn_center-bottom contetn_lr-item" title="订单概览">
         <CenterBottom :dataList="profitMargin" />
       </ItemWrap>
     </div>
     <div class="contetn_right">
+      <unslotWarp
+        class="contetn_right-bottom contetn_lr-item"
+        title="维修订单及执行情况"
+      />
       <dv-border-Box-1>
         <div class="container">
           <div class="item">
-            <RightBottom :dataList="repairMachinistList" />
+            <LeftBottom :dataList="repairDataList" />
+            <!-- <RightBottom :dataList="repairMachinistList" /> -->
           </div>
         </div>
       </dv-border-Box-1>
@@ -89,6 +95,7 @@ import CenterBottom from "./center-bottom.vue";
 import RightTop from "./right-top.vue";
 import RightCenter from "./right-center.vue";
 import RightBottom from "./right-bottom.vue";
+import unslotWarp from "@/components/item-wrap/unslot-warp.vue";
 
 import { repaiKanbanApi } from "api/modules/kanban";
 
@@ -102,6 +109,7 @@ export default {
     RightCenter,
     RightBottom,
     CenterBottom,
+    unslotWarp,
   },
   data() {
     return {
@@ -185,6 +193,7 @@ export default {
   //左右两侧 三个块
   .contetn_lr-item {
     // height: 310px;
+    font-size: 18px;
   }
 
   .content_right_h {
@@ -204,6 +213,11 @@ export default {
 
   .contetn_center-bottom {
     height: 315px;
+  }
+  .contetn_right-bottom {
+    position: absolute;
+    top: -15px;
+    width: 100%;
   }
 
   //左边 右边 结构一样

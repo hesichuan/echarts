@@ -12,7 +12,7 @@
 import { currentGET } from "api";
 import { graphic } from "echarts";
 const demoData = {
-  barData: [41, 147, 84, 92, 132, 141, 153, 83, 50, 118, 154, 136], // 收入
+  barData: [41, 147, 84, 92, 132, 141, 153, 83, 50, 118, 154, 136], // 维修费用
   category: [
     "22-12",
     "23-01",
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     packageData(arr = []) {
-      const barData = []; // 收入
+      const barData = []; // 维修费用
       const lineData = []; // 成本
       const category = [];
       const rateData = [];
@@ -125,8 +125,8 @@ export default {
           },
         },
         legend: {
-          // data: ["收入", "成本", "利润率"],
-          data: ["收入", "数量"],
+          // data: ["维修费用", "成本", "利润率"],
+          data: ["维修费用", "维修订单数量"],
           textStyle: {
             color: "#B4B4B4",
           },
@@ -182,7 +182,7 @@ export default {
         ],
         series: [
           {
-            name: "收入",
+            name: "维修费用",
             type: "bar",
             barWidth: 10,
             itemStyle: {
@@ -211,7 +211,7 @@ export default {
           //   data: newData.lineData,
           // },
           {
-            name: "数量",
+            name: "维修订单数量",
             type: "line",
             smooth: true,
             showAllSymbol: true,

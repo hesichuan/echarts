@@ -6,13 +6,14 @@
   >
     <div class="custome-table__header_container">
       <div class="custome-table__header">
-        <div class="custome-table__td">姓名</div>
-        <div class="custome-table__td">技师等级</div>
-        <div class="custome-table__td">所在地</div>
-        <div class="custome-table__td">工作任务</div>
-        <div class="custome-table__td">完成进度</div>
-        <div class="custome-table__td">累计工时</div>
-        <div class="custome-table__td">当前状态</div>
+        <div class="mini custome-table__td order_number">序号</div>
+        <div class="mini custome-table__td">姓名</div>
+        <div class="mini custome-table__td">技能等级</div>
+        <div class="mini custome-table__td">所在地</div>
+        <div class="mini custome-table__td">工作任务</div>
+        <div class="mini custome-table__td">完成进度</div>
+        <div class="mini custome-table__td">累计工时</div>
+        <div class="mini custome-table__td">当前状态</div>
         <!-- 空闲（绿色）、工作（蓝色），紧急（红色） -->
       </div>
     </div>
@@ -24,10 +25,15 @@
     >
       <ul class="right_center">
         <li class="right_center_item" v-for="(item, i) in dataList" :key="i">
+          <div class="custome-table__td ellipsis order_number">
+            {{ i + 1 }}
+          </div>
           <div class="custome-table__td ellipsis">{{ item.name }}</div>
           <div class="custome-table__td ellipsis">{{ item.level }}</div>
           <div class="custome-table__td ellipsis">{{ item.address }}</div>
-          <div class="custome-table__td ellipsis">{{ item.workTasks }}</div>
+          <div class="custome-table__td ellipsis">
+            {{ item.workTasks }}
+          </div>
           <div class="custome-table__td ellipsis">
             {{ item.completeProgress || "暂无" }}
           </div>
@@ -38,9 +44,9 @@
             <span
               :class="[
                 'status-common',
-                item.currentStatus == '空闲'
+                item.currentStatus == '休假'
                   ? 'style__1'
-                  : item.currentStatus == '工作'
+                  : item.currentStatus == '在岗'
                   ? 'style__2'
                   : 'style__3',
               ]"
@@ -144,6 +150,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.order_number {
+  max-width: 34px;
+}
+.right_center_wrap {
+  overflow: hidden;
+  width: 100%;
+  max-height: calc(100% - 70px);
+  margin-top: 40px;
+}
 .custome-table__header_container {
   height: 42px;
   width: 96%;
@@ -152,8 +167,8 @@ export default {
   // background-color: #263b40;
   background: linear-gradient(
     180deg,
-    rgba(46, 144, 241, 0.3),
-    rgba(51, 161, 219, 0.5)
+    rgba(46 144 241 / 30%),
+    rgba(51 161 219 / 50%)
   );
   position: absolute;
   z-index: 999;
@@ -199,6 +214,9 @@ export default {
       .style__3 {
         background: #f56c6c;
       }
+    }
+    &.mini {
+      font-size: 14px;
     }
   }
 }
@@ -266,16 +284,6 @@ export default {
       }
     }
   }
-}
-
-.right_center_wrap {
-  overflow: hidden;
-  width: 100%;
-}
-
-.right_scroll_wap {
-  max-height: calc(100% - 70px);
-  margin-top: 40px;
 }
 
 .overflow-y-auto {

@@ -29,6 +29,8 @@ import xzqCode from "../../utils/map/xzqCode";
 import { currentGET } from "api/modules";
 import * as echarts from "echarts";
 import { GETNOBASE } from "api";
+
+const extendsCategory = "设备存放基地";
 const provinceList = [
   {
     name: "陕西省", // 铜川
@@ -54,6 +56,45 @@ const provinceList = [
     name: "甘肃省", // 泾川
     value: 6,
   },
+  {
+    name: "新疆维吾尔自治区", //
+    value: 7,
+  },
+  {
+    name: "辽宁省", //
+    value: 8,
+  },
+  {
+    name: "河北省", // 泾川
+    value: 9,
+  },
+];
+// visualMap图例源数据
+const groups = [
+  {
+    name: "铜川-潼关保障组",
+    value: 1,
+  },
+  {
+    name: "郑州保障组",
+    value: 2,
+  },
+  {
+    name: "南通保障组",
+    value: 3,
+  },
+  {
+    name: "漳州保障组",
+    value: 4,
+  },
+  {
+    name: "川二线保障组",
+    value: 5,
+  },
+  {
+    name: "甘肃泾川保障组",
+    value: 6,
+  },
 ];
 export default {
   data() {
@@ -64,14 +105,7 @@ export default {
       code: "china", //china 代表中国 其他地市是行政编码
       echartBindClick: false,
       isSouthChinaSea: false, //是否要展示南海群岛  修改此值请刷新页面
-      categories: [
-        "铜川-潼关保障组",
-        "郑州保障组",
-        "南通保障组",
-        "漳州保障组",
-        "川二线保障组",
-        "甘肃泾川保障组",
-      ],
+      categories: groups.map((group) => group.name),
     };
   },
   created() {},
@@ -84,15 +118,8 @@ export default {
     getData(code) {
       // src/mock/mock.js
       currentGET("big8", { regionCode: code }).then((res) => {
-        console.log("设备分布", res);
-        const demoArea = {
-          data: {
-            dataList: provinceList,
-            regionCode: "china",
-          },
-        };
         if (res.success) {
-          this.getGeojson(demoArea.data.regionCode, demoArea.data.dataList); // ('china, [{name: "陕西省",value: 879}]')
+          this.getGeojson("china", provinceList); // ('china, [{name: "陕西省",value: 879}]')
           // this.mapclick();
         } else {
           this.$Message.warning(res.msg);
@@ -102,10 +129,10 @@ export default {
     /**
      * @description: 获取geojson
      * @param {*} name china 表示中国 其他省份行政区编码
-     * @param {*} mydata 接口返回列表数据
+     * @param {*} provinceList 接口返回列表数据
      * @return {*}
      */
-    async getGeojson(name, mydata) {
+    async getGeojson(name, provinceList) {
       this.code = name;
       //如果要展示南海群岛并且展示的是中国的话
       let geoname = name;
@@ -117,12 +144,7 @@ export default {
       if (mapjson) {
         mapjson = mapjson.geoJSON;
       } else {
-        // mapjson = await GETNOBASE(`./map-geojson/word.json`).then(
-        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then(
-          (res) => {
-            return res;
-          }
-        );
+        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`);
         echarts.registerMap(name, mapjson);
       }
       let cityCenter = {};
@@ -134,7 +156,7 @@ export default {
       });
       let newData = [];
       let effectScatterData = [];
-      mydata.map((item, index) => {
+      provinceList.map((item, index) => {
         const projectList = [
           {
             projectName: "铜川-潼关保障组",
@@ -160,13 +182,25 @@ export default {
             projectName: "甘肃泾川保障组",
             desc: "维修人员2名，车辆1辆。保障西三五公司10台。",
           },
+          {
+            projectName: extendsCategory,
+            desc: "哈密设备存放基地",
+          },
+          {
+            projectName: extendsCategory,
+            desc: "盘锦设备存放基地",
+          },
+          {
+            projectName: extendsCategory,
+            desc: "廊坊设备存放基地",
+          },
         ];
         if (cityCenter[item.name]) {
           newData.push({
             name: item.name,
             value: [
               cityCenter[item.name].concat(item.value),
-              this.categories[index],
+              this.categories[index] || extendsCategory,
             ],
             projectName: projectList[index] && projectList[index].projectName,
             desc: projectList[index] && projectList[index].desc,
@@ -177,8 +211,8 @@ export default {
           });
         }
       });
-      console.log("data2", newData);
-      this.init(name, mydata, newData, effectScatterData);
+      console.log("newData: ", newData);
+      this.init(name, newData, effectScatterData);
     },
     outoPaly(myChart) {
       let currentIndex = -1;
@@ -254,7 +288,7 @@ export default {
         }, 5000);
       });
     },
-    init(name, data, data2, effectScatterData) {
+    init(name, data2, effectScatterData) {
       let top = 90;
       let zoom = 1.15;
       let option = {
@@ -294,17 +328,34 @@ export default {
         visualMap: {
           left: 20,
           bottom: 20,
-          categories: this.categories,
+          categories: [
+            "铜川-潼关保障组",
+            "郑州保障组",
+            "南通保障组",
+            "漳州保障组",
+            "川二线保障组",
+            "甘肃泾川保障组",
+          ].concat(extendsCategory),
           inRange: {
-            // 渐变颜色，从小到大
-            color: [
-              "#e4393c",
-              "orange",
-              "#e6a23c",
-              "#67c23a",
-              "#e09eff",
-              "#626aef",
-            ],
+            color: {
+              "铜川-潼关保障组": "#e4393c",
+              郑州保障组: "#6cbb83",
+              南通保障组: "#7ecaf0",
+              漳州保障组: "#67c23a",
+              川二线保障组: "#e09eff",
+              甘肃泾川保障组: "#e6a23c",
+              "": "#626aef", // 空字串，表示除了'Warden'、'Demon Hunter'外，都对应到 'green'。
+            },
+            // color: [
+            //   "#e4393c",
+            //   "orange",
+            //   "#e6a23c",
+            //   "#67c23a",
+            //   "#e09eff",
+            //   "#626aef",
+            //   "#f0f0f0",
+            //   '': 'green'
+            // ],
           },
           textStyle: {
             color: "#fff",
@@ -313,7 +364,7 @@ export default {
         geo: {
           map: name,
           roam: false,
-          selectedMode: false, //是否允许选中多个区域
+          selectedMode: true, //是否允许选中多个区域
           zoom: zoom,
           top: top,
           // aspectScale: 0.78,
@@ -437,83 +488,6 @@ export default {
               shadowBlur: 10,
             },
           },
-          // {
-          //   type: "lines",
-          //   zlevel: 3,
-          //   symbol: "circle",
-          //   symbolSize: [5, 5],
-          //   color: "#ff8003",
-          //   opacity: 1,
-          //   label: {
-          //     show: true,
-          //     padding: [10, 20],
-          //     color: "#fff",
-          //     backgroundColor: "#1a3961",
-          //     borderColor: "#aee9fb",
-          //     borderWidth: 1,
-          //     borderRadius: 6,
-          //     formatter(params) {
-          //       let arr = [
-          //         params.name,
-          //         "废水污染：" + params.value[1] + "家",
-          //         "废气污染：" + params.value[0] + "家",
-          //       ];
-          //       return arr.join("\n");
-          //     },
-          //     textStyle: {
-          //       align: "left",
-          //       lineHeight: 20,
-          //     },
-          //   },
-          //   lineStyle: {
-          //     type: "solid",
-          //     color: "#fff",
-          //     width: 0.5,
-          //     opacity: 1,
-          //   },
-          //   data: [
-          //     {
-          //       name: "北京",
-          //       coords: [
-          //         [116.24, 39.55, 100],
-          //         [120.24, 46.55, 100],
-          //       ], // 线条位置[开始位置，结束位置]
-          //       value: [1021, 120],
-          //     },
-          //     {
-          //       name: "深圳",
-          //       coords: [
-          //         [114.271522, 22.753644],
-          //         [118.24, 18.55, 100],
-          //       ], // 线条位置[开始位置，结束位置]
-          //       value: [1021, 120],
-          //     },
-          //     {
-          //       name: "重庆",
-          //       coords: [
-          //         [106.54, 29.59],
-          //         [104.24, 35.55],
-          //       ], // 线条位置[开始位置，结束位置]
-          //       value: [1021, 120],
-          //     },
-          //     {
-          //       name: "浙江",
-          //       coords: [
-          //         [120.19, 30.26],
-          //         [125.24, 27.55, 100],
-          //       ], // 线条位置[开始位置，结束位置]
-          //       value: [1021, 120],
-          //     },
-          //     {
-          //       name: "上海",
-          //       coords: [
-          //         [121.4648, 31.2891],
-          //         [122.4648, 32.2891],
-          //       ], // 线条位置[开始位置，结束位置]
-          //       value: [1201, 60],
-          //     },
-          //   ],
-          // },
         ],
       };
       this.options = option;

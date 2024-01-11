@@ -218,8 +218,8 @@ export default {
 .left_boottom_wrap {
   overflow: hidden;
   width: 100%;
-  max-height: calc(100% - 60px);
-  margin-top: 40px;
+  max-height: calc(100% - 80px);
+  margin-top: 50px;
 }
 .custome-table__header_container {
   height: 40px;
