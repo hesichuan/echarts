@@ -3,7 +3,8 @@ import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
 import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 import ChartThree from '@/components/ChartLibs/ChartThree.vue'
 
-import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
+// import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
+import CircleChart from '@/components/ChartLibs/CircleChart.vue'
 </script>
 
 <template>
@@ -13,7 +14,8 @@ import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
       <ChartFour />
     </div>
     <div class="left-content__item">
-      <OrderCarousel />
+      <!-- <OrderCarousel /> -->
+      <CircleChart />
     </div>
     <div class="left-content__item">
       <ChartThree />

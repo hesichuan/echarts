@@ -12,6 +12,23 @@ export const orderStatisticApi = (params) => {
 export const deviceStatisticApi = () => {
   return request.get({ url: `/customer/device/deviceKanbanData` })
 }
+// 设备品牌
+export const deviceBrandsList = () => {
+  return request.get({ url: '/customer/brand/select' })
+}
+// 获取机构树
+export const getOrgTreeApi = () => {
+  return request.get({ url: `/customer/organ/tree` })
+}
+// 获取项目列表
+export const projectList = (): Promise<any> => {
+  return request.get({ url: '/customer/common/project' })
+}
+
+// 获取设备位置信息
+export const getDeviceLocationsApi = (data) => {
+  return request.post({ url: `/customer/device/deviceLocation`, data })
+}
 // // 区域中心以及设备超市数量
 // export const marketAreaListApi = (params?: { nationFlag: number | string }) => {
 //   return request.get({ url: `/customer/supermarket/list`, params })

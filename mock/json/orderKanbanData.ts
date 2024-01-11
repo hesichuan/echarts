@@ -140,6 +140,19 @@ export default {
                 "orderNum": 1
             }
         ],
+        "repairOrderMap": {
+            "carryOn": {
+                "orderNum": "247",
+                "orderPercentage": "68.04%"
+            },
+            "total": {
+                "orderNum": "363"
+            },
+            "baseRepair": {
+                "orderNum": "59",
+                "orderPercentage": "16.25%"
+            }
+        },
         "totalOrder": 616
     }
 }

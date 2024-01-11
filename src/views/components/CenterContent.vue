@@ -7,9 +7,9 @@ import Notice from '@/components/ChartLibs/Notice.vue'
 
 <template>
   <div class="center-content">
-    <div class="center-content__top">
+    <!-- <div class="center-content__top">
       <CountStatistic />
-    </div>
+    </div> -->
     <div class="center-content__center">
       <ChinaChart />
     </div>

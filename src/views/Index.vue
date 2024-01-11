@@ -40,6 +40,7 @@ const totalAmount = computed(() => orderStatistic.value.totalAmount)
 const orderComplete = computed(() => orderStatistic.value.completions)
 // 左2
 const orderCarousel = computed(() => orderStatistic.value.unitUseOrder)
+const repairorder = computed(() => orderStatistic.value.repairOrderMap)
 // 左3
 const projectList = computed(() => orderStatistic.value.projectInfoList)
 // 中2
@@ -56,6 +57,7 @@ const remandList = computed(() => remandOrderList.value)
 provide('orderComplete', orderComplete)
 provide('orderCarousel', orderCarousel)
 provide('projectList', projectList)
+provide('repairorder', repairorder)
 provide('orderCount', { regions, totalAmount, addNewOrder })
 provide('deviceCategories', deviceCategories)
 provide('deviceCompany', deviceCompany)
