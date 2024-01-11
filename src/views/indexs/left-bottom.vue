@@ -33,8 +33,12 @@
           <div class="custome-table__td ellipsis">{{ item.deviceName }}</div>
           <div class="custome-table__td ellipsis">{{ item.repairer }}</div>
           <div class="custome-table__td ellipsis">{{ item.repairType }}</div>
-          <div class="custome-table__td ellipsis">{{ item.time }}</div>
-          <div class="custome-table__td ellipsis">{{ item.currentStatus }}</div>
+          <div class="custome-table__td ellipsis">{{ item.repairDate }}</div>
+          <div class="custome-table__td ellipsis status__style">
+            <span class="status-common" :class="`status__${item.status}`">{{
+              item.orderStatus
+            }}</span>
+          </div>
         </li>
       </ul>
     </component>
@@ -253,6 +257,29 @@ export default {
   &__td {
     flex: 1;
     text-align: center;
+    &.status__style {
+      display: flex;
+      justify-content: center;
+      font-size: 14px;
+      .status-common {
+        width: 50px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        &.status__0 {
+          background: #67c23a;
+        }
+        &.status__1 {
+          background: orange;
+          // background: #409eff;
+        }
+        &.status__2 {
+          background: #409eff;
+        }
+      }
+    }
   }
 }
 

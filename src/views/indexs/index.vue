@@ -61,25 +61,6 @@
           </div>
         </div>
       </dv-border-Box-1>
-      <!-- <ItemWrap
-        class="contetn_left-bottom contetn_lr-item"
-        title="报警次数"
-      >
-        <RightTop />
-      </ItemWrap>
-      <ItemWrap
-        class="contetn_left-bottom contetn_lr-item"
-        title="报警排名(TOP8)"
-        style="padding: 0 10px 16px 10px"
-      >
-        <RightCenter />
-      </ItemWrap> -->
-      <!-- <ItemWrap
-        class="contetn_left-bottom contetn_lr-item content_right_h"
-        title=""
-      >
-        <RightBottom />
-      </ItemWrap> -->
     </div>
   </div>
 </template>
@@ -138,7 +119,7 @@ export default {
     getKanbanData() {
       repaiKanbanApi().then((res) => {
         const data = res.data || {};
-        this.repairDataList = data.repairDataList;
+        this.repairDataList = data.repairWorkOrdersList;
         this.repairMachinistList = data.repairMachinistList;
         this.deviceStatusInfo = data.deviceStatusNumMap;
         this.repairOrder = data.repairOrderMap;
