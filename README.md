@@ -48,21 +48,38 @@ npm run lint
 ### project build
 
 1. live inviroment
-   ```sh
-       npm run prod
-   ```
+
+```sh
+npm run prod
+```
 
 ### req
 
-    引入DataV组件后，启动报错 参考[https://blog.csdn.net/weixin_43832353/article/details/129228896]
+    1.引入DataV组件后，启动报错 参考[https://blog.csdn.net/weixin_43832353/article/details/129228896]
+    2.重启服务
 
 ### git brach info
 
 1. clear template
-   ```sh
-      git checkout echarts-clear
-   ```
+
+```sh
+git checkout echarts-clear
+```
+
 2. 设备共享平台
-   ```sh
-      git checkout echarts-2.0
-   ```
+
+```sh
+git checkout echarts-2.0
+```
+
+3. 设备维修大屏
+
+```sh
+git checkout echarts-intelligint-1.0-api
+```
+
+4. 中油工程设备
+
+```sh
+git checkout echarts-CNPC-device
+```
