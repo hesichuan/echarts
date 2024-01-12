@@ -55,8 +55,8 @@ npm run prod
 
 ### req
 
-    1.引入DataV组件后，启动报错 参考[https://blog.csdn.net/weixin_43832353/article/details/129228896]
-    2.重启服务
+  1.引入DataV组件后，启动报错 参考[https://blog.csdn.net/weixin_43832353/article/details/129228896]
+  2.重启服务
 
 ### git brach info
 
