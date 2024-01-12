@@ -48,7 +48,7 @@ service.interceptors.request.use(
     }
     // if (appStore.getLocalUser) {
       // }
-    ;(config.headers as AxiosRequestHeaders)['Token'] = 'C78FE78D5E9F0B3A8E4A1727012A48AC'
+    ;(config.headers as AxiosRequestHeaders)['Token'] = '67F4C4DF712F41EB31288EC6BDCD606D'
     // get参数编码
     if (config.method === 'get' && config.params) {
       let url = config.url as string

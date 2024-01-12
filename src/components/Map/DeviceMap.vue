@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/* eslint-disable */
 import { onBeforeMount, onMounted, onUnmounted, ref, reactive, computed, watch } from 'vue'
 import XYZ from 'ol/source/XYZ'
 import 'ol/ol.css' // 地图样式
@@ -14,21 +15,12 @@ import Feature from 'ol/Feature'
 import Cluster from 'ol/source/Cluster'
 import CircleStyle from 'ol/style/Circle'
 import Overlay from 'ol/Overlay' //弹窗
-import { defaults as defaultControls } from 'ol/control' //默认缩放
-import { ScaleLine } from 'ol/control' //比例尺控件
-import { debounce } from 'lodash-es'
-import { FullScreen } from 'ol/control' //全屏控件
-// import { ElDrawer, ElDivider, ElTreeSelect, ElSelect, ElOption, ElInput } from 'element-plus'
-// import { ElRadio, ElRadioGroup } from 'element-plus'
-// import { ElButton, ElAffix } from 'element-plus'
+import { defaults as defaultControls, ScaleLine, FullScreen } from 'ol/control' //默认缩放, 比例尺控件, 全屏控件
 
 import iconPath from '@/assets/imgs/marker-default.png'
-import {
-  deviceBrandsList,
-  getOrgTreeApi,
-  getDeviceLocationsApi,
-  projectList as projectPage
-} from '@/api'
+import { getDeviceLocationsApi } from '@/api'
+
+const MAX_ZOON = 23 // 地图缩放最大级别
 
 const isToggle = ref(false)
 const brandsList = ref([])
@@ -51,28 +43,16 @@ const humburgeClick = () => {
   isToggle.value = !isToggle.value
 }
 
-watch(
-  filterRef,
-  debounce((val) => {
-    searchHandle(val)
-  }, 500)
-)
-
 //地图容器
-let map // 创建一个地图实例
+let map = {} as any // 创建一个地图实例
 let bdToken = ''
-const searchHandle = (val) => {
-  console.log('搜索项变化了--接口', val)
-  removeCluster()
-  getDeviceLocations(val)
-}
 
 const beiMapLayer = new TileLayer({
   visible: true,
   source: new XYZ({
     visible: true,
-    // url: 'http://218.205.135.163:8090/wt/normal/{z}/{x}/{y}.jpg'
-    url: `${window.location.protocol}//${window.location.host}/wt/satelite/{z}/{x}/{y}.jpg`
+    url: 'http://218.205.135.163:8090/wt/satelite/{z}/{x}/{y}.jpg'
+    // url: `${window.location.protocol}//${window.location.host}/wt/satelite/{z}/{x}/{y}.jpg`
     // url: 'https://bds.cnpc:8081/wt/satelite/{z}/{x}/{y}.jpg'
   })
 })
@@ -82,18 +62,19 @@ const a4MapLayer = new TileLayer({
   source: new XYZ({
     visible: true,
     // var tileUrlPre = "http://a4.petrochina/A4Service/TileService.ashx?c=${col}&r=${row}&l=${level}&token=" + mapConfig.Token + "&type=";
-    url:
-      `${window.location.protocol}//${window.location.host}/A4Service/TileService.ashx?c={x}&r={y}&l={z}&token=` +
-      '84265148-19bb-4b6b-a2d0-923738b4ebbf' +
-      '&type=VECMIX'
     // url:
-    //   'http://218.205.135.163:8090/A4Service/TileService.ashx?c={x}&r={y}&l={z}&token=' +
-    //   '84265148-19bb-4b6b-a2d0-923738b4ebbf' +
-    //   '&type=VECMIX'
+    // `${window.location.protocol}//${window.location.host}/A4Service/TileService.ashx?c={x}&r={y}&l={z}&token=` +
+    // '84265148-19bb-4b6b-a2d0-923738b4ebbf' +
+    // '&type=IMGMIX'
+    url:
+      'http://218.205.135.163:8090/A4Service/TileService.ashx?c={x}&r={y}&l={z}&token=' +
+      '84265148-19bb-4b6b-a2d0-923738b4ebbf' +
+      '&type=IMGMIX'
   })
 })
 
 function packageFragment(deviceInfo) {
+  console.log('deviceInfo', deviceInfo)
   const includeKey = {
     deviceName: '设备名称：',
     organName: '所属单位：',
@@ -119,6 +100,7 @@ function packageFragment(deviceInfo) {
       const label = includeKey[i]
       console.log('label', label)
       let inner = deviceInfo[i]
+
       if (label == '发动机状态：') {
         if (inner == 1) {
           inner = '开'
@@ -129,6 +111,8 @@ function packageFragment(deviceInfo) {
 
       const li = document.createElement('li')
       li.innerHTML = `${label}${inner}`
+
+      console.log('li', li)
       ul.appendChild(li)
     }
   }
@@ -176,7 +160,7 @@ function clickMap(evt) {
         //     features.map((r) => r.getGeometry().getCoordinates())
         // );
         // map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
-        if (map.getView().getZoom() < 20) {
+        if (map.getView().getZoom() < MAX_ZOON) {
           // 放大地图层级
           map.getView().animate({
             center: feature.getGeometry().getCoordinates(),
@@ -195,59 +179,31 @@ function clickMap(evt) {
 
 // 初始化地图
 const initMap = () => {
-  console.log('地图初始化')
   map = new Map({
     controls: defaultControls().extend([new FullScreen()]),
-    layers: [
-      // gdMapLayer
-      // baiDuMapLayer
-      // tdMapWgLayer,tdMapDtLayer
-      // beiMapLayer
-      // beiMapLayer,a4MapLayer
-      // a4MapLayer
-      // gdMapLayer,tdMapWgLayer,tdMapDtLayer //同时设置两种地图的底图
-      a4MapLayer,
-      beiMapLayer
-      // vectorLayer
-    ],
+    layers: [a4MapLayer],
     target: 'map', //默认加载地图容器 1
     view: new View({
-      center: [116.403218, 39.92372], // 设置地图中心点
-      // center: [32, 2],
-      // center:fromLonLat([116.403218, 39.92372]),
-      zoom: 8, // 地图缩放级别（打开页面时默认级别）
-      maxZoom: 20, // 地图缩放最大级别
+      // center: [116.403218, 39.92372], // 设置地图中心点 北京
+      center: [107.73851, 34.98333], // 设置地图中心点 北京
+      zoom: 4, // 地图缩放级别（打开页面时默认级别）
+      maxZoom: MAX_ZOON, // 地图缩放最大级别
       // minZoom:10, // 地图缩放最小级别
       projection: 'EPSG:4326', //设置坐标系
-      // projection: 'EPSG:3857', //加载百度地图采用3857坐标系
       constrainResolution: true, // 设置缩放级别为整数
       smoothResolutionConstraint: false // 关闭无级缩放地图
     })
   })
 
-  //同时设置两种地图的底图，地图切换时显示和隐藏底图
-  if (currenSelectMap.value == '1') {
-    //   tdMapWgLayer.setVisible(true);
-    //   tdMapDtLayer.setVisible(true);
-    //   gdMapLayer.setVisible(false);
-
-    a4MapLayer.setVisible(true)
-    beiMapLayer.setVisible(false)
-  }
-  if (currenSelectMap.value == '2') {
-    // tdMapWgLayer.setVisible(false);
-    // tdMapDtLayer.setVisible(false);
-    // gdMapLayer.setVisible(true);
-
-    a4MapLayer.setVisible(false)
-    beiMapLayer.setVisible(true)
-  }
+  beiMapLayer.setVisible(true)
 
   // 实例化比例尺控件
   var scaleLineControl = new ScaleLine({
     // 设置比例尺单位为degrees、imperial、us、nautical或metric（度量单位）
     units: 'metric'
+    // minWidth: 100
   })
+
   map.addControl(scaleLineControl)
 
   //单击事件
@@ -255,132 +211,6 @@ const initMap = () => {
     clickMap(e)
   })
 }
-
-// 切换地图底图事件
-const changeMap = (value) => {
-  console.log('currenSelectMap', value)
-  switch (value) {
-    case '1':
-      map.getView().animate({
-        // 只设置需要的属性即可
-        center: [116.403218, 39.92372], // 中心点
-        zoom: 8, // 缩放级别
-        rotation: undefined, // 缩放完成view视图旋转弧度
-        duration: 1000 // 缩放持续时间，默认不需要设置
-      })
-      // tdMapWgLayer.setVisible(true);
-      // tdMapDtLayer.setVisible(true);
-      // gdMapLayer.setVisible(false);
-
-      a4MapLayer.setVisible(true)
-      beiMapLayer.setVisible(false)
-      break
-
-    case '2':
-      map.getView().animate({
-        // 只设置需要的属性即可
-        center: [32, 0], // 中心点
-        zoom: 6, // 缩放级别
-        rotation: undefined, // 缩放完成view视图旋转弧度
-        duration: 1000 // 缩放持续时间，默认不需要设置
-      })
-      // tdMapWgLayer.setVisible(false);
-      // tdMapDtLayer.setVisible(false);
-      // gdMapLayer.setVisible(true);
-
-      a4MapLayer.setVisible(false)
-      beiMapLayer.setVisible(true)
-      break
-    default:
-      map.getView().animate({
-        // 只设置需要的属性即可
-        center: [32.595383, 39.92372], // 中心点
-        zoom: 10, // 缩放级别
-        rotation: undefined, // 缩放完成view视图旋转弧度
-        duration: 1000 // 缩放持续时间，默认不需要设置
-      })
-      // tdMapWgLayer.setVisible(true);
-      // tdMapDtLayer.setVisible(true);
-      // gdMapLayer.setVisible(false);
-
-      a4MapLayer.setVisible(true)
-      beiMapLayer.setVisible(false)
-  }
-}
-
-// 添加坐标点
-const addSinglePoint = () => {
-  let feature = new Feature({
-    title: 'beijing',
-    geometry: new Point([116.403218, 39.92372])
-    // geometry: new Point(fromLonLat([116.403218, 39.92372])),
-  })
-  feature.setStyle(
-    new Style({
-      image: new CircleStyle({
-        fill: new Fill({
-          color: 'blue'
-        }),
-        radius: 4
-      })
-    })
-  )
-  //添加点的时候赋值属性
-  feature.setProperties({
-    id: 'id' + 1,
-    name: 'name' + 1,
-    desc: 'desc' + 1,
-    type: 'type' + 1
-  })
-
-  let source = new VectorSource()
-  source.addFeature(feature)
-  let layer = new VectorLayer()
-  layer.setSource(source)
-  map.addLayer(layer)
-}
-
-// 添加点位
-const addPointLayer = (v) => {
-  // console.log("111",v);
-  const feature = new Feature({
-    // 经纬度转换成坐标信息
-    // geometry: new Point(fromLonLat(v.long)),
-    geometry: new Point(v.long),
-    // 可以带别的参数，key 可以随便写，不冲突就行，这里将所有的参数都放进来，供后续使用
-    ...v
-  })
-
-  feature.setStyle(
-    new Style({
-      image: new CircleStyle({
-        fill: new Fill({
-          color: 'blue'
-        }),
-        radius: 4
-      })
-    })
-  )
-
-  let source = new VectorSource()
-  source.addFeature(feature)
-  let layer = new VectorLayer()
-  layer.setSource(source)
-  map.addLayer(layer)
-}
-
-//设置原始样式
-var originalStyle = new Style({
-  image: new CircleStyle({
-    radius: 5,
-    stroke: new Stroke({
-      color: '#fff'
-    }),
-    fill: new Fill({
-      color: '#3399CC'
-    })
-  })
-})
 
 //关闭
 const closePop = () => {
@@ -462,7 +292,7 @@ const createClusterLayerToMap = (data) => {
 
         let jhSize = Math.round(12 + Math.pow(clusterCount, 1 / 5) * 10)
 
-        if (map.getView().getZoom() >= 20) {
+        if (map.getView().getZoom() >= MAX_ZOON) {
           return new Style({
             image: new Icon({
               src: iconPath,
@@ -553,231 +383,24 @@ onMounted(() => {
   overlay.setPosition(undefined) // 设置弹窗位置，刚开始不显示，设置undefined
 
   initMap()
-  searchHandle(filterRef)
+
+  removeCluster()
+  getDeviceLocations(filterRef)
 })
 
-// 获取品牌
-const getBrands = () => {
-  deviceBrandsList()
-    .then((res) => {
-      brandsList.value = res.data || []
-    })
-    .catch((err) => console.log(err))
-}
-// 获取机构树
-const getOrgTree = async () => {
-  try {
-    const res = await getOrgTreeApi()
-    treeList.value = res?.data || []
-  } catch (error) {
-    console.log('获取出错', error)
-  }
-}
-
-// 获取设备位置信息
+/** 获取设备位置信息 */
 const getDeviceLocations = async (data) => {
   try {
     const res = await getDeviceLocationsApi(data)
     deviceLocations.value = res?.data || []
-    console.log(deviceLocations.value)
     createClusterLayerToMap(deviceLocations.value)
   } catch (error) {
     console.log('获取出错', error)
   }
 }
-
-// 获取项目列表api
-const getProjectList = () => {
-  projectPage().then((res) => {
-    projectList.value = res?.data || []
-  })
-}
-
-const filterNodeMethod = (value, data) => {
-  // orgList.value = [...orgList.value].filter((item) => item.name.includes(value))
-  return data.name.includes(value)
-}
-
-getOrgTree()
-getBrands()
-getProjectList()
 </script>
 
 <template>
-  <div class="map">
-    <ElDrawer
-      v-model="isToggle"
-      :size="'280px'"
-      :fullscreen="false"
-      direction="ltr"
-      :show-close="false"
-      :with-header="false"
-    >
-      <div class="eldrawer-content">
-        <div class="icon-container">
-          <div class="humburge-icon drawer-icon">
-            <svg
-              class="bars"
-              :class="{ active: isToggle }"
-              viewBox="0 0 100 100"
-              @click="humburgeClick"
-            >
-              <path
-                class="line top"
-                d="m 30,33 h 40 c 13.100415,0 14.380204,31.80258 6.899646,33.421777 -24.612039,5.327373 9.016154,-52.337577 -12.75751,-30.563913 l -28.284272,28.284272"
-              ></path>
-              <path
-                class="line middle"
-                d="m 70,50 c 0,0 -32.213436,0 -40,0 -7.786564,0 -6.428571,-4.640244 -6.428571,-8.571429 0,-5.895471 6.073743,-11.783399 12.286435,-5.570707 6.212692,6.212692 28.284272,28.284272 28.284272,28.284272"
-              ></path>
-              <path
-                class="line bottom"
-                d="m 69.575405,67.073826 h -40 c -13.100415,0 -14.380204,-31.80258 -6.899646,-33.421777 24.612039,-5.327373 -9.016154,52.337577 12.75751,30.563913 l 28.284272,-28.284272"
-              ></path>
-            </svg>
-          </div>
-        </div>
-        <!-- 内容 -->
-        <div class="search-content">
-          <div class="serach-item">
-            <span class="label"
-              >共 <span class="count-style">{{ deviceLocations.length }} </span> 个设备</span
-            >
-          </div>
-          <div class="serach-item toggle-radio" style="margin-top: 30px">
-            <el-radio-group v-model="currenSelectMap" @change="changeMap">
-              <el-radio label="1">A4地图</el-radio>
-              <el-radio label="2">北斗地图</el-radio>
-            </el-radio-group>
-          </div>
-          <div class="serach-item">
-            <ElTreeSelect
-              class="item"
-              v-model="filterRef.organId"
-              filterable
-              :data="treeList"
-              check-strictly
-              clearable
-              :render-after-expand="false"
-              :filter-node-method="filterNodeMethod"
-              placeholder="组织机构"
-              :selectParams="{
-                multiple: false
-              }"
-              :props="{
-                label: 'name',
-                value: 'organId'
-              }"
-            />
-          </div>
-          <div class="serach-item">
-            <ElSelect
-              v-model="filterRef.brand"
-              filterable
-              clearable
-              placeholder="设备品牌"
-              class="item"
-            >
-              <ElOption
-                v-for="item in brandsList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              />
-            </ElSelect>
-          </div>
-          <div class="serach-item">
-            <ElSelect
-              v-model="filterRef.projectId"
-              clearable
-              filterable
-              placeholder="项目"
-              class="item"
-            >
-              <ElOption
-                v-for="item in projectList"
-                :key="item.id"
-                :label="item.projectName"
-                :value="item.id"
-              />
-            </ElSelect>
-          </div>
-        </div>
-      </div>
-    </ElDrawer>
-    <div class="humburge-icon">
-      <svg class="bars" :class="{ active: isToggle }" viewBox="0 0 100 100" @click="humburgeClick">
-        <path
-          class="line top"
-          d="m 30,33 h 40 c 13.100415,0 14.380204,31.80258 6.899646,33.421777 -24.612039,5.327373 9.016154,-52.337577 -12.75751,-30.563913 l -28.284272,28.284272"
-        ></path>
-        <path
-          class="line middle"
-          d="m 70,50 c 0,0 -32.213436,0 -40,0 -7.786564,0 -6.428571,-4.640244 -6.428571,-8.571429 0,-5.895471 6.073743,-11.783399 12.286435,-5.570707 6.212692,6.212692 28.284272,28.284272 28.284272,28.284272"
-        ></path>
-        <path
-          class="line bottom"
-          d="m 69.575405,67.073826 h -40 c -13.100415,0 -14.380204,-31.80258 -6.899646,-33.421777 24.612039,-5.327373 -9.016154,52.337577 12.75751,30.563913 l 28.284272,-28.284272"
-        ></path>
-      </svg>
-    </div>
-    <!-- <div class="search-container">
-      <div class="serach-item toggle-radio" style="margin-left: 30px">
-        <el-radio-group v-model="currenSelectMap" @change="changeMap">
-          <el-radio label="1">A4地图</el-radio>
-          <el-radio label="2">北斗地图</el-radio>
-        </el-radio-group>
-      </div>
-      <div class="serach-item" style="margin-left: 40px">
-        <span class="label"> 所属单位:</span>
-        <ElTreeSelect
-          class="item"
-          v-model="filterRef.organId"
-          filterable
-          :data="treeList"
-          check-strictly
-          clearable
-          :render-after-expand="false"
-          :filter-node-method="filterNodeMethod"
-          placeholder="组织机构"
-          :selectParams="{
-            multiple: false
-          }"
-          :props="{
-            label: 'name',
-            value: 'organId'
-          }"
-        />
-      </div>
-      <div class="serach-item">
-        <span class="label"> 设备品牌:</span>
-        <ElSelect
-          v-model="filterRef.brand"
-          filterable
-          clearable
-          placeholder="设备品牌"
-          class="item"
-        >
-          <ElOption v-for="item in brandsList" :key="item.id" :label="item.name" :value="item.id" />
-        </ElSelect>
-      </div>
-      <div class="serach-item">
-        <span class="label" style="min-width: 50px">项目:</span>
-        <ElSelect v-model="filterRef.projectId" clearable filterable placeholder="项目">
-          <ElOption
-            v-for="item in projectList"
-            :key="item.id"
-            :label="item.projectName"
-            :value="item.id"
-          />
-        </ElSelect>
-      </div>
-      <div class="serach-item" style="margin-left: 15px">
-        <span class="label">共 {{ deviceLocations.length }} 个设备</span>
-      </div>
-    </div> -->
-  </div>
-
   <div class="map-container">
     <div id="map"></div>
     <div id="popup" class="ol-popup" ref="popupContainer">
@@ -806,7 +429,16 @@ getProjectList()
 </template>
 
 <style>
+.ol-full-screen,
+.ol-zoom {
+  font-size: 14px;
+  /* width: 30px;
+  height: 30px; */
+  > button {
+  }
+}
 ul.model-list-ul {
+  color: #000;
   li:not(:last-child) {
     margin-bottom: 4px;
   }
@@ -925,8 +557,8 @@ ul.model-list-ul {
 }
 #map{
   /* 屏幕宽高 */
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   /*height: 100%;*/
   /*height: 100%;*/
 }

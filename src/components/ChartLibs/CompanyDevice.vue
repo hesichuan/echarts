@@ -6,9 +6,9 @@ import hooks from '@/hooks'
 const loadFinish = ref(false)
 
 const companyList = ref<Array<string>>([])
-const deviceCount = ref<Array<number>>([]) // 设备数量
-const branchCount = ref<Array<number>>([]) // 品牌数量
-const typeCount = ref<Array<number>>([]) // 类型数量
+const deviceCount = ref<Array<number>>([]) // 投入设备
+const branchCount = ref<Array<number>>([]) // 工作总台班
+const typeCount = ref<Array<number>>([]) // 投入人员
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
@@ -34,15 +34,15 @@ watch(
 
 const option = computed(() => {
   return {
-    title: {
-      text: '公司设备数量/品牌数量/类型数量统计图',
-      top: 0
-      // left: 'center',
-      // textStyle: {
-      //   color: '#999',
-      //   fontSize: 12
-      // }
-    },
+    // title: {
+    //   text: '公司投入设备/工作总台班/投入人员统计图',
+    //   top: 0
+    //   // left: 'center',
+    //   // textStyle: {
+    //   //   color: '#999',
+    //   //   fontSize: 12
+    //   // }
+    // },
     tooltip: {
       show: true,
       trigger: 'axis',
@@ -63,10 +63,10 @@ const option = computed(() => {
       }
     },
     grid: {
-      left: '10%',
-      top: '20%',
-      right: 'auto',
-      bottom: '12%'
+      left: 'auto',
+      top: '15%',
+      right: '10%',
+      bottom: '25%'
     },
     // grid: {
     //   top: 56,
@@ -76,37 +76,43 @@ const option = computed(() => {
     //   containLabel: true
     // },
     legend: {
-      show: true,
       data: [
         {
-          name: '设备数量',
+          name: '投入设备',
           itemStyle: {
             color: '#4084EE'
           }
         },
         {
-          name: '品牌数量',
+          name: '工作总台班',
           itemStyle: {
             color: '#FF8D28'
           }
         },
         {
-          name: '类型数量',
+          name: '投入人员',
           itemStyle: {
             color: '#6ACC29'
           }
         }
       ],
-      top: calcFont(25),
-      selectedMode: false,
-      type: 'scroll',
-      icon: 'circle',
-      itemWidth: calcFont(16),
-      itemHeight: calcFont(16),
+      bottom: '3%',
       textStyle: {
-        color: '#C3E3F9',
+        color: '#1FC3CE',
         fontSize: calcFont(14)
       }
+      // show: true,
+
+      // top: calcFont(25),
+      // selectedMode: false,
+      // type: 'scroll',
+      // icon: 'circle',
+      // itemWidth: calcFont(16),
+      // itemHeight: calcFont(16),
+      // textStyle: {
+      //   color: '#C3E3F9',
+      //   fontSize: calcFont(14)
+      // }
     },
     xAxis: {
       data: companyList.value, // x轴公司
@@ -118,7 +124,7 @@ const option = computed(() => {
         }
       },
       axisLabel: {
-        fontSize: calcFont(12),
+        fontSize: calcFont(14),
         color: '#87CCFF',
         lineHeight: calcFont(15),
         formatter: function (value: any) {
@@ -152,7 +158,8 @@ const option = computed(() => {
     yAxis: [
       {
         type: 'value',
-        name: '单位',
+        position: 'right',
+        // name: '单位',
         nameGap: 24,
         nameTextStyle: {
           align: 'center',
@@ -183,75 +190,12 @@ const option = computed(() => {
       }
     ],
     series: [
-      // {
-      //   // 下面
-      //   data: [1, 1, 1, 1, 1],
-      //   color: '#1E7EFF',
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barWidth: calcFont(26),
-      //   symbol: 'diamond',
-      //   symbolPosition: 'start',
-      //   // symbolOffset: [0, 0],
-      //   symbolOffset: ['-55%', '50%'],
-      //   zlevel: 3,
-      //   symbolSize: [calcFont(26), calcFont(12)] // 菱形宽高
-      // },
-      // {
-      //   // 上面
-      //   data: deviceCount.value,
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: calcFont(48),
-      //   color: '#1E7EFF',
-      //   symbolPosition: 'end',
-      //   symbol: 'diamond',
-      //   symbolOffset: [-calcFont(24), '-50%'],
-      //   symbolSize: [calcFont(32), calcFont(12)],
-      //   zlevel: 2
-      // },
-      // {
-      //   // 阴影
-      //   data: deviceCount.value,
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: calcFont(48),
-      //   color: {
-      //     x: 0,
-      //     y: 1,
-      //     x2: 0,
-      //     y2: 0,
-      //     type: 'linear',
-      //     global: false,
-      //     colorStops: [
-      //       {
-      //         offset: 0,
-      //         color: 'rgba(0,0,0,0.2)'
-      //       },
-      //       {
-      //         offset: 1,
-      //         color: 'rgba(0,0,0,0.3)'
-      //       }
-      //     ]
-      //   },
-      //   symbolPosition: 'end',
-      //   symbol: 'rect',
-      //   symbolSize: [13, '100%'],
-      //   symbolOffset: [-37.699999999999996, 0],
-      //   zlevel: 1
-      // },
       {
         data: deviceCount.value,
         type: 'bar',
-        name: '设备数量',
+        name: '投入设备',
         barGap: '20%',
-        barWidth: calcFont(22),
+        barWidth: calcFont(18),
         label: {
           show: true,
           position: 'top',
@@ -304,72 +248,12 @@ const option = computed(() => {
           }
         }
       },
-      // {
-      //   data: [1, 1, 1, 1],
-      //   color: '#FFA75A',
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: calcFont(48),
-      //   symbol: 'diamond',
-      //   zlevel: 3,
-      //   symbolOffset: [calcFont(8), '50%'],
-      //   symbolSize: [calcFont(32), calcFont(12)]
-      // },
-      // {
-      //   data: branchCount.value,
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: calcFont(48),
-      //   color: '#FFA75A',
-      //   symbolPosition: 'end',
-      //   symbol: 'diamond',
-      //   // symbolOffset: [0, '-50%'],
-      //   // symbolSize: [26, 10.4],
-      //   symbolOffset: [calcFont(8), '-50%'],
-      //   symbolSize: [calcFont(32), calcFont(12)],
-      //   zlevel: 2
-      // },
-      // {
-      //   data: branchCount.value,
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: calcFont(48),
-      //   color: {
-      //     x: 0,
-      //     y: 1,
-      //     x2: 0,
-      //     y2: 0,
-      //     type: 'linear',
-      //     global: false,
-      //     colorStops: [
-      //       {
-      //         offset: 0,
-      //         color: 'rgba(0,0,0,0.2)'
-      //       },
-      //       {
-      //         offset: 1,
-      //         color: 'rgba(0,0,0,0.3)'
-      //       }
-      //     ]
-      //   },
-      //   symbolPosition: 'end',
-      //   symbol: 'rect',
-      //   symbolSize: [13, '100%'],
-      //   symbolOffset: [-6.5, 0],
-      //   zlevel: 1
-      // },
       {
         data: branchCount.value,
         type: 'bar',
-        name: '品牌数量',
+        name: '工作总台班',
         barGap: '20%',
-        barWidth: calcFont(22),
+        barWidth: calcFont(18),
         barMaxWidth: calcFont(48),
         label: {
           show: true,
@@ -423,70 +307,12 @@ const option = computed(() => {
           }
         }
       },
-      // {
-      //   data: [1, 1, 1, 1],
-      //   color: '#6ACC29',
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: calcFont(48),
-      //   symbol: 'diamond',
-      //   symbolOffset: [calcFont(40), '50%'],
-      //   zlevel: 3,
-      //   symbolSize: [calcFont(32), calcFont(12)]
-      // },
-      // {
-      //   data: typeCount.value,
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: 48,
-      //   color: '#6ACC29',
-      //   symbolPosition: 'end',
-      //   symbol: 'diamond',
-      //   symbolOffset: [calcFont(31), '-50%'],
-      //   symbolSize: [calcFont(32), calcFont(12)],
-      //   zlevel: 2
-      // },
-      // {
-      //   data: typeCount.value,
-      //   type: 'pictorialBar',
-      //   tooltip: {
-      //     show: false
-      //   },
-      //   barMaxWidth: 48,
-      //   color: {
-      //     x: 0,
-      //     y: 1,
-      //     x2: 0,
-      //     y2: 0,
-      //     type: 'linear',
-      //     global: false,
-      //     colorStops: [
-      //       {
-      //         offset: 0,
-      //         color: 'rgba(0,0,0,0.2)'
-      //       },
-      //       {
-      //         offset: 1,
-      //         color: 'rgba(0,0,0,0.3)'
-      //       }
-      //     ]
-      //   },
-      //   symbolPosition: 'end',
-      //   symbol: 'rect',
-      //   symbolSize: [13, '100%'],
-      //   symbolOffset: [24.700000000000003, 0],
-      //   zlevel: 1
-      // },
       {
         data: typeCount.value,
         type: 'bar',
-        name: '类型数量',
+        name: '投入人员',
         barGap: '20%',
-        barWidth: calcFont(22),
+        barWidth: calcFont(18),
         label: {
           show: true,
           position: 'top',

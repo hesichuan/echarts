@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import CountStatistic from '@/components/ChartLibs/CountStatistic.vue'
 import ChinaChart from '@/components/ChartLibs/ChinaChart.vue'
 import Notice from '@/components/ChartLibs/Notice.vue'
+import DeviceMap from '@/components/Map/DeviceMap.vue'
 </script>
 
 <template>
@@ -10,11 +11,12 @@ import Notice from '@/components/ChartLibs/Notice.vue'
     <!-- <div class="center-content__top">
       <CountStatistic />
     </div> -->
-    <div class="center-content__center">
-      <ChinaChart />
+    <div class="center-content__center content-wrap">
+      <!-- <ChinaChart /> -->
+      <DeviceMap />
     </div>
-    <div class="center-content__bottom" style="fontsize: 30px">
-      <Notice />
+    <div class="center-content__bottom border_image content-wrap">
+      <!-- <Notice /> -->
     </div>
   </div>
 </template>
@@ -32,10 +34,12 @@ import Notice from '@/components/ChartLibs/Notice.vue'
     // height: calc(500 * var(--app-base-unit))
   }
   &__bottom {
-    height: calc(200 * var(--app-base-unit));
+    // height: calc(400 * var(--app-base-unit));
+    // height: 33%;
+    height: calc(33.33% - 10 * var(--app-base-unit));
     display: flex;
-    justify-content: center;
-    align-items: center;
+    // justify-content: center;
+    // align-items: center;
   }
 }
 </style>

@@ -3,19 +3,22 @@ import DeviceCategory from '@/components/ChartLibs/DeviceCategory.vue'
 import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 import AreaMarket from '@/components/ChartLibs/AreaMarket.vue'
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
+
+import WrapTitle from '@/components/icons/WrapTitle.vue'
 </script>
 
 <template>
   <div class="right-content">
-    <div class="right-content__item">
-      <DeviceCategory />
+    <div class="right-content__item border_image content-wrap">
+      <!-- <DeviceCategory /> -->
     </div>
-    <div class="right-content__item">
+    <div class="right-content__item border_image content-wrap">
       <!-- <ChartFour/> -->
+      <WrapTitle :title="'重点项目设备投入'" class="wrap__title-content" />
       <CompanyDevice />
     </div>
-    <div class="right-content__item">
-      <AreaMarket />
+    <div class="right-content__item border_image content-wrap">
+      <!-- <AreaMarket /> -->
     </div>
   </div>
 </template>

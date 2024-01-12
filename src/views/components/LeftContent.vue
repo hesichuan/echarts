@@ -1,24 +1,26 @@
 <script setup lang="ts">
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
-import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 import ChartThree from '@/components/ChartLibs/ChartThree.vue'
 
 // import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
 import CircleChart from '@/components/ChartLibs/CircleChart.vue'
+import Summary from '@/components/ChartLibs/Summary.vue'
+import WrapTitle from '@/components/icons/WrapTitle.vue'
 </script>
 
 <template>
   <div class="left-content">
-    <div class="left-content__item">
-      <!-- <CompanyDevice /> -->
-      <ChartFour />
+    <div class="left-content__item border_image content-wrap">
+      <WrapTitle :title="'整体概述'" class="wrap__title-content" />
+      <Summary />
     </div>
-    <div class="left-content__item">
+    <div class="left-content__item border_image content-wrap">
       <!-- <OrderCarousel /> -->
+      <WrapTitle :title="'人员情况'" class="wrap__title-content" />
       <CircleChart />
     </div>
-    <div class="left-content__item">
-      <ChartThree />
+    <div class="left-content__item border_image content-wrap">
+      <!-- <ChartThree /> -->
     </div>
   </div>
 </template>

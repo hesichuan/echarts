@@ -161,21 +161,21 @@ onUnmounted(() => {
     <header class="header"><Header /></header>
     <section class="section">
       <div class="aside-lf">
-        <BorderBox1>
-          <div class="container">
-            <LeftContent />
-          </div>
-        </BorderBox1>
+        <!-- <BorderBox1> -->
+        <div class="container">
+          <LeftContent />
+        </div>
+        <!-- </BorderBox1> -->
       </div>
       <div class="center">
         <CenterContent />
       </div>
       <div class="aside-rt">
-        <BorderBox1>
-          <div class="container">
-            <RightContent />
-          </div>
-        </BorderBox1>
+        <!-- <BorderBox1> -->
+        <div class="container">
+          <RightContent />
+        </div>
+        <!-- </BorderBox1> -->
       </div>
     </section>
     <Loading v-if="isLoading" />
@@ -218,5 +218,18 @@ onUnmounted(() => {
   .aside-rt {
     flex: 2;
   }
+}
+:deep(.border_image) {
+  border: calc(10 * var(--app-base-unit)) solid;
+  border-left-width: calc(20 * var(--app-base-unit));
+  border-right-width: calc(20 * var(--app-base-unit));
+  border-image: url('../assets/imgs/border.jpg') 10 10 round;
+  // border-image-source: url('../assets/img/border.jpg');
+  // border: 20px solid;
+  // padding: 10px;
+}
+:deep(.content-wrap) {
+  position: relative;
+  margin: calc(5 * var(--app-base-unit));
 }
 </style>

@@ -3,41 +3,35 @@ export default {
     "data": {
         "unitDeviceInfo": [
             {
-                "deviceTypeCount": 22,
-                "orgName": "工程公司设备租赁分公司",
+                "deviceTypeCount": 440,
+                "orgName": "吉林石化项目",
                 "deviceCount": 570,
-                "brandCount": 16
+                "brandCount": 300
             },
             {
-                "deviceTypeCount": 29,
-                "orgName": "华北工程建设公司",
+                "deviceTypeCount": 200,
+                "orgName": "广西石化项目",
                 "deviceCount": 365,
-                "brandCount": 17
+                "brandCount": 170
             },
             {
-                "deviceTypeCount": 5,
-                "orgName": "华北利星行",
-                "deviceCount": 38,
-                "brandCount": 1
+                "deviceTypeCount": 510,
+                "orgName": "塔里木二期乙烯项目",
+                "deviceCount": 380,
+                "brandCount": 110
             },
             {
-                "deviceTypeCount": 5,
-                "orgName": "天远",
-                "deviceCount": 36,
-                "brandCount": 2
+                "deviceTypeCount": 570,
+                "orgName": "巴斯夫项目",
+                "deviceCount": 360,
+                "brandCount": 230
             },
             {
-                "deviceTypeCount": 6,
-                "orgName": "四川建设工程责任公司",
-                "deviceCount": 34,
-                "brandCount": 6
+                "deviceTypeCount": 601,
+                "orgName": "西四线项目",
+                "deviceCount": 340,
+                "brandCount": 480
             },
-            {
-                "deviceTypeCount": 5,
-                "orgName": "徐工通联",
-                "deviceCount": 29,
-                "brandCount": 1
-            }
         ],
         "typeNameAndNums": [
             {
