@@ -36,7 +36,7 @@ const optionsData = [
   },
   {
     name: '移动电站台',
-    value: 1998
+    value: 500
   },
   {
     name: '奇台数量套',
@@ -177,8 +177,7 @@ function getPie3D(pieData, internalDiameterRatio) {
       k,
       // 调整扇形高度
       i === 0 ? 10 : 10,
-      i,
-      series[i].pieData.value
+      i
     )
 
     startValue = endValue
@@ -196,7 +195,9 @@ series.push({
     opacity: 1,
     // fontSize: calcFont(12),
     lineHeight: calcFont(20),
-    position: 'inner',
+    // position: 'inner',
+    distanceToLabelLine: -25,
+    top: 200,
     textStyle: {
       fontSize: calcFont(8),
       color: '#fff'
@@ -205,6 +206,7 @@ series.push({
       const nameStr = params.data.name.replace(/.{1,5}/g, '$&\n')
       const _value = params.value
       const percent = params.percent
+      console.error(params)
       // return nameStr + '\n' + params.percent // 使用\n进行换行
       // return `${nameStr}${_value}（${percent}%）`
       return `${nameStr}${_value}（${percent}%）`
@@ -212,12 +214,10 @@ series.push({
     }
   },
   labelLine: {
+    show: false,
     length: 0,
     length2: 0
   },
-  // labelLayout: {
-  //   x: 'center'
-  // },
   startAngle: -30, //起始角度，支持范围[0, 360]。
   clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
   radius: ['60%', '60%'],
@@ -227,7 +227,6 @@ series.push({
     opacity: 0
   }
 })
-
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
   return {
