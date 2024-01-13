@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import WrapTitle from '@/components/icons/WrapTitle.vue'
 import CountStatistic from '@/components/ChartLibs/CountStatistic.vue'
 import ChinaChart from '@/components/ChartLibs/ChinaChart.vue'
 import Notice from '@/components/ChartLibs/Notice.vue'
 import DeviceMap from '@/components/Map/DeviceMap.vue'
+import Achievement from '@/components/ChartLibs/Achievement.vue'
 </script>
 
 <template>
@@ -16,7 +18,9 @@ import DeviceMap from '@/components/Map/DeviceMap.vue'
       <DeviceMap />
     </div>
     <div class="center-content__bottom border_image content-wrap">
+      <WrapTitle :title="'设备共享和集中租赁成果'" class="wrap__title-content" />
       <!-- <Notice /> -->
+      <Achievement />
     </div>
   </div>
 </template>
