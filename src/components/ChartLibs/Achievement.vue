@@ -76,7 +76,7 @@ const data = [
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
+    font-size: calc(20 * var(--app-base-unit));
     color: #01daff;
     font-style: italic;
     .device-title,
@@ -102,26 +102,26 @@ const data = [
     }
   }
   .box {
-    width: 31%;
+    width: 33%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     &:not(:nth-child(3n + 1)) {
       // margin-left: 25px;
     }
     .icon {
-      width: 80px;
-      margin-right: 10px;
+      width: calc(80 * var(--app-base-unit));
+      margin-right: calc(20 * var(--app-base-unit));
     }
     .right {
       display: flex;
       flex-direction: column;
       .title {
-        font-size: 14px;
+        font-size: calc(14 * var(--app-base-unit));
         color: #ffffff;
       }
       .total {
-        font-size: 14px;
+        font-size: calc(22 * var(--app-base-unit));
         font-weight: 800;
         color: #01daff;
         font-style: italic;
