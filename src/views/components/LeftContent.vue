@@ -10,11 +10,11 @@
  * @ComponentDescription: XXX
 -->
 <script setup lang="ts">
-import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
 import ChartThree from '@/components/ChartLibs/ChartThree.vue'
 
 // import OrderCarousel from '@/components/ChartLibs/OrderCarousel.vue'
-import CircleChart from '@/components/ChartLibs/CircleChart.vue'
+
+import SingleBar from '@/components/ChartLibs/SingleBar.vue'
 import Summary from '@/components/ChartLibs/Summary.vue'
 import WrapTitle from '@/components/icons/WrapTitle.vue'
 import DeviceSharing from '@/components/ChartLibs/Cake3D.vue'
@@ -27,9 +27,8 @@ import DeviceSharing from '@/components/ChartLibs/Cake3D.vue'
       <Summary />
     </div>
     <div class="left-content__item border_image content-wrap">
-      <!-- <OrderCarousel /> -->
-      <WrapTitle :title="'人员情况'" class="wrap__title-content" />
-      <CircleChart />
+      <WrapTitle :title="'设备类型'" class="wrap__title-content" />
+      <SingleBar />
     </div>
     <div class="left-content__item border_image content-wrap">
       <WrapTitle :title="'设备共享'" class="wrap__title-content" />

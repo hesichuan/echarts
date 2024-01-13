@@ -153,6 +153,28 @@ export default {
                 "orderPercentage": "16.25%"
             }
         },
+        "deviceTypeList": [
+            {
+                "orgName": "工程机械",
+                "deviceCount": 1031
+            },
+            {
+                "orgName": "起重搬运机械",
+                "deviceCount": 772
+            },
+            {
+                "orgName": "动力设备",
+                "deviceCount": 624
+            },
+            {
+                "orgName": "焊接切割设备",
+                "deviceCount": 474
+            },
+            {
+                "orgName": "其它设备",
+                "deviceCount": 330
+            }
+        ],
         "totalOrder": 616
     }
 }

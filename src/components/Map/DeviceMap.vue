@@ -268,7 +268,6 @@ const createClusterLayerToMap = (data) => {
       //获取点位个数，判断当前点位如果数量大于1为聚合点，加载自定义圆。如果只有一个点位，显示我们原本点位。
       const size = feature.get('features').length
       const clusterCount = size
-      console.log('clusterCount', clusterCount)
       if (size > 1) {
         let radius = 12
         if (size > 1000) {
