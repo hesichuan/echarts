@@ -77,7 +77,7 @@ git checkout echarts-2.0
 git checkout echarts-intelligint-1.0-api
 ```
 
-4. 中油工程
+4. 中油工程设备
 
 ```sh
 git checkout echarts-CNPC-device

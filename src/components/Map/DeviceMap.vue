@@ -18,10 +18,13 @@ import Overlay from 'ol/Overlay' //弹窗
 import { defaults as defaultControls, ScaleLine, FullScreen } from 'ol/control' //默认缩放, 比例尺控件, 全屏控件
 
 import iconPath from '@/assets/imgs/marker-default.png'
+import DefaultDevice from '@/assets/imgs/default-device.png'
 import { getDeviceLocationsApi } from '@/api'
 
 const MAX_ZOON = 23 // 地图缩放最大级别
 
+const currentDeviceInfo = ref({})
+const popupData = ref({})
 const isToggle = ref(false)
 const brandsList = ref([])
 const treeList = ref([])
@@ -74,11 +77,12 @@ const a4MapLayer = new TileLayer({
 })
 
 function packageFragment(deviceInfo) {
+  currentDeviceInfo.value = { ...deviceInfo }
   console.log('deviceInfo', deviceInfo)
   const includeKey = {
-    deviceName: '设备名称：',
+    // deviceName: '设备名称：',
     organName: '所属单位：',
-    brandName: '设备品牌：',
+    // brandName: '设备品牌：',
     projectName: '项目名称：',
     tsLon: '经度：',
     tsLat: '纬度：',
@@ -91,14 +95,14 @@ function packageFragment(deviceInfo) {
     devSerial: '设备机号或识别码：'
   } as any
 
+  const newObj = {}
+
   const ul = document.createElement('ul')
   ul.className = 'model-list-ul'
 
   for (const i in includeKey) {
-    console.log('iii', i)
     if (deviceInfo[i]) {
       const label = includeKey[i]
-      console.log('label', label)
       let inner = deviceInfo[i]
 
       if (label == '发动机状态：') {
@@ -109,13 +113,20 @@ function packageFragment(deviceInfo) {
         }
       }
 
+      newObj[label] = inner
+
       const li = document.createElement('li')
       li.innerHTML = `${label}${inner}`
 
-      console.log('li', li)
       ul.appendChild(li)
     }
   }
+  popupData.value = {
+    base: { ...newObj },
+    other: { mainImg: deviceInfo.mainImg || '' }
+  }
+
+  console.log('popupData', popupData.value)
   return ul
 }
 
@@ -124,41 +135,34 @@ let overlay = null
 
 //点击事件
 function clickMap(evt) {
-  console.log('map.getView().getZoom()', map.getView().getZoom())
   // evt.pixel 鼠标点击的位置，这个应该是像素
   let feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layerVetor) {
     return feature
   })
   if (feature) {
-    console.log('坐标点')
     if (feature.getProperties().features) {
-      //聚合情况下
+      // 聚合情况下
       let features = feature.getProperties().features
-      console.log('feature.getProperties().features', feature.getProperties().features)
       if (feature.getProperties().features.length == 1) {
-        console.log('单个坐标点')
         let attr = features[0].values_
         let coodinate = evt.coordinate // 鼠标点击的坐标位置
-        console.log('attr', attr)
         if (features[0].values_) {
           let deviceInfo = attr.deviceInfo
 
-          popupContent.value.innerHTML = ''
-          popupContent.value.appendChild(packageFragment(deviceInfo))
+          packageFragment(deviceInfo)
+
+          // popupContent.value.innerHTML = ''
+          // popupContent.value.appendChild(packageFragment(deviceInfo))
         } else {
-          popupContent.value.innerHTML = '<ul>' + '<li>' + '--' + '</li>' + '</ul>'
+          // popupContent.value.innerHTML = '<ul>' + '<li>' + '--' + '</li>' + '</ul>'
         }
 
         overlay.setPosition(coodinate)
         map.addOverlay(overlay)
       } else {
         //有多个要素
-        console.log('聚合点')
         overlay.setPosition(undefined)
         // 发散点
-        // const extent = boundingExtent(
-        //     features.map((r) => r.getGeometry().getCoordinates())
-        // );
         // map.getView().fit(extent, { duration: 1000, padding: [50, 50, 50, 50] });
         if (map.getView().getZoom() < MAX_ZOON) {
           // 放大地图层级
@@ -186,7 +190,7 @@ const initMap = () => {
     view: new View({
       // center: [116.403218, 39.92372], // 设置地图中心点 北京
       center: [107.73851, 34.98333], // 设置地图中心点 北京
-      zoom: 4, // 地图缩放级别（打开页面时默认级别）
+      zoom: 8 || 4, // 地图缩放级别（打开页面时默认级别）
       maxZoom: MAX_ZOON, // 地图缩放最大级别
       // minZoom:10, // 地图缩放最小级别
       projection: 'EPSG:4326', //设置坐标系
@@ -398,37 +402,48 @@ const getDeviceLocations = async (data) => {
     console.log('获取出错', error)
   }
 }
+const imgOnError = (e) => {
+  const img = e.srcElement
+  img.src = DefaultDevice
+}
 </script>
 
 <template>
   <div class="map-container">
     <div id="map"></div>
     <div id="popup" class="ol-popup" ref="popupContainer">
-      <!--      //弹出框标题-->
-      <div
-        id="popup-title"
-        style="
-          font: bold 15px sans-serif;
-          align: left;
-          position: absolute;
-          top: 8px;
-          left: 14px;
-          color: #000000;
-        "
-      >
-        设备信息
+      <div class="container">
+        <!-- <div class="popup-title">设备信息</div> -->
+        <div>
+          <a href="#" id="popup-closer" class="ol-popup-closer" @click="closePop"></a>
+        </div>
+        <div id="popup-content" ref="popupContent">
+          <div class="model-list-ul">
+            <div class="header">
+              <div class="img-box">
+                <img
+                  v-if="popupData && popupData.other"
+                  :src="popupData.other.mainImg"
+                  @error="imgOnError($event)"
+                />
+              </div>
+              <div class="base-info">
+                <h1>{{ currentDeviceInfo.deviceName }}</h1>
+                <small>{{ currentDeviceInfo.brandName }}</small>
+              </div>
+            </div>
+            <div v-for="(value, key) in popupData.base" :key="key">{{ key }}{{ value }}</div>
+          </div>
+        </div>
       </div>
-      <!--      //弹出框右上角关闭效果-->
-      <div>
-        <a href="#" id="popup-closer" class="ol-popup-closer" @click="closePop"></a>
-      </div>
-      <!--      //弹出框内容-->
-      <div id="popup-content" ref="popupContent" style="padding-top: 20px; font-size: 12px"></div>
     </div>
   </div>
 </template>
 
 <style>
+.map-popup-border-color {
+  border-color: rgba(96, 165, 250, 1);
+}
 .ol-full-screen,
 .ol-zoom {
   font-size: 14px;
@@ -437,52 +452,160 @@ const getDeviceLocations = async (data) => {
   > button {
   }
 }
-ul.model-list-ul {
-  color: #000;
-  li:not(:last-child) {
+.model-list-ul {
+  div:not(:last-child) {
     margin-bottom: 4px;
   }
+}
+/*设置弹出框样式*/
+
+.ol-popup {
+  position: absolute;
+  background-color: #fff;
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  border-radius: 10px;
+  bottom: 12px;
+  left: 0px;
+  min-width: 280px;
+}
+.ol-popup:after,
+.ol-popup:before {
+  top: 100%;
+  border: solid transparent;
+  content: ' ';
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.ol-popup:after {
+  border-top-color: rgba(96, 165, 250, 1);
+  border-width: 10px;
+  left: 48px;
+  margin-left: -10px;
+}
+.ol-popup:before {
+  border-top-color: #cccccc;
+  border-width: 11px;
+  left: 48px;
+  margin-left: -11px;
+}
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ol-popup-closer:after {
+  content: '✖';
 }
 </style>
 
 <style scoped lang="less">
-
-
+#popup {
+  .popup-title {
+    font-size: bold 15px sans-serif;
+    text-align: left;
+    position: absolute;
+    top: 8px;
+    left: 14px;
+    color: #000000;
+  }
+  .container {
+    background: rgb(96, 63, 139);
+    border-radius: 10px;
+    border-color: @map-border-color;
+    border-width: 6px;
+    border-style: solid;
+    padding: 10px;
+  }
+}
+#popup-content {
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .img-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #fff;
+      overflow: hidden;
+      border: 2px solid #60a5fa;
+      padding: 10px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+    }
+    .base-info {
+      margin-left: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      height: 60px;
+      h1 {
+        font-size: 18px;
+      }
+      small {
+        padding-top: 5px;
+        border-width: 0;
+        border-top-width: 3px;
+        border-color: @map-border-color;
+        font-size: 12px;
+        border-style: solid;
+        min-width: 50px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}
 .humburge-icon {
   background: #fff;
   position: fixed;
-    z-index: 2;
-    left: 30px;
-    top: 30px;
-    border: 2px solid #409eff;
-    border-radius: 10px;
-    transform: translateX(-50%) translateY(-50%);
-  &.drawer-icon{
+  z-index: 2;
+  left: 30px;
+  top: 30px;
+  border: 2px solid #409eff;
+  border-radius: 10px;
+  transform: translateX(-50%) translateY(-50%);
+  &.drawer-icon {
     position: absolute;
     right: 0;
     top: 30px;
     left: auto;
-    .bars{
+    .bars {
       width: 30px;
     }
   }
 }
-.eldrawer-content{
-  .serach-item{
+.eldrawer-content {
+  .serach-item {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
-    &.toggle-radio{
+    &.toggle-radio {
       min-width: 180px;
     }
-    .item{
+    .item {
       width: 220px;
     }
-    .label{
+    .label {
       min-width: 80px;
-      color:#333;
-      .count-style{
-        color:#409eff
+      color: #333;
+      .count-style {
+        color: #409eff;
       }
     }
   }
@@ -497,7 +620,7 @@ ul.model-list-ul {
   stroke: #409eff;
   stroke-width: 4;
   stroke-linecap: square;
-  transition: stroke-dasharray 400ms,  stroke-dashoffset 400ms;
+  transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
 }
 .bars .line.top {
   stroke-dasharray: 40 172;
@@ -517,108 +640,21 @@ ul.model-list-ul {
 .bars.active .bottom {
   stroke-dashoffset: -132px;
 }
-
-
-.search-container{
-  //margin-left: 40px;
-  display: flex;
-  align-items: center;
-  min-height: 45px;
-  position: fixed;
-  z-index: 10;
-  background: rgba(255,255,255,.7);
-  padding: 0 10px;
-
-  width: calc(100% - 100px);
-    margin: 0 50px;
-    border-radius: 25px;
-  -webkit-box-shadow: 0px 10px 38px 0px rgba(0,0,0,0.1);
-  -moz-box-shadow: 0px 10px 38px 0px rgba(0,0,0,0.1);
-  box-shadow: 0px 10px 38px 0px rgba(0,0,0,0.1);
-    box-sizing: border-box;
-  .serach-item{
-    display: flex;
-    align-items: center;
-    margin-left: 15px;
-    &.toggle-radio{
-      min-width: 180px;
-    }
-    .item{
-      width: 220px;
-    }
-    .label{
-      min-width: 80px;
-      color:#333;
-    }
-  }
+.map-container {
+  width: 100%;
+  height: 100%;
 }
-.map-container{
-  width: 100%;height: 100%;
-}
-#map{
+#map {
   /* 屏幕宽高 */
   width: 100%;
   height: 100%;
-  /*height: 100%;*/
-  /*height: 100%;*/
 }
 
-.selectLocation {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  /*// float: right;*/
-}
-
-.other{
+.other {
   position: absolute;
-  left:100px;
+  left: 100px;
   top: 10px;
   z-index: 1;
-}
-
-/*设置弹出框样式*/
-.ol-popup {
-  position: absolute;
-  background-color: #fff;
-  -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #cccccc;
-  bottom: 12px;
-  left: 0px;
-  min-width: 280px;
-}
-.ol-popup:after, .ol-popup:before {
-  top: 100%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-}
-.ol-popup:after {
-  border-top-color: #eeeeee;
-  border-width: 10px;
-  left: 48px;
-  margin-left: -10px;
-}
-.ol-popup:before {
-  border-top-color: #cccccc;
-  border-width: 11px;
-  left: 48px;
-  margin-left: -11px;
-}
-.ol-popup-closer {
-  text-decoration: none;
-  position: absolute;
-  top: 2px;
-  right: 8px;
-}
-.ol-popup-closer:after {
-  content: "✖";
 }
 </style>
 <style>

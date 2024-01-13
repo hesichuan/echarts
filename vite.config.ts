@@ -129,13 +129,13 @@ export default  ({ command, mode }: ConfigEnv): UserConfig => {
       proxy: { // 本地开发环境通过代理实现跨域，生产环境使用 nginx 转发
         // 正则表达式写法
         '^/customer': {
-          // target: 'http://172.16.16.30:8084/', 
+          target: 'http://172.16.16.30:8084/', 
           // target: 'http://10.100.182.125:8084', // jj
           // target: 'http://192.168.0.145:8084', 
           // target: "http://10.177.105.25:8084/",
           // target: "http://11.54.93.94:32573/",
           // target: "http://11.54.87.224:31617/",
-          target: "http://218.205.135.163:8090/",
+          // target: "http://218.205.135.163:8090/",
           // target: "http://portal.c.cloudos.cnpc.com.cn/",
           // target: "http://share.c.cloudos.cnpc.com.cn/",
           // target: "http://d.c.cloudos.cnpc.com.cn/",
