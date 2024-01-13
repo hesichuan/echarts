@@ -223,7 +223,7 @@ const toggleFullscreen = () => {
     }
   }
   .header-center {
-    width: 24%;
+    width: 27%;
     display: flex;
     align-items: center;
     justify-content: center;
