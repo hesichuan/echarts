@@ -40,13 +40,14 @@ const totalAmount = computed(() => orderStatistic.value.totalAmount)
 const orderComplete = computed(() => orderStatistic.value.completions)
 // 左2
 const orderCarousel = computed(() => orderStatistic.value.unitUseOrder)
-const repairorder = computed(() => orderStatistic.value.repairOrderMap)
+const deviceTypeList = computed(() => orderStatistic.value.deviceTypeList)
 // 左3
 const projectList = computed(() => orderStatistic.value.projectInfoList)
 // 中2
 const deviceMapCount = computed(() => deviceStatistic.value.deviceLocationAndNumList)
 // 右1
 const deviceCategories = computed(() => deviceStatistic.value.typeNameAndNums)
+const repairorder = computed(() => orderStatistic.value.repairOrderMap)
 // 右2
 const deviceCompany = computed(() => deviceStatistic.value.unitDeviceInfo)
 // 右3
@@ -58,6 +59,7 @@ provide('orderComplete', orderComplete)
 provide('orderCarousel', orderCarousel)
 provide('projectList', projectList)
 provide('repairorder', repairorder)
+provide('deviceTypeList', deviceTypeList)
 provide('orderCount', { regions, totalAmount, addNewOrder })
 provide('deviceCategories', deviceCategories)
 provide('deviceCompany', deviceCompany)
@@ -158,7 +160,9 @@ onUnmounted(() => {
 
 <template>
   <div class="digital-screen-container">
-    <header class="header"><Header /></header>
+    <header class="header">
+      <Header />
+    </header>
     <section class="section">
       <div class="aside-lf">
         <!-- <BorderBox1> -->
@@ -198,11 +202,11 @@ onUnmounted(() => {
   flex-direction: column;
 }
 .header {
-  height: calc(55 * var(--app-base-unit));
+  height: @header-height-calc;
 }
 .section {
   display: flex;
-  height: calc(100vh - 55 * var(--app-base-unit));
+  height: calc(100vh - @header-height * var(--app-base-unit));
   flex: 1;
   padding: calc(10 * var(--app-base-unit));
   box-sizing: border-box;

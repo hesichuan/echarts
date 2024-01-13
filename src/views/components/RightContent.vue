@@ -2,6 +2,8 @@
 import DeviceCategory from '@/components/ChartLibs/DeviceCategory.vue'
 import ChartFour from '@/components/ChartLibs/ChartFour.vue'
 import AreaMarket from '@/components/ChartLibs/AreaMarket.vue'
+
+import CircleChart from '@/components/ChartLibs/CircleChart.vue'
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
 
 import WrapTitle from '@/components/icons/WrapTitle.vue'
@@ -10,7 +12,8 @@ import WrapTitle from '@/components/icons/WrapTitle.vue'
 <template>
   <div class="right-content">
     <div class="right-content__item border_image content-wrap">
-      <!-- <DeviceCategory /> -->
+      <WrapTitle :title="'人员情况'" class="wrap__title-content" />
+      <CircleChart />
     </div>
     <div class="right-content__item border_image content-wrap">
       <!-- <ChartFour/> -->
