@@ -70,27 +70,31 @@ const outoPaly = (myChart) => {
 }
 
 const init = async () => {
-  myChart.value = markRaw(echarts.init(chartDom.value))
+  try {
+    myChart.value = markRaw(echarts.init(chartDom.value))
 
-  const option = props.option
-  option.title = chartTitle.value
+    const option = props.option
+    option.title = chartTitle.value
 
-  if (props.type === 'map') {
-    // const JEOJSON = await getChinaGeoJson().catch((err) => {
-    //   console.log('JEOJSON-err', err)
-    // })
+    if (props.type === 'map') {
+      // const JEOJSON = await getChinaGeoJson().catch((err) => {
+      //   console.log('JEOJSON-err', err)
+      // })
 
-    echarts.registerMap('china', JEOJSON)
+      echarts.registerMap('china', JEOJSON)
 
-    emits('mapEmit', JEOJSON)
+      emits('mapEmit', JEOJSON)
+    }
+    myChart.value.setOption(option)
+
+    //过渡完成后开始动画
+    myChart.value.on('finished', () => {
+      // outoPaly(myChart)
+    })
+    props.autoplay && outoPaly(myChart.value)
+  } catch (error) {
+    console.error(error)
   }
-  myChart.value.setOption(option)
-
-  //过渡完成后开始动画
-  myChart.value.on('finished', () => {
-    // outoPaly(myChart)
-  })
-  props.autoplay && outoPaly(myChart.value)
 }
 
 onMounted(() => {
