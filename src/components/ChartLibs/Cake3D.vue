@@ -6,7 +6,7 @@ import hooks from '@/hooks'
 const loadFinish = ref(false)
 setTimeout(() => {
   loadFinish.value = true
-}, 3000)
+}, 1000)
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
@@ -19,8 +19,34 @@ const { calcFont } = useModuleData(null)
 //   reCreate: 0,
 //   total: 0
 // })
-const lData = ['猪', '鸡', '牛', '鸭', '鹅', '狗']
-const colors = ['#FF6B12', '#CBE6FE', '#FFCE06', '#4D7DD2', '#7BBA50', '#FF8D75', '#B2B2B2']
+
+// 传入数据生成 option
+const optionsData = [
+  {
+    name: '口器集台套',
+    value: 4256
+  },
+  {
+    name: '鸡公路式台',
+    value: 2356
+  },
+  {
+    name: '位置自动台',
+    value: 2018
+  },
+  {
+    name: '移动电站台',
+    value: 1998
+  },
+  {
+    name: '奇台数量套',
+    value: 1998
+  }
+  // {
+  //   name: '吊管机81台套',
+  //   value: 3021
+  // }
+]
 
 function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, height, i) {
   // 计算
@@ -161,45 +187,28 @@ function getPie3D(pieData, internalDiameterRatio) {
   }
   return series
 }
-// 传入数据生成 option
-const optionsData = [
-  {
-    name: '猪',
-    value: 4256
-  },
-  {
-    name: '鸡',
-    value: 2356
-  },
-  {
-    name: '牛',
-    value: 2018
-  },
-  {
-    name: '鸭',
-    value: 1998
-  },
-  {
-    name: '鹅',
-    value: 1998
-  },
-  {
-    name: '狗',
-    value: 3021
-  }
-]
+
 const series = getPie3D(optionsData, 0) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
 series.push({
   name: 'pie2d',
   type: 'pie',
   label: {
     opacity: 1,
-    fontSize: calcFont(14),
+    // fontSize: calcFont(12),
     lineHeight: calcFont(20),
     position: 'inner',
     textStyle: {
-      fontSize: calcFont(14),
+      fontSize: calcFont(8),
       color: '#fff'
+    },
+    formatter: function (params) {
+      const nameStr = params.data.name.replace(/.{1,5}/g, '$&\n')
+      const _value = params.value
+      const percent = params.percent
+      // return nameStr + '\n' + params.percent // 使用\n进行换行
+      // return `${nameStr}${_value}（${percent}%）`
+      return `${nameStr}${_value}（${percent}%）`
+      // return nameStr + params.percent + '%' // 使用\n进行换行
     }
   },
   labelLine: {
@@ -211,13 +220,14 @@ series.push({
   // },
   startAngle: -30, //起始角度，支持范围[0, 360]。
   clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-  radius: ['50%', '50%'],
-  center: ['50%', '41%'],
+  radius: ['60%', '60%'],
+  center: ['50%', '40%'],
   data: optionsData,
   itemStyle: {
     opacity: 0
   }
 })
+
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
   return {
@@ -240,16 +250,22 @@ let option = computed(() => {
         fontSize: calcFont(14)
       }
     },
-    backgroundColor: 'transparent',
-    label: {
-      show: true,
-      position: 'outside',
-      formatter: '{b} \n{d}%',
-      textStyle: {
-        color: '#fff',
-        fontSize: calcFont(14)
-      }
-    },
+    // grid: {
+    //   left: '10%',
+    //   top: '20%',
+    //   right: '10%',
+    //   bottom: '12%'
+    // },
+    // backgroundColor: 'transparent',
+    // label: {
+    //   show: true,
+    //   position: 'outside',
+    //   formatter: '{b} \n{d}%',
+    //   textStyle: {
+    //     color: '#fff',
+    //     fontSize: calcFont(14)
+    //   }
+    // },
     xAxis3D: {
       min: -1,
       max: 1
