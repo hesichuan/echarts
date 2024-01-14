@@ -11,7 +11,8 @@ import {
   GraphChart,
   RadarChart,
   LineChart,
-  MapChart
+  MapChart,
+  GaugeChart
 } from 'echarts/charts'
 // 引入提示框，标题，直角坐标系，数据集，内置数据转换器组件，组件后缀都为 Component
 import {
@@ -46,7 +47,8 @@ echarts.use([
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,
-  MapChart
+  MapChart,
+  GaugeChart
 ])
 
 export default echarts

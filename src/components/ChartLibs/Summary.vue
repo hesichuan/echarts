@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import DashBoard from '@/components/ChartLibs/DashBoard.vue'
+</script>
 
 <template>
   <div class="summary">
@@ -21,9 +23,7 @@
       </div>
     </div>
     <div class="rate-info">
-      <div class="rate-info__item">1</div>
-      <div class="rate-info__item">1</div>
-      <div class="rate-info__item">1</div>
+      <DashBoard />
     </div>
   </div>
 </template>
@@ -36,19 +36,21 @@
   .device-info {
     display: flex;
     flex: 6;
+    justify-content: space-evenly;
     &__item {
-      flex: 1;
+      // flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      margin-top: calc(50 * var(--app-base-unit));
       .img-container {
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: calc(100 * var(--app-base-unit));
-        height: calc(100 * var(--app-base-unit));
+        width: calc(70 * var(--app-base-unit));
+        height: calc(70 * var(--app-base-unit));
         > img {
           position: absolute;
         }
@@ -57,8 +59,8 @@
           height: 100%;
         }
         .img-2 {
-          width: calc(70 * var(--app-base-unit));
-          height: calc(70 * var(--app-base-unit));
+          width: calc(50 * var(--app-base-unit));
+          height: calc(50 * var(--app-base-unit));
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
@@ -68,14 +70,14 @@
         }
       }
       .desc {
-        margin-top: calc(15 * var(--app-base-unit));
+        margin-top: calc(5 * var(--app-base-unit));
         font-size: calc(10 * var(--app-base-unit));
       }
     }
   }
   .rate-info {
     display: flex;
-    flex: 4;
+    flex: 6;
     &__item {
       flex: 1;
     }

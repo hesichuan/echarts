@@ -21,32 +21,33 @@ const { calcFont } = useModuleData(null)
 // 传入数据生成 option
 const optionsData = [
   {
-    name: '口器集台套',
-    value: 4256
+    name: '全位置自动焊台',
+    value: 131
   },
   {
-    name: '鸡公路式台',
-    value: 2356
+    name: '挖掘机台',
+    value: 554
   },
   {
-    name: '位置自动台',
-    value: 2018
+    name: '公路式汽车起重机台',
+    value: 362
   },
   {
-    name: '移动电站台',
-    value: 500
+    name: '随车起重机台',
+    value: 245
   },
   {
-    name: '奇台数量套',
-    value: 1998
+    name: '履带式起重机台',
+    value: 162
+  },
+  {
+    name: '其它',
+    value: 93
   }
-  // {
-  //   name: '吊管机81台套',
-  //   value: 3021
-  // }
 ]
 let legendData = []
-function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, height, i) {
+// 生成扇形的曲面参数方程，用于 series-surface.parametricEquation
+function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, height) {
   // 计算
   let midRatio = (startRatio + endRatio) / 2
 
@@ -65,7 +66,7 @@ function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, h
   // 计算选中效果分别在 x 轴、y 轴方向上的位移（未选中，则位移均为 0）
   let offsetX = isSelected ? Math.cos(midRadian) * 0.1 : 0
   let offsetY = isSelected ? Math.sin(midRadian) * 0.1 : 0
-  let offsetZ = i == 1 ? 2 : 0
+
   // 计算高亮效果的放大比例（未高亮，则比例为 1）
   let hoverRate = isHovered ? 1.05 : 1
 
@@ -121,7 +122,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   let sumValue = 0
   let startValue = 0
   let endValue = 0
-
+  let legendData = []
   let k =
     typeof internalDiameterRatio !== 'undefined'
       ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
@@ -131,7 +132,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   for (let i = 0; i < pieData.length; i++) {
     sumValue += pieData[i].value
 
-    let seriesItem: any = {
+    let seriesItem = {
       name: typeof pieData[i].name === 'undefined' ? `series${i}` : pieData[i].name,
       type: 'surface',
       parametric: true,
@@ -147,7 +148,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     }
 
     if (typeof pieData[i].itemStyle != 'undefined') {
-      let itemStyle: any = {}
+      let itemStyle = {}
 
       typeof pieData[i].itemStyle.color != 'undefined'
         ? (itemStyle.color = pieData[i].itemStyle.color)
@@ -174,51 +175,140 @@ function getPie3D(pieData, internalDiameterRatio) {
       false,
       false,
       k,
-      // 调整扇形高度
-      i === 0 ? 10 : 10,
-      i
+      series[i].pieData.value
     )
 
     startValue = endValue
+
     legendData.push(series[i].name)
   }
+
+  // // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
+  series.push({
+    name: 'mouseoutSeries',
+    type: 'surface',
+    parametric: true,
+    wireframe: {
+      show: false
+    },
+    itemStyle: {
+      opacity: 0.1,
+      color: '#E1E8EC'
+    },
+    parametricEquation: {
+      u: {
+        min: 0,
+        max: Math.PI * 2,
+        step: Math.PI / 20
+      },
+      v: {
+        min: 0,
+        max: Math.PI,
+        step: Math.PI / 20
+      },
+      x: function (u, v) {
+        return ((Math.sin(v) * Math.sin(u) + Math.sin(u)) / Math.PI) * 2
+      },
+      y: function (u, v) {
+        return ((Math.sin(v) * Math.cos(u) + Math.cos(u)) / Math.PI) * 2
+      },
+      z: function (u, v) {
+        return Math.cos(v) > 0 ? -0.5 : -5
+      }
+    }
+  })
+
+  // // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
+  series.push({
+    name: 'mouseoutSeries',
+    type: 'surface',
+    parametric: true,
+    wireframe: {
+      show: false
+    },
+    itemStyle: {
+      opacity: 0.1,
+      color: '#E1E8EC'
+    },
+    parametricEquation: {
+      u: {
+        min: 0,
+        max: Math.PI * 2,
+        step: Math.PI / 20
+      },
+      v: {
+        min: 0,
+        max: Math.PI,
+        step: Math.PI / 20
+      },
+      x: function (u, v) {
+        return ((Math.sin(v) * Math.sin(u) + Math.sin(u)) / Math.PI) * 2
+      },
+      y: function (u, v) {
+        return ((Math.sin(v) * Math.cos(u) + Math.cos(u)) / Math.PI) * 2
+      },
+      z: function (u, v) {
+        return Math.cos(v) > 0 ? -5 : -7
+      }
+    }
+  })
+  series.push({
+    name: 'mouseoutSeries',
+    type: 'surface',
+    parametric: true,
+    wireframe: {
+      show: false
+    },
+    itemStyle: {
+      opacity: 0.1,
+      color: '#E1E8EC'
+    },
+
+    parametricEquation: {
+      u: {
+        min: 0,
+        max: Math.PI * 2,
+        step: Math.PI / 20
+      },
+      v: {
+        min: 0,
+        max: Math.PI,
+        step: Math.PI / 20
+      },
+      x: function (u, v) {
+        return ((Math.sin(v) * Math.sin(u) + Math.sin(u)) / Math.PI) * 2.2
+      },
+      y: function (u, v) {
+        return ((Math.sin(v) * Math.cos(u) + Math.cos(u)) / Math.PI) * 2.2
+      },
+      z: function (u, v) {
+        return Math.cos(v) > 0 ? -7 : -7
+      }
+    }
+  })
   return series
 }
 
-const series = getPie3D(optionsData, 0) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
+const series = getPie3D(optionsData, 0.8) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
 series.push({
   name: 'pie2d',
   type: 'pie',
   label: {
     opacity: 1,
-    // fontSize: calcFont(12),
     lineHeight: calcFont(20),
-    // position: 'inner',
-    // distanceToLabelLine: -90,
-    top: 200,
     textStyle: {
       fontSize: calcFont(14),
       color: '#fff'
-    },
-    formatter: function (params) {
-      const nameStr = params.data.name.replace(/.{1,5}/g, '$&\n')
-      const _value = params.value
-      const percent = params.percent
-      // return nameStr + '\n' + params.percent // 使用\n进行换行
-      // return `${nameStr}${_value}（${percent}%）`
-      return `${nameStr}${_value}（${percent}%）`
-      // return nameStr + params.percent + '%' // 使用\n进行换行
     }
   },
   labelLine: {
-    show: true,
     length: 20,
     length2: 20
   },
   startAngle: -30, //起始角度，支持范围[0, 360]。
   clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-  radius: ['60%', '60%'],
-  center: ['50%', '50%'],
+  radius: ['20%', '45%'], // 饼图的半径，数组的第一项是内半径，第二项是外半径。
+  center: ['50%', '43%'], // 饼图的中心（圆心）坐标。
   data: optionsData,
   itemStyle: {
     opacity: 0
@@ -227,20 +317,51 @@ series.push({
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
   return {
+    legend: {
+      tooltip: {
+        show: true
+      },
+      data: legendData,
+      bottom: '5%',
+      textStyle: {
+        color: '#fff',
+        fontSize: 12
+      }
+    },
     animation: true,
     tooltip: {
       formatter: (params) => {
         if (params.seriesName !== 'mouseoutSeries' && params.seriesName !== 'pie2d') {
           return `${
             params.seriesName
-          }<br/><span style="display:inline-block;margin-right:5px;border-radius:5px;width:10px;height:10px;background-color:${
+          }<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
             params.color
           };"></span>${series[params.seriesIndex].pieData.value}`
         }
       },
       textStyle: {
-        fontSize: calcFont(14)
+        fontSize: 12
       }
+    },
+    title: {
+      x: 'center',
+      top: '20',
+      textStyle: {
+        color: '#fff',
+        fontSize: 12
+      }
+    },
+    backgroundColor: '#333',
+    labelLine: {
+      show: true,
+      lineStyle: {
+        color: '#7BC0CB'
+      }
+    },
+    label: {
+      show: true,
+      position: 'outside',
+      formatter: '{b} \n{c} ({d}%)'
     },
     xAxis3D: {
       min: -1,
@@ -256,20 +377,15 @@ let option = computed(() => {
     },
     grid3D: {
       show: false,
-      boxHeight: 5,
-      left: '2%',
-      bottom: '15%',
-      // environment: "rgba(255,255,255,0)",
+      boxHeight: 0.25,
+      // top: '30%',
+      bottom: '0%',
+      environment: '#021041',
       viewControl: {
-        // 3d效果可以放大、旋转等，
-        alpha: 30, // 饼图翻转的程度
-        beta: 30,
-        rotateSensitivity: 0,
-        zoomSensitivity: 0,
-        panSensitivity: 0,
-        autoRotate: false, // 是否自动旋转
-        maxDistance: 300,
-        distance: 300 // 距离越小看到的饼图越大
+        distance: 280,
+        alpha: 25,
+        beta: 40,
+        autoRotate: false // 自动旋转
       }
     },
     series: series

@@ -112,6 +112,7 @@ const toggleFullscreen = () => {
   background-size: auto 100%;
   position: relative;
   display: flex;
+  justify-content: space-evenly;
   .line {
     position: absolute;
     top: calc(4 * var(--app-base-unit));
@@ -123,7 +124,7 @@ const toggleFullscreen = () => {
     display: flex;
     .img {
       width: 100%;
-      height: 100%;
+      // height: 100%;
       transform: translateX(calc(20 * var(--app-base-unit)));
       object-fit: cover;
     }
@@ -165,7 +166,7 @@ const toggleFullscreen = () => {
     }
   }
   .header-lf {
-    flex: 1;
+    width: 32%;
     position: relative;
     // background: url('../../assets/imgs/header_top_1.png') no-repeat;
     // background-position: right center;
@@ -175,7 +176,7 @@ const toggleFullscreen = () => {
     // background-size: 100% 100%;
   }
   .header-rt {
-    flex: 1;
+    width: 32%;
     position: relative;
     // display: flex;
     // justify-content: flex-end;
