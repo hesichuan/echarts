@@ -1,14 +1,3 @@
-<!--
- * @Author: 贺思川
- * @Date: 2024-01-12 19:29:57
- * @LastEditTime: 2024-01-13 18:56:37
- * @LastEditors: 贺思川
- * @TapdLink: https://XXX
- * @DesignsLink: https://XXX
- * @RelatedPersons: XXX[市场]、XXX[产品]、XXX[前端]、XXX[后端]、XXX[设计]
- * @ProjectDescription: XXX
- * @ComponentDescription: XXX
--->
 <script setup lang="ts">
 import ChartThree from '@/components/ChartLibs/ChartThree.vue'
 

@@ -3,24 +3,26 @@ import { ref, unref, inject, watch, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
-const loadFinish = ref(true)
-
-const { useModuleData } = hooks
-const { calcFont } = useModuleData(null)
-
-// const repairorder = ref([])
-
-// const repairData = ref({
-//   guarantee: 0,
-//   baseRepair: 0,
-//   carryOn: 0,
-//   reCreate: 0,
-//   total: 0
-// })
+const apiData = inject('cnpcBaseData', null)
+const loadFinish = ref(false)
 
 // 传入数据生成 option
-const optionsData = [90.12, 39.53, 85.34]
+let optionsData = [0, 0, 0]
 let legendData = []
+
+watch(
+  () => apiData,
+  (newVal) => {
+    if (newVal) {
+      optionsData = [+newVal.value.intactRate, +newVal.value.utilizeRate, +newVal.value.repairRate]
+      loadFinish.value = true
+    }
+  },
+  {
+    deep: true
+  }
+)
+
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
   return {

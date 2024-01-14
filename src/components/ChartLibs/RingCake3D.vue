@@ -351,7 +351,7 @@ let option = computed(() => {
         fontSize: 12
       }
     },
-    backgroundColor: '#333',
+    backgroundColor: 'transparent',
     labelLine: {
       show: true,
       lineStyle: {
@@ -379,8 +379,7 @@ let option = computed(() => {
       show: false,
       boxHeight: 0.25,
       // top: '30%',
-      bottom: '0%',
-      environment: '#021041',
+      // bottom: '0%',
       viewControl: {
         distance: 280,
         alpha: 25,

@@ -4,6 +4,7 @@ import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
 const loadFinish = ref(false)
+const currentChartRef = ref()
 
 const companyList = ref<Array<string>>([])
 const deviceCount = ref<Array<number>>([]) // 投入设备
@@ -31,7 +32,6 @@ watch(
     deep: true
   }
 )
-
 const option = computed(() => {
   return {
     // title: {
@@ -368,6 +368,20 @@ const option = computed(() => {
     ]
   }
 })
+
+const curCompsEmits = inject('curCompsEmits')
+const clickChart = (params: any) => {
+  console.log('clickChart', params.name, params)
+  // defineExpose({ clickChart: true })
+  curCompsEmits({
+    compsName: 'OrderCarousel',
+    title: '重点项目设备投入',
+    data: {
+      index: params.dataIndex,
+      projectName: params.name
+    }
+  })
+}
 </script>
 
 <template>
@@ -376,6 +390,7 @@ const option = computed(() => {
     v-if="loadFinish"
     :autoplay="false"
     :autoplayLen="companyList.length"
+    :clickChart="clickChart"
   />
 </template>
 

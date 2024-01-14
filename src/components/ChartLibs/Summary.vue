@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import DashBoard from '@/components/ChartLibs/DashBoard.vue'
+import { inject, ref } from 'vue'
+
+const summaryData = inject('cnpcBaseData', {})
 </script>
 
 <template>
@@ -9,7 +12,7 @@ import DashBoard from '@/components/ChartLibs/DashBoard.vue'
         <div class="img-container">
           <img src="~@/assets/imgs/circle_1.jpg" class="img-1" />
           <img src="~@/assets/imgs/circle_2.png" class="img-2" />
-          <span class="txt">6.2万</span>
+          <span class="txt">{{ summaryData.deviceTotal }}万</span>
         </div>
         <div class="desc">设备总量（台套）</div>
       </div>
@@ -17,7 +20,7 @@ import DashBoard from '@/components/ChartLibs/DashBoard.vue'
         <div class="img-container">
           <img src="~@/assets/imgs/circle_1.jpg" class="img-1" />
           <img src="~@/assets/imgs/circle_2.png" class="img-2" />
-          <span class="txt">4.0万</span>
+          <span class="txt">{{ summaryData.deviceUse }}万</span>
         </div>
         <div class="desc">在用设备（台套）</div>
       </div>
