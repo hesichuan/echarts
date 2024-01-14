@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, provide, watch, computed, onUnmounted } from 'vue'
-import { BorderBox1 } from '@dataview/datav-vue3'
+import { onMounted, ref, provide, watch, computed, onUnmounted, nextTick } from 'vue'
+import { BorderBox11 } from '@dataview/datav-vue3'
 import hooks from '@/hooks'
 
 import Header from '@/components/Header/index.vue'
@@ -9,6 +9,7 @@ import Loading from '@/components/GlobalLoading/index.vue'
 import LeftContent from './components/LeftContent.vue'
 import CenterContent from './components/CenterContent.vue'
 import RightContent from './components/RightContent.vue'
+import CurrentChart from '@/components/ChartLibs/CurrentChart.vue'
 
 // 接口
 // import { OrderStatisticDemo } from '@/utils/demo'
@@ -17,7 +18,14 @@ import {
   orderKanbanDataApi,
   deviceStatisticApi,
   deviceKanbanDataApi,
-  remandOrderDataApi
+  remandOrderDataApi,
+  getCollectiveAndRentalSharingDeviceData
+} from '@/api'
+
+import {
+  getCnpcKanbanJson,
+  getKanbanBaseData,
+  getCollectiveAndRentalSharingDeviceJson
 } from '@/api'
 
 const VITE_ENV = import.meta.env
@@ -28,6 +36,14 @@ const isLoading = ref(true)
 const orderStatistic = ref({})
 const deviceStatistic = ref({})
 const remandOrderList = ref([])
+const currentCompsTitle = ref('')
+const currentChartRef = ref()
+const showCurrentChart = ref(false)
+/** new */
+const kanbanData = ref({})
+const wholeDesc = ref({})
+const pieData = ref({})
+
 // 需求单轮巡
 const loopTimer = ref()
 
@@ -67,6 +83,28 @@ provide('deviceMapCount', deviceMapCount)
 provide('remandList', remandList)
 provide('supermarket', supermarket)
 
+provide('cnpcBaseData', wholeDesc)
+provide('pieData', pieData)
+
+const getPieData = async () => {
+  const reqApi =
+    VITE_ENV.VITE_API_BASEPATH === 'test'
+      ? getCollectiveAndRentalSharingDeviceJson
+      : getCollectiveAndRentalSharingDeviceData
+  const orderRes = await reqApi()
+
+  pieData.value = orderRes.data
+  isLoading.value = false
+}
+
+const getKanbanData = async () => {
+  const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? getCnpcKanbanJson : getKanbanBaseData
+  const orderRes = await reqApi()
+
+  wholeDesc.value = orderRes.data
+  isLoading.value = false
+}
+
 const getOrderStatistic = async () => {
   const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? orderKanbanDataApi : orderStatisticApi
   const orderRes = await reqApi()
@@ -92,6 +130,10 @@ getOrderStatistic()
 getDeviceStatistic()
 // 需求单
 getRemandOrderList()
+// 看板
+getKanbanData()
+// 饼图
+getPieData()
 
 loopTimer.value = setInterval(() => {
   getRemandOrderList()
@@ -156,6 +198,32 @@ setScreenMode('AdptMultiDevice')
 onUnmounted(() => {
   clearInterval(loopTimer.value)
 })
+
+const curCompsEmits = ({
+  compsName,
+  title,
+  data
+}: {
+  compsName: string
+  title: string
+  data: Partial<Object>
+}) => {
+  console.log('curCompsEmits')
+  showCurrentChart.value = true
+  currentCompsTitle.value = title
+  nextTick(() => {
+    currentChartRef.value.init({
+      compsName,
+      title,
+      data
+    })
+  })
+}
+provide('curCompsEmits', curCompsEmits)
+
+const currentPropsCloseHandle = () => {
+  showCurrentChart.value = false
+}
 </script>
 
 <template>
@@ -182,6 +250,18 @@ onUnmounted(() => {
         <!-- </BorderBox1> -->
       </div>
     </section>
+
+    <div class="cur-big-comps" :class="{ 'is-show': showCurrentChart }">
+      <BorderBox11
+        :title="currentCompsTitle"
+        class="custome-orderbox11"
+        style="width: 100vw; height: 100vh"
+      >
+      </BorderBox11>
+      <div v-if="showCurrentChart" class="cur-comps-container">
+        <CurrentChart ref="currentChartRef" @close="currentPropsCloseHandle" />
+      </div>
+    </div>
     <Loading v-if="isLoading" />
   </div>
 </template>
@@ -221,6 +301,27 @@ onUnmounted(() => {
   }
   .aside-rt {
     flex: 2;
+  }
+}
+.cur-big-comps {
+  z-index: -100;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  opacity: 0;
+  &.is-show {
+    display: flex;
+    background: #06032f;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 1111111;
+    opacity: 1;
+  }
+  .cur-comps-container {
+    position: fixed;
   }
 }
 :deep(.border_image) {

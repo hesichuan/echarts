@@ -18,7 +18,8 @@ const props = defineProps({
   option: propTypes.object.def({}),
   autoplay: propTypes.bool.def(false),
   autoplayLen: propTypes.number.def(1),
-  type: propTypes.string.def('')
+  type: propTypes.string.def(''),
+  clickChart: propTypes.func.def(() => {})
 })
 
 const commonTitle = computed(() => {
@@ -92,6 +93,7 @@ const init = async () => {
       // outoPaly(myChart)
     })
     props.autoplay && outoPaly(myChart.value)
+    myChart.value.on('click', props.clickChart)
   } catch (error) {
     console.error(error)
   }
