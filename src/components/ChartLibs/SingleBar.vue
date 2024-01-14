@@ -123,7 +123,7 @@ const option = computed(() => {
         }
       },
       axisLabel: {
-        fontSize: calcFont(16),
+        fontSize: calcFont(12),
         color: '#87CCFF',
         lineHeight: calcFont(15),
         formatter: function (value: any) {

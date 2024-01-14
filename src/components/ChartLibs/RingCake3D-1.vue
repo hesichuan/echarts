@@ -21,29 +21,29 @@ const { calcFont } = useModuleData(null)
 // 传入数据生成 option
 const optionsData = [
   {
-    name: '口器集台套',
-    value: 4256
+    name: '全位置自动焊台',
+    value: 131
   },
   {
-    name: '鸡公路式台',
-    value: 2356
+    name: '挖掘机台',
+    value: 554
   },
   {
-    name: '位置自动台',
-    value: 2018
+    name: '公路式汽车起重机台',
+    value: 362
   },
   {
-    name: '移动电站台',
-    value: 500
+    name: '随车起重机台',
+    value: 245
   },
   {
-    name: '奇台数量套',
-    value: 1998
+    name: '履带式起重机台',
+    value: 162
+  },
+  {
+    name: '其它',
+    value: 93
   }
-  // {
-  //   name: '吊管机81台套',
-  //   value: 3021
-  // }
 ]
 let legendData = []
 function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, height, i) {
@@ -115,13 +115,12 @@ function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, h
   }
 }
 
-// 生成模拟 3D 饼图的配置项
+// 生成模拟3D饼图的配置项
 function getPie3D(pieData, internalDiameterRatio) {
   let series = []
   let sumValue = 0
   let startValue = 0
   let endValue = 0
-
   let k =
     typeof internalDiameterRatio !== 'undefined'
       ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
@@ -131,7 +130,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   for (let i = 0; i < pieData.length; i++) {
     sumValue += pieData[i].value
 
-    let seriesItem: any = {
+    let seriesItem = {
       name: typeof pieData[i].name === 'undefined' ? `series${i}` : pieData[i].name,
       type: 'surface',
       parametric: true,
@@ -147,7 +146,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     }
 
     if (typeof pieData[i].itemStyle != 'undefined') {
-      let itemStyle: any = {}
+      let itemStyle = {}
 
       typeof pieData[i].itemStyle.color != 'undefined'
         ? (itemStyle.color = pieData[i].itemStyle.color)
@@ -176,7 +175,8 @@ function getPie3D(pieData, internalDiameterRatio) {
       k,
       // 调整扇形高度
       i === 0 ? 10 : 10,
-      i
+      i,
+      series[i].pieData.value
     )
 
     startValue = endValue
@@ -185,39 +185,28 @@ function getPie3D(pieData, internalDiameterRatio) {
   return series
 }
 
-const series = getPie3D(optionsData, 0) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
+const series = getPie3D(optionsData, 0.5) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
 series.push({
   name: 'pie2d',
   type: 'pie',
   label: {
     opacity: 1,
-    // fontSize: calcFont(12),
-    lineHeight: calcFont(20),
-    // position: 'inner',
-    // distanceToLabelLine: -90,
-    top: 200,
+    fontSize: calcFont(20),
+    lineHeight: 20,
     textStyle: {
-      fontSize: calcFont(14),
+      fontSize: 14,
       color: '#fff'
     },
-    formatter: function (params) {
-      const nameStr = params.data.name.replace(/.{1,5}/g, '$&\n')
-      const _value = params.value
-      const percent = params.percent
-      // return nameStr + '\n' + params.percent // 使用\n进行换行
-      // return `${nameStr}${_value}（${percent}%）`
-      return `${nameStr}${_value}（${percent}%）`
-      // return nameStr + params.percent + '%' // 使用\n进行换行
-    }
+    position: 'inside'
   },
   labelLine: {
-    show: true,
-    length: 20,
-    length2: 20
+    show: false,
+    length: 10,
+    length2: 10
   },
-  startAngle: -30, //起始角度，支持范围[0, 360]。
-  clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-  radius: ['60%', '60%'],
+  startAngle: -20, //起始角度，支持范围[0, 360]。
+  clockwise: true, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
+  radius: ['50%', '50%'],
   center: ['50%', '50%'],
   data: optionsData,
   itemStyle: {
@@ -256,20 +245,20 @@ let option = computed(() => {
     },
     grid3D: {
       show: false,
-      boxHeight: 5,
-      left: '2%',
-      bottom: '15%',
+      boxHeight: 3,
+      top: '3%',
+      bottom: 15,
       // environment: "rgba(255,255,255,0)",
       viewControl: {
         // 3d效果可以放大、旋转等，
-        alpha: 30, // 饼图翻转的程度
-        beta: 30,
+        alpha: 30, // 沿X轴旋转
+        beta: 30, // 沿Y轴旋转
         rotateSensitivity: 0,
         zoomSensitivity: 0,
         panSensitivity: 0,
         autoRotate: false, // 是否自动旋转
-        maxDistance: 300,
-        distance: 300 // 距离越小看到的饼图越大
+        maxDistance: 230,
+        distance: 150 // 距离越小看到的饼图越大
       }
     },
     series: series

@@ -374,7 +374,7 @@ const option = computed(() => {
   <DefaultChart
     :option="option"
     v-if="loadFinish"
-    :autoplay="true"
+    :autoplay="false"
     :autoplayLen="companyList.length"
   />
 </template>

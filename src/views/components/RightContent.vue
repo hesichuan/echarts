@@ -7,6 +7,8 @@ import CircleChart from '@/components/ChartLibs/CircleChart.vue'
 import CompanyDevice from '@/components/ChartLibs/CompanyDevice.vue'
 
 import WrapTitle from '@/components/icons/WrapTitle.vue'
+
+import Lease from '@/components/ChartLibs/RingCake3D.vue'
 </script>
 
 <template>
@@ -22,6 +24,8 @@ import WrapTitle from '@/components/icons/WrapTitle.vue'
     </div>
     <div class="right-content__item border_image content-wrap">
       <!-- <AreaMarket /> -->
+      <WrapTitle :title="'集中租赁'" class="wrap__title-content" />
+      <Lease />
     </div>
   </div>
 </template>
