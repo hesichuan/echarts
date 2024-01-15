@@ -92,8 +92,9 @@ watch(
 .achievement-container {
   width: 100%;
   height: 100%;
-  padding: calc(50 * var(--app-base-unit)) calc(30 * var(--app-base-unit))
-    calc(30 * var(--app-base-unit));
+  padding-top: calc(50 * var(--app-base-unit));
+  // padding-top: calc(50 * var(--app-base-unit)) calc(30 * var(--app-base-unit))
+  //   calc(30 * var(--app-base-unit));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -138,11 +139,12 @@ watch(
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 50%;
     &:not(:nth-child(3n + 1)) {
       // margin-left: 25px;
     }
     .icon {
-      width: calc(80 * var(--app-base-unit));
+      width: calc(120 * var(--app-base-unit));
       margin-right: calc(20 * var(--app-base-unit));
     }
     .right {
