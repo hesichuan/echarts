@@ -203,6 +203,9 @@ const option = computed(() => {
           textStyle: {
             color: '#4084EE',
             fontSize: calcFont(14)
+          },
+          formatter: function (params: any) {
+            return params.value + '台'
           }
         },
         showBackground: false,
@@ -262,6 +265,9 @@ const option = computed(() => {
           textStyle: {
             color: '#FF8D28',
             fontSize: calcFont(14)
+          },
+          formatter: function (params: any) {
+            return params.value + '\n' + '台班'
           }
         },
         showBackground: true,
@@ -320,6 +326,9 @@ const option = computed(() => {
           textStyle: {
             color: '#6ACC29',
             fontSize: calcFont(14)
+          },
+          formatter: function (params: any) {
+            return params.value + '人'
           }
         },
         showBackground: true,

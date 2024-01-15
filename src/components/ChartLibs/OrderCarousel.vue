@@ -61,13 +61,8 @@ watch(
   () => props.data,
   async (newVal) => {
     const { data } = await getEquipmentInvestment(newVal)
-    const dataArr = data.map((item) => {
-      return {
-        organName: `${item.deviceType} ${item.model}`,
-        orderNum: parseInt(item.num)
-      }
-    })
-    orderCarousel.value = dataArr
+    console.error('dataArr', data)
+    orderCarousel.value = data
   },
   {
     deep: true
@@ -81,7 +76,13 @@ const getEquipmentInvestment = async (params) => {
 
 <template>
   <div class="project-scroll">
-    <Vue3SeamlessScroll :list="orderCarousel" :step="0.3" :hover="true" class="project-list">
+    <Vue3SeamlessScroll
+      :list="orderCarousel"
+      :step="0.3"
+      :limitScrollNum="13"
+      :hover="false"
+      class="project-list"
+    >
       <div
         class="project-list-item"
         v-for="(item, index) in orderCarousel"
@@ -91,10 +92,11 @@ const getEquipmentInvestment = async (params) => {
           <i :class="getIconClassName(item)">{{ index + 1 }}</i>
         </div>
         <div class="project-list-item__name ellipsis">
-          {{ item.organName }}
+          <div class="item device-type">{{ item.deviceType }}</div>
+          <div class="item device-model">{{ item.model }}</div>
         </div>
         <div class="statistics-card">
-          <span class="statistics-card__num font-16">{{ item.orderNum }}</span>
+          <span class="statistics-card__num font-16">{{ item.num }}</span>
           <span class="statistics-card__text mt-5">数量</span>
         </div>
         <!-- <div class="statistics-card ml-10">
@@ -111,7 +113,7 @@ const getEquipmentInvestment = async (params) => {
 <style lang="less" scoped>
 .project-scroll {
   height: 95vh;
-  width: 90vw;
+  width: 50vw;
 }
 .project-list {
   padding: 0 calc(20 * var(--app-base-unit));
@@ -191,6 +193,15 @@ const getEquipmentInvestment = async (params) => {
       flex: 1;
       font-size: calc(16 * var(--app-base-unit));
       min-width: calc(120 * var(--app-base-unit));
+      display: flex;
+      align-items: center;
+      .item {
+        display: flex;
+        font-weight: bold;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+      }
     }
   }
 }
