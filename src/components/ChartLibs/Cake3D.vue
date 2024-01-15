@@ -3,12 +3,14 @@ import { ref, unref, inject, watch, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
-const apiData = inject('pieData', {})
+const apiData = inject('collectiveRentData', {})
 const loadFinish = ref(false)
+
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
+
 // 传入数据生成 option
-// let legendData = ref([])
+let legendData = ref([])
 let series = ref([])
 // 传入数据生成 option
 let optionsData = ref([])
@@ -17,7 +19,7 @@ watch(
   () => apiData.value,
   (newVal) => {
     if (newVal) {
-      optionsData.value = newVal.deviceList
+      optionsData.value = [...newVal.deviceList]
         .sort((a, b) => {
           return b.num - a.num
         })
@@ -27,8 +29,8 @@ watch(
             value: +item.num
           }
         })
+      console.error('Cake3D')
       init()
-
       loadFinish.value = true
     }
   },
@@ -37,6 +39,7 @@ watch(
   }
 )
 
+// 生成扇形的曲面参数方程，用于 series-surface.parametricEquation
 function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, height, i) {
   // 计算
   let midRatio = (startRatio + endRatio) / 2
@@ -116,6 +119,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     typeof internalDiameterRatio !== 'undefined'
       ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
       : 1 / 3
+
   // 为每一个饼图数据，生成一个 series-surface 配置
   for (let i = 0; i < pieData.length; i++) {
     sumValue += pieData[i].value
@@ -153,7 +157,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   // 使用上一次遍历时，计算出的数据和 sumValue，调用 getParametricEquation 函数，
   // 向每个 series-surface 传入不同的参数方程 series-surface.parametricEquation，也就是实现每一个扇形。
   for (let i = 0; i < series.value.length; i++) {
-    endValue = startValue + series.value[i]?.pieData?.value ?? 0
+    endValue = startValue + series.value[i].pieData.value
     series.value[i].pieData.startRatio = startValue / sumValue
     series.value[i].pieData.endRatio = endValue / sumValue
     series.value[i].parametricEquation = getParametricEquation(
@@ -180,24 +184,17 @@ const init = () => {
     type: 'pie',
     label: {
       opacity: 1,
-      // fontSize: calcFont(12),
       lineHeight: calcFont(20),
-      // position: 'inner',
-      // distanceToLabelLine: -90,
-      top: 200,
       textStyle: {
         fontSize: calcFont(14),
         color: '#fff'
-      },
-      formatter: function (params) {
-        const nameStr = params.data.name.replace(/.{1,5}/g, '$&\n')
-        const _value = params.value
-        const percent = params.percent
-        // return nameStr + '\n' + params.percent // 使用\n进行换行
-        // return `${nameStr}${_value}（${percent}%）`
-        return `${nameStr}${_value}（${percent}%）`
-        // return nameStr + params.percent + '%' // 使用\n进行换行
       }
+      // formatter: function (params) {
+      //   const nameStr = params.data.name.replace(/.{1,5}/g, '$&\n')
+      //   const _value = params.value
+      //   const percent = params.percent
+      //   return `${nameStr}${_value}（${percent}%）`
+      // }
     },
     labelLine: {
       show: true,
@@ -225,12 +222,18 @@ let option = computed(() => {
             params.seriesName
           }<br/><span style="display:inline-block;margin-right:5px;border-radius:5px;width:10px;height:10px;background-color:${
             params.color
-          };"></span>${series[params.seriesIndex].pieData.value}`
+          };"></span>${series.value[params.seriesIndex].pieData.value}`
         }
       },
       textStyle: {
         fontSize: calcFont(14)
       }
+    },
+    backgroundColor: 'transparent',
+    label: {
+      show: true,
+      position: 'outside',
+      formatter: '{b} \n{c} ({d}%)'
     },
     xAxis3D: {
       min: -1,
@@ -252,13 +255,12 @@ let option = computed(() => {
       // environment: "rgba(255,255,255,0)",
       viewControl: {
         // 3d效果可以放大、旋转等，
-        alpha: 30, // 饼图翻转的程度
-        beta: 30,
+        alpha: 25, // 饼图翻转的程度
+        beta: 60,
         rotateSensitivity: 0,
         zoomSensitivity: 0,
         panSensitivity: 0,
         autoRotate: false, // 是否自动旋转
-        maxDistance: 300,
         distance: 300 // 距离越小看到的饼图越大
       }
     },
