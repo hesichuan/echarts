@@ -18,6 +18,8 @@ export default function (handleApiData) {
 
   const calcFont = (fontSize: number): number => {
 
+    console.log('contrastRatio',unref(contrastRatio))
+
     return unref(contrastRatio) * fontSize
   }
 

@@ -166,7 +166,8 @@ const toggleFullscreen = () => {
     }
   }
   .header-lf {
-    width: 32%;
+    // width: 35%;
+    flex: 1;
     position: relative;
     // background: url('../../assets/imgs/header_top_1.png') no-repeat;
     // background-position: right center;
@@ -176,7 +177,8 @@ const toggleFullscreen = () => {
     // background-size: 100% 100%;
   }
   .header-rt {
-    width: 32%;
+    // width: 32%;
+    flex: 1;
     position: relative;
     // display: flex;
     // justify-content: flex-end;
@@ -224,7 +226,7 @@ const toggleFullscreen = () => {
     }
   }
   .header-center {
-    width: 27%;
+    width: calc(600 * var(--app-base-unit));
     display: flex;
     align-items: center;
     justify-content: center;

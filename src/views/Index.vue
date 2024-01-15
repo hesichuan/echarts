@@ -108,6 +108,8 @@ const initHtmlFontSize = () => {
       contrastRatio.value = 1
     }
   }
+
+  console.log('index-contrastRatio', contrastRatio.value)
   // 竖屏
   document.documentElement.style.fontSize = contrastRatio.value * 100 + 'px'
 }
