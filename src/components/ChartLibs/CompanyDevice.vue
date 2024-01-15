@@ -375,7 +375,6 @@ const option = computed(() => {
 const curCompsEmits = inject('curCompsEmits')
 const clickChart = (params: any) => {
   console.log('clickChart', params.name, params)
-  // defineExpose({ clickChart: true })
   curCompsEmits({
     compsName: 'OrderCarousel',
     title: '重点项目设备投入',

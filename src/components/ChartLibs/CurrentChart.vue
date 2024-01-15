@@ -41,7 +41,6 @@ const init = ({
 
   nextTick(() => {
     paramsData.value = data
-
     console.log('data.value', paramsData.value)
   })
 }
@@ -98,7 +97,7 @@ defineExpose({ init })
   .close {
     position: absolute;
     right: calc(40 * var(--app-base-unit));
-    top: calc(35 * var(--app-base-unit));
+    top: calc(70 * var(--app-base-unit));
     cursor: pointer;
     .img_btn {
       width: calc(60 * var(--app-base-unit));

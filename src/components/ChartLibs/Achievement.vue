@@ -7,46 +7,69 @@ import img5 from '@/assets/imgs/device_5.png'
 import img6 from '@/assets/imgs/device_6.png'
 import DeviceTitleImg from '@/assets/imgs/device_title.jpg'
 
-import { inject, ref } from 'vue'
+import { inject, ref, watch } from 'vue'
 import hooks from '@/hooks'
 
 const loadFinish = ref(false)
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
-const summaryData = inject('cnpcBaseData', {})
-
-const data = [
+const apiData = inject('cnpcBaseData', {})
+const data = ref([
   {
     img: img1,
     title: '盘活内部闲置资源',
-    total: '1000台套'
+    total: '0台套'
   },
   {
     img: img2,
     title: '集租平均单价降低',
-    total: '25%'
+    total: '0%'
   },
   {
     img: img3,
     title: '年出租施工设备',
-    total: '2000台套'
+    total: '0台套'
   },
   {
     img: img4,
     title: '促进低效资产增值',
-    total: '1亿元'
+    total: '0元'
   },
   {
     img: img5,
     title: '促进低效资产增值',
-    total: '4041万元'
+    total: '0元'
   },
   {
     img: img6,
     title: '年累计出租设备',
-    total: '5455台班'
+    total: '0台班'
   }
-]
+])
+
+watch(
+  () => apiData.value,
+  (newVal) => {
+    data.value = data.value.map((item, index) => {
+      const total = [
+        `${newVal.replaceNum}台套`,
+        `${newVal.leaseUnitPrice}%`,
+        `${newVal.deviceNum}台套`,
+        `${newVal.addValue}亿元`,
+        `${newVal.leaseSavePrice}万元`,
+        `${newVal.hireNum}台班`
+      ]
+      return {
+        ...item,
+        total: total[index]
+      }
+    })
+    loadFinish.value = false
+  },
+  {
+    deep: true
+  }
+)
 </script>
 
 <template>

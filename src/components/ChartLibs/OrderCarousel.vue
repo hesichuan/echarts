@@ -13,9 +13,7 @@ const props = defineProps({
     default: () => {}
   }
 })
-const orderCarousel = ref({})
-
-orderCarousel.value = inject('orderCarousel', [])
+let orderCarousel = ref([])
 
 const getBackgroundClassName = ({ type }) => {
   let className = 'project-list-item__icon'
@@ -61,39 +59,43 @@ const getIconClassName = ({ type }) => {
 
 watch(
   () => props.data,
-  (newVal) => {
-    getEquipmentInvestment(newVal)
+  async (newVal) => {
+    const { data } = await getEquipmentInvestment(newVal)
+    const dataArr = data.map((item) => {
+      return {
+        organName: `${item.deviceType} ${item.model}`,
+        orderNum: parseInt(item.num)
+      }
+    })
+    orderCarousel.value = dataArr
   },
   {
     deep: true
   }
 )
 // projectName
-const getEquipmentInvestment = (params) => {
-  getEquipmentInvestmentList({ ...params, projectName: '吉林石化项目' }).then((res: any) => {
-    // const { data } = res
-    console.error(res)
-  })
+const getEquipmentInvestment = async (params) => {
+  return getEquipmentInvestmentList(params)
 }
 </script>
 
 <template>
   <div class="project-scroll">
-    <Vue3SeamlessScroll :list="orderCarousel.value" :step="0.3" :hover="true" class="project-list">
+    <Vue3SeamlessScroll :list="orderCarousel" :step="0.3" :hover="true" class="project-list">
       <div
         class="project-list-item"
-        v-for="(item, index) in orderCarousel.value"
+        v-for="(item, index) in orderCarousel"
         :key="'project-item' + index"
       >
         <div :class="getBackgroundClassName(item)">
-          <i :class="getIconClassName(item)"></i>
+          <i :class="getIconClassName(item)">{{ index + 1 }}</i>
         </div>
         <div class="project-list-item__name ellipsis">
           {{ item.organName }}
         </div>
         <div class="statistics-card">
-          <span class="statistics-card__num font-16">{{ toThousands(item.orderNum) }}</span>
-          <span class="statistics-card__text mt-5">订单数</span>
+          <span class="statistics-card__num font-16">{{ item.orderNum }}</span>
+          <span class="statistics-card__text mt-5">数量</span>
         </div>
         <!-- <div class="statistics-card ml-10">
           <span>

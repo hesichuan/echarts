@@ -28,23 +28,23 @@ const currentChartRef = ref()
 const showCurrentChart = ref(false)
 /** new */
 const wholeDesc = ref({})
-const pieData = ref({})
+const collectiveRentData = ref({})
 
 // 需求单轮巡
 const loopTimer = ref()
 
 // 饼图数据
-const apiPieData = computed(() => pieData.value)
+const collectiveRentDataList = computed(() => collectiveRentData.value)
 
 provide('cnpcBaseData', wholeDesc)
-provide('pieData', apiPieData)
+provide('collectiveRentData', collectiveRentDataList)
 
-const getPieData = async () => {
+const getCollectiveRentData = async () => {
   const reqApi =
     VITE_ENV.VITE_API_BASEPATH === 'test' ? getCollectiveRentApiJson : getCollectiveRentApiData
   const orderRes = await reqApi()
 
-  pieData.value = orderRes.data
+  collectiveRentData.value = orderRes.data
   isLoading.value = false
 }
 
@@ -58,8 +58,8 @@ const getKanbanData = async () => {
 
 // 看板
 getKanbanData()
-// 饼图
-getPieData()
+// 集租、共享设备
+getCollectiveRentData()
 
 loopTimer.value = setInterval(() => {
   getKanbanData()

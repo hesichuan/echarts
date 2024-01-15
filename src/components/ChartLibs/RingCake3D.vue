@@ -3,7 +3,7 @@ import { ref, unref, inject, watch, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
-const apiData = inject('pieData', null)
+const apiData = inject('collectiveRentData', null)
 const loadFinish = ref(false)
 
 const { useModuleData } = hooks
@@ -19,7 +19,7 @@ watch(
   () => apiData.value,
   (newVal) => {
     if (newVal) {
-      optionsData.value = newVal.leaseDeviceList
+      optionsData.value = [...newVal.leaseDeviceList]
         .sort((a, b) => {
           return b.num - a.num
         })
@@ -29,6 +29,7 @@ watch(
             value: +item.num
           }
         })
+      console.error('RingCake3D')
       init()
       loadFinish.value = true
     }
@@ -113,7 +114,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   let sumValue = 0
   let startValue = 0
   let endValue = 0
-  let legendData = []
+
   let k =
     typeof internalDiameterRatio !== 'undefined'
       ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
@@ -123,7 +124,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   for (let i = 0; i < pieData.length; i++) {
     sumValue += pieData[i].value
 
-    let seriesItem = {
+    let seriesItem: any = {
       name: typeof pieData[i].name === 'undefined' ? `series${i}` : pieData[i].name,
       type: 'surface',
       parametric: true,
@@ -139,7 +140,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     }
 
     if (typeof pieData[i].itemStyle != 'undefined') {
-      let itemStyle = {}
+      let itemStyle: any = {}
 
       typeof pieData[i].itemStyle.color != 'undefined'
         ? (itemStyle.color = pieData[i].itemStyle.color)
@@ -157,7 +158,6 @@ function getPie3D(pieData, internalDiameterRatio) {
   // 向每个 series-surface 传入不同的参数方程 series-surface.parametricEquation，也就是实现每一个扇形。
   for (let i = 0; i < series.value.length; i++) {
     endValue = startValue + series.value[i].pieData.value
-    console.log(series.value[i])
     series.value[i].pieData.startRatio = startValue / sumValue
     series.value[i].pieData.endRatio = endValue / sumValue
     series.value[i].parametricEquation = getParametricEquation(
@@ -170,11 +170,10 @@ function getPie3D(pieData, internalDiameterRatio) {
     )
 
     startValue = endValue
-
-    legendData.push(series.value[i].name)
+    // legendData.push(series.value[i].name)
   }
 
-  // // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
+  // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
   series.value.push({
     name: 'mouseoutSeries',
     type: 'surface',
@@ -209,7 +208,7 @@ function getPie3D(pieData, internalDiameterRatio) {
     }
   })
 
-  // // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
+  // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
   series.value.push({
     name: 'mouseoutSeries',
     type: 'surface',
@@ -294,6 +293,7 @@ const init = () => {
       }
     },
     labelLine: {
+      show: true,
       length: 20,
       length2: 20
     },
@@ -311,17 +311,6 @@ const init = () => {
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
   return {
-    legend: {
-      tooltip: {
-        show: true
-      },
-      data: legendData,
-      bottom: '5%',
-      textStyle: {
-        color: '#fff',
-        fontSize: 12
-      }
-    },
     animation: true,
     tooltip: {
       formatter: (params) => {
@@ -334,24 +323,10 @@ let option = computed(() => {
         }
       },
       textStyle: {
-        fontSize: 12
-      }
-    },
-    title: {
-      x: 'center',
-      top: '20',
-      textStyle: {
-        color: '#fff',
-        fontSize: 12
+        fontSize: calcFont(14)
       }
     },
     backgroundColor: 'transparent',
-    labelLine: {
-      show: true,
-      lineStyle: {
-        color: '#7BC0CB'
-      }
-    },
     label: {
       show: true,
       position: 'outside',
@@ -375,10 +350,13 @@ let option = computed(() => {
       // top: '30%',
       // bottom: '0%',
       viewControl: {
-        distance: 280,
         alpha: 25,
         beta: 40,
-        autoRotate: false // 自动旋转
+        rotateSensitivity: 0,
+        zoomSensitivity: 0,
+        panSensitivity: 0,
+        autoRotate: false, // 是否自动旋转
+        distance: 300 // 距离越小看到的饼图越大
       }
     },
     series: series.value
