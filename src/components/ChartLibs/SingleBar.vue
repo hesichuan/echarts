@@ -6,23 +6,28 @@ import echarts from '@/utils/echarts'
 
 const loadFinish = ref(false)
 
+// const baseData = ref({})
+
 const companyList = ref<Array<string>>([])
 const deviceCount = ref<Array<number>>([]) // 设备数量
 const branchCount = ref<Array<number>>([]) // 工作总台班
-const typeCount = ref<Array<number>>([]) // 投入人员
+const typeCount = ref<Array<number>>([]) // 投入人员 typeVoList
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
-const deviceTypeList = inject('deviceTypeList', [])
+// const deviceTypeList = inject('deviceTypeList', [])
+
+const baseData = inject('cnpcBaseData', {})
 
 watch(
-  () => deviceTypeList,
+  () => baseData,
   (newVal) => {
-    unref(newVal)?.forEach((item: any) => {
-      const { orgName, deviceCount: dC } = item
-      companyList.value.push(orgName)
-      deviceCount.value.push(dC)
+    const list = [...unref(newVal).typeVoList]
+    list.forEach((item: any) => {
+      const { num, deviceType } = item
+      companyList.value.push(deviceType)
+      deviceCount.value.push(num)
     })
     loadFinish.value = true
   },
@@ -128,7 +133,7 @@ const option = computed(() => {
         lineHeight: calcFont(15),
         formatter: function (value: any) {
           var ret = '' //拼接加\n返回的类目项
-          var max = 5 //每行显示的文字字数
+          var max = 4 //每行显示的文字字数
           var val = value.length //X轴内容的文字字数
           var rowN = Math.ceil(val / max) //需要换的行数
           if (rowN > 1) {

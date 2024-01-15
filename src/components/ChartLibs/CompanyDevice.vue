@@ -7,24 +7,27 @@ const loadFinish = ref(false)
 const currentChartRef = ref()
 
 const companyList = ref<Array<string>>([])
-const deviceCount = ref<Array<number>>([]) // 投入设备
-const branchCount = ref<Array<number>>([]) // 工作总台班
-const typeCount = ref<Array<number>>([]) // 投入人员
+const deviceCount = ref<Array<number>>([]) // 入设备数量
+const workCount = ref<Array<number>>([]) // 工作总台班
+const userCount = ref<Array<number>>([]) // 投入人员 userNum project
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
-const deviceCompany = inject('deviceCompany', [])
+// const deviceCompany = inject('deviceCompany', [])
+
+const baseData = inject('cnpcBaseData', {})
 
 watch(
-  () => deviceCompany,
+  () => baseData,
   (newVal) => {
-    unref(newVal)?.forEach((item: any) => {
-      const { deviceTypeCount: dTC, orgName, deviceCount: dC, brandCount: bC } = item
-      companyList.value.push(orgName)
+    const list = [...unref(newVal).project]
+    list.forEach((item: any) => {
+      const { userNum, projectName, num: dC, workNum } = item
+      companyList.value.push(projectName)
       deviceCount.value.push(dC)
-      branchCount.value.push(bC)
-      typeCount.value.push(dTC)
+      workCount.value.push(workNum)
+      userCount.value.push(userNum)
     })
     loadFinish.value = true
   },
@@ -249,7 +252,7 @@ const option = computed(() => {
         }
       },
       {
-        data: branchCount.value,
+        data: workCount.value,
         type: 'bar',
         name: '工作总台班',
         barGap: '20%',
@@ -308,7 +311,7 @@ const option = computed(() => {
         }
       },
       {
-        data: typeCount.value,
+        data: userCount.value,
         type: 'bar',
         name: '投入人员',
         barGap: '20%',
