@@ -21,6 +21,10 @@ import iconPath from '@/assets/imgs/marker-default.png'
 import DefaultDevice from '@/assets/imgs/default-device.png'
 import { getDeviceLocationsApi } from '@/api'
 
+const VITE_ENV = import.meta.env
+
+console.log('VITE_ENV', VITE_ENV)
+
 const MAX_ZOON = 23 // 地图缩放最大级别
 
 const currentDeviceInfo = ref({})
@@ -50,27 +54,17 @@ const humburgeClick = () => {
 let map = {} as any // 创建一个地图实例
 let bdToken = ''
 
-const beiMapLayer = new TileLayer({
-  visible: true,
-  source: new XYZ({
-    visible: true,
-    url: 'http://218.205.135.163:8090/wt/satelite/{z}/{x}/{y}.jpg'
-    // url: `${window.location.protocol}//${window.location.host}/wt/satelite/{z}/{x}/{y}.jpg`
-    // url: 'https://bds.cnpc:8081/wt/satelite/{z}/{x}/{y}.jpg'
-  })
-})
+const BASE_HOST =
+  VITE_ENV.VITE_APP_MAP_TILE !== 'true'
+    ? 'http://218.205.135.163:8090'
+    : `${window.location.protocol}//${window.location.host}`
 
 const a4MapLayer = new TileLayer({
   visible: true,
   source: new XYZ({
     visible: true,
-    // var tileUrlPre = "http://a4.petrochina/A4Service/TileService.ashx?c=${col}&r=${row}&l=${level}&token=" + mapConfig.Token + "&type=";
-    // url:
-    // `${window.location.protocol}//${window.location.host}/A4Service/TileService.ashx?c={x}&r={y}&l={z}&token=` +
-    // '84265148-19bb-4b6b-a2d0-923738b4ebbf' +
-    // '&type=IMGMIX'
     url:
-      'http://218.205.135.163:8090/A4Service/TileService.ashx?c={x}&r={y}&l={z}&token=' +
+      `${BASE_HOST}/A4Service/TileService.ashx?c={x}&r={y}&l={z}&token=` +
       '84265148-19bb-4b6b-a2d0-923738b4ebbf' +
       '&type=IMGMIX'
   })
@@ -189,8 +183,8 @@ const initMap = () => {
     target: 'map', //默认加载地图容器 1
     view: new View({
       // center: [116.403218, 39.92372], // 设置地图中心点 北京
-      center: [107.73851, 34.98333], // 设置地图中心点 北京
-      zoom: 8 || 4, // 地图缩放级别（打开页面时默认级别）
+      center: [107.73851, 34.98333], // 设置地图中心点
+      zoom: 3, // 地图缩放级别（打开页面时默认级别）
       maxZoom: MAX_ZOON, // 地图缩放最大级别
       // minZoom:10, // 地图缩放最小级别
       projection: 'EPSG:4326', //设置坐标系
@@ -198,8 +192,6 @@ const initMap = () => {
       smoothResolutionConstraint: false // 关闭无级缩放地图
     })
   })
-
-  beiMapLayer.setVisible(true)
 
   // 实例化比例尺控件
   var scaleLineControl = new ScaleLine({

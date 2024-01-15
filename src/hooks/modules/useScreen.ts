@@ -1,4 +1,4 @@
-import { provide, ref, reactive, onMounted, onUnmounted } from "vue";
+import { provide, ref, reactive, onMounted, onUnmounted, nextTick } from "vue";
 import useResize from "./useResize";
 
 export default function(handleResizeScreen: Function) {
@@ -33,7 +33,10 @@ export default function(handleResizeScreen: Function) {
 
   onMounted(() => {    
     handleResizeScreen();
-    initResizeEvent(handleResizeScreen);
+    nextTick(() => {
+
+      initResizeEvent(handleResizeScreen);
+    })
   });
 
   onUnmounted(() => {
