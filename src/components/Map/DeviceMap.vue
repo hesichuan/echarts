@@ -23,8 +23,6 @@ import { getDeviceLocationsApi } from '@/api'
 
 const VITE_ENV = import.meta.env
 
-console.log('VITE_ENV', VITE_ENV)
-
 const MAX_ZOON = 23 // 地图缩放最大级别
 
 const currentDeviceInfo = ref({})
