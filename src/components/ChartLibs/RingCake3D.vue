@@ -347,8 +347,6 @@ let option = computed(() => {
     grid3D: {
       show: false,
       boxHeight: 0.25,
-      // top: '30%',
-      // bottom: '0%',
       viewControl: {
         alpha: 25,
         beta: 40,

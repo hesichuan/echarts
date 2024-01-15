@@ -3,46 +3,51 @@ import { ref, unref, inject, watch, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
-const apiData = inject('collectiveRentData', {})
 const loadFinish = ref(false)
-
+setTimeout(() => {
+  loadFinish.value = true
+}, 1000)
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
+// const repairorder = ref([])
+
+// const repairData = ref({
+//   guarantee: 0,
+//   baseRepair: 0,
+//   carryOn: 0,
+//   reCreate: 0,
+//   total: 0
+// })
+
 // 传入数据生成 option
-let legendData = ref([])
-let series = ref([])
-// 传入数据生成 option
-let optionsData = ref([])
-const colors = ['#ff8d75', '#ffce06', '#4d7dd2', '#7bba50', '#65a7e4', '#fd8839']
-watch(
-  () => apiData.value,
-  (newVal) => {
-    if (newVal) {
-      optionsData.value = [...newVal.deviceList]
-        .sort((a, b) => {
-          return b.num - a.num
-        })
-        .map((item, index) => {
-          return {
-            name: item.deviceType,
-            value: +item.num,
-            itemStyle: {
-              color: colors[index]
-            }
-          }
-        })
-      console.error('Cake3D')
-      init()
-      loadFinish.value = true
-    }
+const optionsData = [
+  {
+    name: '口器集台套',
+    value: 4256
   },
   {
-    deep: true
+    name: '鸡公路式台',
+    value: 2356
+  },
+  {
+    name: '位置自动台',
+    value: 2018
+  },
+  {
+    name: '移动电站台',
+    value: 500
+  },
+  {
+    name: '奇台数量套',
+    value: 1998
   }
-)
+  // {
+  //   name: '吊管机81台套',
+  //   value: 3021
+  // }
+]
 
-// 生成扇形的曲面参数方程，用于 series-surface.parametricEquation
 function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, height, i) {
   // 计算
   let midRatio = (startRatio + endRatio) / 2
@@ -111,13 +116,13 @@ function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, h
     }
   }
 }
-
 // 生成模拟 3D 饼图的配置项
 function getPie3D(pieData, internalDiameterRatio) {
+  let series = []
   let sumValue = 0
   let startValue = 0
   let endValue = 0
-
+  let legendData = []
   let k =
     typeof internalDiameterRatio !== 'undefined'
       ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
@@ -154,18 +159,19 @@ function getPie3D(pieData, internalDiameterRatio) {
 
       seriesItem.itemStyle = itemStyle
     }
-    series.value.push(seriesItem)
+    series.push(seriesItem)
   }
 
   // 使用上一次遍历时，计算出的数据和 sumValue，调用 getParametricEquation 函数，
   // 向每个 series-surface 传入不同的参数方程 series-surface.parametricEquation，也就是实现每一个扇形。
-  for (let i = 0; i < series.value.length; i++) {
-    endValue = startValue + series.value[i].pieData.value
-    series.value[i].pieData.startRatio = startValue / sumValue
-    series.value[i].pieData.endRatio = endValue / sumValue
-    series.value[i].parametricEquation = getParametricEquation(
-      series.value[i].pieData.startRatio,
-      series.value[i].pieData.endRatio,
+  for (let i = 0; i < series.length; i++) {
+    endValue = startValue + series[i].pieData.value
+    console.log(series[i])
+    series[i].pieData.startRatio = startValue / sumValue
+    series[i].pieData.endRatio = endValue / sumValue
+    series[i].parametricEquation = getParametricEquation(
+      series[i].pieData.startRatio,
+      series[i].pieData.endRatio,
       false,
       false,
       k,
@@ -175,39 +181,52 @@ function getPie3D(pieData, internalDiameterRatio) {
     )
 
     startValue = endValue
-    // legendData.value.push(series.value[i].name)
+
+    legendData.push(series[i].name)
   }
-  return series.value
+  return series
 }
 
-const init = () => {
-  series.value = getPie3D(optionsData.value, 0) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
-  series.value.push({
-    name: 'pie2d',
-    type: 'pie',
-    label: {
-      opacity: 1,
-      lineHeight: calcFont(14),
-      textStyle: {
-        fontSize: calcFont(12),
-        color: '#fff'
-      }
+const series = getPie3D(optionsData, 0) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
+series.push({
+  name: 'pie2d',
+  type: 'pie',
+  label: {
+    opacity: 1,
+    // fontSize: calcFont(12),
+    lineHeight: calcFont(20),
+    // position: 'inner',
+    distanceToLabelLine: -25,
+    top: 200,
+    textStyle: {
+      fontSize: calcFont(8),
+      color: '#fff'
     },
-    labelLine: {
-      show: false,
-      length: 0,
-      length2: 0
-    },
-    startAngle: 0, //起始角度，支持范围[0, 360]。
-    clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-    radius: ['0%', '40%'],
-    center: ['50%', '50%'],
-    data: optionsData.value,
-    itemStyle: {
-      opacity: 0
+    formatter: function (params) {
+      const nameStr = params.data.name.replace(/.{1,5}/g, '$&\n')
+      const _value = params.value
+      const percent = params.percent
+      console.error(params)
+      // return nameStr + '\n' + params.percent // 使用\n进行换行
+      // return `${nameStr}${_value}（${percent}%）`
+      return `${nameStr}${_value}（${percent}%）`
+      // return nameStr + params.percent + '%' // 使用\n进行换行
     }
-  })
-}
+  },
+  labelLine: {
+    show: false,
+    length: 0,
+    length2: 0
+  },
+  startAngle: -30, //起始角度，支持范围[0, 360]。
+  clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
+  radius: ['60%', '60%'],
+  center: ['50%', '40%'],
+  data: optionsData,
+  itemStyle: {
+    opacity: 0
+  }
+})
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
   return {
@@ -217,21 +236,35 @@ let option = computed(() => {
         if (params.seriesName !== 'mouseoutSeries' && params.seriesName !== 'pie2d') {
           return `${
             params.seriesName
-          }<br/><span style="display:inline-block;margin-right:5px;border-radius:5px;width:10px;height:10px;background-color:${
-            params.color
-          };"></span>${series.value[params.seriesIndex].pieData.value}`
+          }<br/><span style="display:inline-block;margin-right:${calcFont(
+            5
+          )};border-radius:${calcFont(10)};width:${calcFont(10)};height:${calcFont(
+            10
+          )};background-color:${params.color};"></span>${
+            option.series[params.seriesIndex].pieData.value
+          }`
         }
       },
       textStyle: {
         fontSize: calcFont(14)
       }
     },
-    backgroundColor: 'transparent',
-    label: {
-      show: true,
-      position: 'outside',
-      formatter: '{b} \n{c} ({d}%)'
-    },
+    // grid: {
+    //   left: '10%',
+    //   top: '20%',
+    //   right: '10%',
+    //   bottom: '12%'
+    // },
+    // backgroundColor: 'transparent',
+    // label: {
+    //   show: true,
+    //   position: 'outside',
+    //   formatter: '{b} \n{d}%',
+    //   textStyle: {
+    //     color: '#fff',
+    //     fontSize: calcFont(14)
+    //   }
+    // },
     xAxis3D: {
       min: -1,
       max: 1
@@ -247,6 +280,10 @@ let option = computed(() => {
     grid3D: {
       show: false,
       boxHeight: 5,
+      top: '3%',
+      left: '2%',
+      bottom: '0',
+      // environment: "rgba(255,255,255,0)",
       viewControl: {
         // 3d效果可以放大、旋转等，
         alpha: 30, // 饼图翻转的程度
@@ -255,10 +292,11 @@ let option = computed(() => {
         zoomSensitivity: 0,
         panSensitivity: 0,
         autoRotate: false, // 是否自动旋转
+        maxDistance: 230,
         distance: 230 // 距离越小看到的饼图越大
       }
     },
-    series: series.value
+    series: series
   }
 })
 </script>
