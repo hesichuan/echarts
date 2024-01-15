@@ -187,7 +187,8 @@ const init = () => {
     type: 'pie',
     label: {
       opacity: 1,
-      lineHeight: calcFont(14),
+      // lineHeight: calcFont(14),
+      position: 'inner',
       textStyle: {
         fontSize: calcFont(12),
         color: '#fff'
@@ -200,8 +201,12 @@ const init = () => {
     },
     startAngle: 0, //起始角度，支持范围[0, 360]。
     clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-    radius: ['0%', '40%'],
-    center: ['50%', '50%'],
+    radius: ['40%', '80%'],
+    center: ['50%', '40%'],
+    labelLayout: {
+      hideOverlap: false
+    },
+    moveOverlap: 'shiftY',
     data: optionsData.value,
     itemStyle: {
       opacity: 0
@@ -250,7 +255,7 @@ let option = computed(() => {
       viewControl: {
         // 3d效果可以放大、旋转等，
         alpha: 30, // 饼图翻转的程度
-        beta: 30,
+        beta: 15,
         rotateSensitivity: 0,
         zoomSensitivity: 0,
         panSensitivity: 0,
