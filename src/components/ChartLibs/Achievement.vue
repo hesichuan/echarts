@@ -6,6 +6,15 @@ import img4 from '@/assets/imgs/device_4.png'
 import img5 from '@/assets/imgs/device_5.png'
 import img6 from '@/assets/imgs/device_6.png'
 import DeviceTitleImg from '@/assets/imgs/device_title.jpg'
+
+import { inject, ref } from 'vue'
+import hooks from '@/hooks'
+
+const loadFinish = ref(false)
+const { useModuleData } = hooks
+const { calcFont } = useModuleData(null)
+const summaryData = inject('cnpcBaseData', {})
+
 const data = [
   {
     img: img1,

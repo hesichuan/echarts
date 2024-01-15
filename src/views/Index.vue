@@ -19,14 +19,10 @@ import {
   deviceStatisticApi,
   deviceKanbanDataApi,
   remandOrderDataApi,
-  getCollectiveAndRentalSharingDeviceData
+  getCollectiveRentApiData
 } from '@/api'
 
-import {
-  getCnpcKanbanJson,
-  getKanbanBaseData,
-  getCollectiveAndRentalSharingDeviceJson
-} from '@/api'
+import { getCnpcKanbanJson, getKanbanBaseData, getCollectiveRentApiJson } from '@/api'
 
 const VITE_ENV = import.meta.env
 
@@ -70,6 +66,8 @@ const deviceCompany = computed(() => deviceStatistic.value.unitDeviceInfo)
 const supermarket = computed(() => deviceStatistic.value.supermarketVos)
 // 中下
 const remandList = computed(() => remandOrderList.value)
+// 饼图数据
+const apiPieData = computed(() => pieData.value)
 
 provide('orderComplete', orderComplete)
 provide('orderCarousel', orderCarousel)
@@ -84,13 +82,11 @@ provide('remandList', remandList)
 provide('supermarket', supermarket)
 
 provide('cnpcBaseData', wholeDesc)
-provide('pieData', pieData)
+provide('pieData', apiPieData)
 
 const getPieData = async () => {
   const reqApi =
-    VITE_ENV.VITE_API_BASEPATH === 'test'
-      ? getCollectiveAndRentalSharingDeviceJson
-      : getCollectiveAndRentalSharingDeviceData
+    VITE_ENV.VITE_API_BASEPATH === 'test' ? getCollectiveRentApiJson : getCollectiveRentApiData
   const orderRes = await reqApi()
 
   pieData.value = orderRes.data

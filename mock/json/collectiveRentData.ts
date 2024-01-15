@@ -1,4 +1,5 @@
 export default {
+  status: 'SUCCEED',
   data: {
     typeVoList: [],
     deviceList: [
