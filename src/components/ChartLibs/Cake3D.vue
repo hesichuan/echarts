@@ -14,7 +14,7 @@ let legendData = ref([])
 let series = ref([] as any)
 // 传入数据生成 option
 let optionsData = ref([])
-const colors = ['#ff8d75', '#ffce06', '#4d7dd2', '#7bba50', '#65a7e4', '#fd8839']
+const colors = ['#ff8d75', '#fd8839', '#4d7dd2', '#7bba50', '#65a7e4']
 watch(
   () => apiData.value,
   (newVal) => {
