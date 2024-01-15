@@ -4,7 +4,6 @@ import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
 const loadFinish = ref(false)
-const currentChartRef = ref()
 
 const companyList = ref<Array<string>>([])
 const deviceCount = ref<Array<number>>([]) // 入设备数量
@@ -13,8 +12,6 @@ const userCount = ref<Array<number>>([]) // 投入人员 userNum project
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
-
-// const deviceCompany = inject('deviceCompany', [])
 
 const baseData = inject('cnpcBaseData', {})
 
@@ -25,9 +22,9 @@ watch(
     list.forEach((item: any) => {
       const { userNum, projectName, num: dC, workNum } = item
       companyList.value.push(projectName)
-      deviceCount.value.push(dC)
-      workCount.value.push(workNum)
-      userCount.value.push(userNum)
+      deviceCount.value.push(parseInt(dC))
+      workCount.value.push(parseInt(workNum))
+      userCount.value.push(parseInt(userNum))
     })
     loadFinish.value = true
   },
