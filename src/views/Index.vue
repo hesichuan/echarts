@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, provide, watch, computed, onUnmounted, nextTick } from 'vue'
+import { ref, provide, watch, computed, onUnmounted, nextTick } from 'vue'
 import { BorderBox11 } from '@dataview/datav-vue3'
 import hooks from '@/hooks'
 
@@ -11,75 +11,30 @@ import CenterContent from './components/CenterContent.vue'
 import RightContent from './components/RightContent.vue'
 import CurrentChart from '@/components/ChartLibs/CurrentChart.vue'
 
-// 接口
-// import { OrderStatisticDemo } from '@/utils/demo'
 import {
-  orderStatisticApi,
-  orderKanbanDataApi,
-  deviceStatisticApi,
-  deviceKanbanDataApi,
-  remandOrderDataApi,
+  getCnpcKanbanJson,
+  getKanbanBaseData,
+  getCollectiveRentApiJson,
   getCollectiveRentApiData
 } from '@/api'
-
-import { getCnpcKanbanJson, getKanbanBaseData, getCollectiveRentApiJson } from '@/api'
 
 const VITE_ENV = import.meta.env
 
 const { useScreen, useCommon } = hooks
 const { setScreenMode } = useCommon()
 const isLoading = ref(true)
-const orderStatistic = ref({})
-const deviceStatistic = ref({})
-const remandOrderList = ref([])
 const currentCompsTitle = ref('')
 const currentChartRef = ref()
 const showCurrentChart = ref(false)
 /** new */
-const kanbanData = ref({})
 const wholeDesc = ref({})
 const pieData = ref({})
 
 // 需求单轮巡
 const loopTimer = ref()
 
-// 中上
-const regions = computed(() => orderStatistic.value.regions)
-const addNewOrder = computed(() => orderStatistic.value.addNewOrder)
-const totalAmount = computed(() => orderStatistic.value.totalAmount)
-
-// 左1
-const orderComplete = computed(() => orderStatistic.value.completions)
-// 左2
-const orderCarousel = computed(() => orderStatistic.value.unitUseOrder)
-const deviceTypeList = computed(() => orderStatistic.value.deviceTypeList)
-// 左3
-const projectList = computed(() => orderStatistic.value.projectInfoList)
-// 中2
-const deviceMapCount = computed(() => deviceStatistic.value.deviceLocationAndNumList)
-// 右1
-const deviceCategories = computed(() => deviceStatistic.value.typeNameAndNums)
-const repairorder = computed(() => orderStatistic.value.repairOrderMap)
-// 右2
-const deviceCompany = computed(() => deviceStatistic.value.unitDeviceInfo)
-// 右3
-const supermarket = computed(() => deviceStatistic.value.supermarketVos)
-// 中下
-const remandList = computed(() => remandOrderList.value)
 // 饼图数据
 const apiPieData = computed(() => pieData.value)
-
-provide('orderComplete', orderComplete)
-provide('orderCarousel', orderCarousel)
-provide('projectList', projectList)
-provide('repairorder', repairorder)
-provide('deviceTypeList', deviceTypeList)
-provide('orderCount', { regions, totalAmount, addNewOrder })
-provide('deviceCategories', deviceCategories)
-provide('deviceCompany', deviceCompany)
-provide('deviceMapCount', deviceMapCount)
-provide('remandList', remandList)
-provide('supermarket', supermarket)
 
 provide('cnpcBaseData', wholeDesc)
 provide('pieData', apiPieData)
@@ -101,44 +56,14 @@ const getKanbanData = async () => {
   isLoading.value = false
 }
 
-const getOrderStatistic = async () => {
-  const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? orderKanbanDataApi : orderStatisticApi
-  const orderRes = await reqApi()
-  orderStatistic.value = orderRes.data
-
-  isLoading.value = false
-}
-
-const getDeviceStatistic = async () => {
-  const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? deviceKanbanDataApi : deviceStatisticApi
-  const deviceRes = await reqApi()
-  deviceStatistic.value = deviceRes.data
-}
-
-const getRemandOrderList = async () => {
-  const reqApi = VITE_ENV.VITE_API_BASEPATH === 'test' ? remandOrderDataApi : orderStatisticApi
-  const deviceRes = await reqApi({ type: 1 })
-  remandOrderList.value = deviceRes.data
-}
-// 订单
-getOrderStatistic()
-// 设备
-getDeviceStatistic()
-// 需求单
-getRemandOrderList()
 // 看板
 getKanbanData()
 // 饼图
 getPieData()
 
 loopTimer.value = setInterval(() => {
-  getRemandOrderList()
+  getKanbanData()
 }, 1000 * 60 * 1)
-
-// setTimeout(() => {
-//   // 需求单
-//   getRemandOrderList()
-// }, 5000)
 
 // 制定html根字体大小
 const initHtmlFontSize = () => {
