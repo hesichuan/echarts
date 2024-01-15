@@ -4,6 +4,7 @@ import { config } from "../../src/config/axios/config";
 import orderKanbanData from "../json/orderKanbanData";
 import deviceKanbanData from "../json/deviceKanbanData"
 import remandOrderData from '../json/remandOrderData'
+import cnpcKanbanData from '../json/cnpcKanbanData'
 // import getChinaGeoJson from '/public/china_geo.json'
 
 const { result_code } = config;
@@ -28,6 +29,13 @@ export default [
         method: 'get',
         response: () => {
           return remandOrderData;
+        },
+      },
+      {
+        url: '/mock/api/cnpcKanbanApi',
+        method: 'get',
+        response: () => {
+          return cnpcKanbanData;
         },
       },
       {

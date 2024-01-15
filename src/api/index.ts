@@ -72,7 +72,7 @@ export const getChinaGeoJson = () => {
 }
 // cnpc看板
 export const getCnpcKanbanJson = () => {
-  return request.get({ url: `/mock/api/cnpcKanbanData` })
+  return request.get({ url: `/mock/api/cnpcKanbanApi` })
 }
 // 获取
 export const getCollectiveAndRentalSharingDeviceJson = () => {

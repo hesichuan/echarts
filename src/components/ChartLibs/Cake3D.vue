@@ -28,7 +28,7 @@ watch(
           }
         })
       init()
-      console.error(optionsData.value)
+
       loadFinish.value = true
     }
   },

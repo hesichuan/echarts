@@ -9,6 +9,7 @@ const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
 const repairorder = ref([])
+const baseData = ref({})
 
 const legendLabel = {
   first: '设备数',
@@ -16,11 +17,9 @@ const legendLabel = {
 }
 
 const repairData = ref({
-  guarantee: 0,
-  baseRepair: 0,
-  carryOn: 0,
-  reCreate: 0,
-  total: 0
+  manageNum: 0, // 管理人员
+  repairNum: 0, // 维修人员
+  operateNum: 0 // 操作人员
 })
 
 const colors = ['#ECA444', '#33A1DB', '#56B557']
@@ -29,20 +28,18 @@ const indicatorList = ref([])
 
 repairorder.value = inject('repairorder', [])
 
+baseData.value = inject('cnpcBaseData', {})
+
 watch(
-  () => repairorder.value,
+  () => baseData.value,
   () => {
-    const data = unref(repairorder.value) as any
+    const data = unref(baseData.value) as any
     console.log('circleChart-data:', data)
-    if (data.guarantee !== undefined) {
-      repairData.value = {
-        ...repairData.value,
-        guarantee: Number(data.guarantee.orderNum),
-        baseRepair: Number(data.baseRepair.orderNum),
-        reCreate: Number(data.reCreate.orderNum),
-        carryOn: Number(data.carryOn.orderNum),
-        total: Number(data.total.orderNum)
-      }
+    repairData.value = {
+      ...repairData.value,
+      manageNum: Number(data.manageNum),
+      repairNum: Number(data.repairNum),
+      operateNum: Number(data.operateNum)
     }
 
     loadFinish.value = true
@@ -73,7 +70,7 @@ const option = computed(() => {
       }
     },
     legend: {
-      data: ['现场维保', '基地维修', '对外承揽'],
+      data: ['管理人员', '维修人员', '操作人员'],
       bottom: '5%',
       textStyle: {
         color: '#1FC3CE',
@@ -98,22 +95,22 @@ const option = computed(() => {
         color: colors,
         data: [
           {
-            value: unref(repairData).guarantee,
-            name: '现场维保',
+            value: unref(repairData).manageNum,
+            name: '管理人员',
             label: {
               shadowColor: colors[0]
             }
           },
           {
-            value: unref(repairData).baseRepair,
-            name: '基地维修',
+            value: unref(repairData).repairNum,
+            name: '维修人员',
             label: {
               shadowColor: colors[2]
             }
           },
           {
-            value: unref(repairData).carryOn,
-            name: '对外承揽',
+            value: unref(repairData).operateNum,
+            name: '操作人员',
             label: {
               shadowColor: colors[1]
             }
@@ -121,7 +118,7 @@ const option = computed(() => {
         ],
         tooltip: { show: true },
         label: {
-          formatter: '{b|{b}} {per|{d}%}',
+          formatter: '{per|{d}%}',
           position: 'outside',
           rich: {
             b: {
@@ -161,22 +158,22 @@ const option = computed(() => {
       //     color: colors,
       //     data: [
       //       {
-      //         value: unref(repairData).guarantee,
-      //         name: '现场维保',
+      //         value: unref(repairData).manageNum,
+      //         name: '管理人员',
       //         label: {
       //           shadowColor: colors[0]
       //         }
       //       },
       //       {
       //         value: unref(repairData).baseRepair,
-      //         name: '基地维修',
+      //         name: '维修人员',
       //         label: {
       //           shadowColor: colors[2]
       //         }
       //       },
       //       {
       //         value: unref(repairData).carryOn,
-      //         name: '对外承揽',
+      //         name: '操作人员',
       //         label: {
       //           shadowColor: colors[1]
       //         }
