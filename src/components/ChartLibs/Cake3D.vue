@@ -3,7 +3,7 @@ import { ref, unref, inject, watch, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
-const apiData = inject('pieData', null)
+const apiData = inject('pieData', {})
 const loadFinish = ref(false)
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
@@ -116,7 +116,6 @@ function getPie3D(pieData, internalDiameterRatio) {
     typeof internalDiameterRatio !== 'undefined'
       ? (1 - internalDiameterRatio) / (1 + internalDiameterRatio)
       : 1 / 3
-
   // 为每一个饼图数据，生成一个 series-surface 配置
   for (let i = 0; i < pieData.length; i++) {
     sumValue += pieData[i].value
@@ -154,8 +153,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   // 使用上一次遍历时，计算出的数据和 sumValue，调用 getParametricEquation 函数，
   // 向每个 series-surface 传入不同的参数方程 series-surface.parametricEquation，也就是实现每一个扇形。
   for (let i = 0; i < series.value.length; i++) {
-    endValue = startValue + series.value[i].pieData.value
-    console.log(series.value[i])
+    endValue = startValue + series.value[i]?.pieData?.value ?? 0
     series.value[i].pieData.startRatio = startValue / sumValue
     series.value[i].pieData.endRatio = endValue / sumValue
     series.value[i].parametricEquation = getParametricEquation(

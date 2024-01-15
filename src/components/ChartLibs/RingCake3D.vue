@@ -3,49 +3,41 @@ import { ref, unref, inject, watch, computed } from 'vue'
 import DefaultChart from './DefaultChart.vue'
 import hooks from '@/hooks'
 
-const loadFinish = ref(true)
+const apiData = inject('pieData', null)
+const loadFinish = ref(false)
 
 const { useModuleData } = hooks
 const { calcFont } = useModuleData(null)
 
-// const repairorder = ref([])
-
-// const repairData = ref({
-//   guarantee: 0,
-//   baseRepair: 0,
-//   carryOn: 0,
-//   reCreate: 0,
-//   total: 0
-// })
-
 // 传入数据生成 option
-const optionsData = [
-  {
-    name: '全位置自动焊台',
-    value: 131
+let legendData = ref([])
+let series = ref([])
+// 传入数据生成 option
+let optionsData = ref([])
+
+watch(
+  () => apiData.value,
+  (newVal) => {
+    if (newVal) {
+      optionsData.value = newVal.leaseDeviceList
+        .sort((a, b) => {
+          return b.num - a.num
+        })
+        .map((item) => {
+          return {
+            name: item.deviceType,
+            value: +item.num
+          }
+        })
+      init()
+      loadFinish.value = true
+    }
   },
   {
-    name: '挖掘机台',
-    value: 554
-  },
-  {
-    name: '公路式汽车起重机台',
-    value: 362
-  },
-  {
-    name: '随车起重机台',
-    value: 245
-  },
-  {
-    name: '履带式起重机台',
-    value: 162
-  },
-  {
-    name: '其它',
-    value: 93
+    deep: true
   }
-]
-let legendData = []
+)
+
 // 生成扇形的曲面参数方程，用于 series-surface.parametricEquation
 function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, height) {
   // 计算
@@ -118,7 +110,6 @@ function getParametricEquation(startRatio, endRatio, isSelected, isHovered, k, h
 
 // 生成模拟 3D 饼图的配置项
 function getPie3D(pieData, internalDiameterRatio) {
-  let series = []
   let sumValue = 0
   let startValue = 0
   let endValue = 0
@@ -159,32 +150,32 @@ function getPie3D(pieData, internalDiameterRatio) {
 
       seriesItem.itemStyle = itemStyle
     }
-    series.push(seriesItem)
+    series.value.push(seriesItem)
   }
 
   // 使用上一次遍历时，计算出的数据和 sumValue，调用 getParametricEquation 函数，
   // 向每个 series-surface 传入不同的参数方程 series-surface.parametricEquation，也就是实现每一个扇形。
-  for (let i = 0; i < series.length; i++) {
-    endValue = startValue + series[i].pieData.value
-    console.log(series[i])
-    series[i].pieData.startRatio = startValue / sumValue
-    series[i].pieData.endRatio = endValue / sumValue
-    series[i].parametricEquation = getParametricEquation(
-      series[i].pieData.startRatio,
-      series[i].pieData.endRatio,
+  for (let i = 0; i < series.value.length; i++) {
+    endValue = startValue + series.value[i].pieData.value
+    console.log(series.value[i])
+    series.value[i].pieData.startRatio = startValue / sumValue
+    series.value[i].pieData.endRatio = endValue / sumValue
+    series.value[i].parametricEquation = getParametricEquation(
+      series.value[i].pieData.startRatio,
+      series.value[i].pieData.endRatio,
       false,
       false,
       k,
-      series[i].pieData.value
+      series.value[i].pieData.value
     )
 
     startValue = endValue
 
-    legendData.push(series[i].name)
+    legendData.push(series.value[i].name)
   }
 
   // // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
-  series.push({
+  series.value.push({
     name: 'mouseoutSeries',
     type: 'surface',
     parametric: true,
@@ -219,7 +210,7 @@ function getPie3D(pieData, internalDiameterRatio) {
   })
 
   // // 补充一个透明的圆环，用于支撑高亮功能的近似实现。
-  series.push({
+  series.value.push({
     name: 'mouseoutSeries',
     type: 'surface',
     parametric: true,
@@ -252,7 +243,7 @@ function getPie3D(pieData, internalDiameterRatio) {
       }
     }
   })
-  series.push({
+  series.value.push({
     name: 'mouseoutSeries',
     type: 'surface',
     parametric: true,
@@ -286,34 +277,37 @@ function getPie3D(pieData, internalDiameterRatio) {
       }
     }
   })
-  return series
+  return series.value
 }
 
-const series = getPie3D(optionsData, 0.8) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
-series.push({
-  name: 'pie2d',
-  type: 'pie',
-  label: {
-    opacity: 1,
-    lineHeight: calcFont(20),
-    textStyle: {
-      fontSize: calcFont(14),
-      color: '#fff'
+const init = () => {
+  series.value = getPie3D(optionsData.value, 0.8) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
+  series.value.push({
+    name: 'pie2d',
+    type: 'pie',
+    label: {
+      opacity: 1,
+      lineHeight: calcFont(20),
+      textStyle: {
+        fontSize: calcFont(14),
+        color: '#fff'
+      }
+    },
+    labelLine: {
+      length: 20,
+      length2: 20
+    },
+    startAngle: -30, //起始角度，支持范围[0, 360]。
+    clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
+    radius: ['20%', '45%'], // 饼图的半径，数组的第一项是内半径，第二项是外半径。
+    center: ['50%', '43%'], // 饼图的中心（圆心）坐标。
+    data: optionsData.value,
+    itemStyle: {
+      opacity: 0
     }
-  },
-  labelLine: {
-    length: 20,
-    length2: 20
-  },
-  startAngle: -30, //起始角度，支持范围[0, 360]。
-  clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-  radius: ['20%', '45%'], // 饼图的半径，数组的第一项是内半径，第二项是外半径。
-  center: ['50%', '43%'], // 饼图的中心（圆心）坐标。
-  data: optionsData,
-  itemStyle: {
-    opacity: 0
-  }
-})
+  })
+}
+
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
   return {
@@ -336,7 +330,7 @@ let option = computed(() => {
             params.seriesName
           }<br/><span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
             params.color
-          };"></span>${series[params.seriesIndex].pieData.value}`
+          };"></span>${series.value[params.seriesIndex].pieData.value}`
         }
       },
       textStyle: {
@@ -387,7 +381,7 @@ let option = computed(() => {
         autoRotate: false // 自动旋转
       }
     },
-    series: series
+    series: series.value
   }
 })
 </script>

@@ -40,7 +40,7 @@ export const getKanbanBaseData = (): Promise<any> => {
 }
 
 // 获取集租、共享设备数据
-export const getCollectiveAndRentalSharingDeviceData = (): Promise<any> => {
+export const getCollectiveRentApiData = (): Promise<any> => {
   return request.get({ url: '/customer/device/kanban/leaseDevice' })
 }
 
@@ -74,7 +74,7 @@ export const getChinaGeoJson = () => {
 export const getCnpcKanbanJson = () => {
   return request.get({ url: `/mock/api/cnpcKanbanApi` })
 }
-// 获取
-export const getCollectiveAndRentalSharingDeviceJson = () => {
-  return request.get({ url: `/mock/api/collectiveAndRentalSharingDevice` })
+// 获取集租、共享设备数据
+export const getCollectiveRentApiJson = () => {
+  return request.get({ url: `/mock/api/collectiveRentApi` })
 }
