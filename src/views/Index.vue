@@ -63,7 +63,7 @@ getCollectiveRentData()
 
 loopTimer.value = setInterval(() => {
   getKanbanData()
-}, 1000 * 60 * 1)
+}, 1000 * 60 * 10) // 10分钟
 
 // 制定html根字体大小
 const initHtmlFontSize = () => {
