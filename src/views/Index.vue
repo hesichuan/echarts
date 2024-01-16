@@ -131,7 +131,6 @@ const curCompsEmits = ({
   title: string
   data: Partial<Object>
 }) => {
-  console.log('curCompsEmits')
   showCurrentChart.value = true
   currentCompsTitle.value = title
   nextTick(() => {
