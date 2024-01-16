@@ -14,14 +14,14 @@ let legendData = ref([])
 let series = ref([] as any)
 // 传入数据生成 option
 let optionsData = ref([])
-const colors = ['#ff8d75', '#fd8839', '#4d7dd2', '#7bba50', '#65a7e4']
+const colors = ['#65a7e4', '#ff8d75', '#4d7dd2', '#7bba50', '#fd8839']
 watch(
   () => apiData.value,
   (newVal) => {
     if (newVal) {
       optionsData.value = [...newVal.deviceList]
         .sort((a, b) => {
-          return b.num - a.num
+          return a.num - b.num
         })
         .map((item, index) => {
           return {
@@ -182,36 +182,70 @@ function getPie3D(pieData, internalDiameterRatio) {
 
 const init = () => {
   series.value = getPie3D(optionsData.value, 0) // 可做为调整内环大小 0为实心圆饼图，大于0 小于1 为圆环
-  series.value.push({
-    name: 'pie2d',
-    type: 'pie',
-    label: {
-      opacity: 1,
-      // lineHeight: calcFont(14),
-      position: 'inner',
-      textStyle: {
-        fontSize: calcFont(12),
-        color: '#fff'
+  series.value.push(
+    {
+      name: 'pie2d',
+      type: 'pie',
+      label: {
+        opacity: 1,
+        // lineHeight: calcFont(14),
+        position: 'inner',
+        textStyle: {
+          fontSize: calcFont(12),
+          color: '#fff'
+        },
+        formatter: '{d}%'
+      },
+      labelLine: {
+        show: false,
+        length: 0,
+        length2: 0
+      },
+      startAngle: 80, //起始角度，支持范围[0, 360]。
+      clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
+      radius: ['40%', '30%'],
+      center: ['52%', '45%'],
+      labelLayout: {
+        hideOverlap: false,
+        dx: -10
+      },
+      moveOverlap: 'shiftY',
+      data: optionsData.value,
+      itemStyle: {
+        opacity: 0
       }
     },
-    labelLine: {
-      show: false,
-      length: 0,
-      length2: 0
-    },
-    startAngle: 0, //起始角度，支持范围[0, 360]。
-    clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-    radius: ['40%', '80%'],
-    center: ['50%', '40%'],
-    labelLayout: {
-      hideOverlap: false
-    },
-    moveOverlap: 'shiftY',
-    data: optionsData.value,
-    itemStyle: {
-      opacity: 0
+    {
+      name: 'pie2d',
+      type: 'pie',
+      label: {
+        opacity: 1,
+        // lineHeight: calcFont(14),
+        position: 'outer',
+        textStyle: {
+          fontSize: calcFont(12),
+          color: '#fff'
+        }
+      },
+      labelLine: {
+        show: false,
+        length: 0,
+        length2: 0
+      },
+      startAngle: 90, //起始角度，支持范围[0, 360]。
+      clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
+      radius: ['40%', '70%'],
+      center: ['50%', '50%'],
+      labelLayout: {
+        hideOverlap: false
+      },
+      moveOverlap: 'shiftY',
+      data: optionsData.value,
+      itemStyle: {
+        opacity: 0
+      }
     }
-  })
+  )
 }
 // 准备待返回的配置项，把准备好的 legendData、series 传入。
 let option = computed(() => {
@@ -235,7 +269,7 @@ let option = computed(() => {
     label: {
       show: true,
       position: 'outside',
-      formatter: '{b} \n{c} ({d}%)'
+      formatter: '{b}{c}台套'
     },
     xAxis3D: {
       min: -1,
@@ -251,16 +285,16 @@ let option = computed(() => {
     },
     grid3D: {
       show: false,
-      boxHeight: 5,
+      boxHeight: 6,
       viewControl: {
         // 3d效果可以放大、旋转等，
-        alpha: 30, // 饼图翻转的程度
-        beta: 15,
+        alpha: 45, // 饼图翻转的程度
+        beta: 270, // Y轴旋转角度
         rotateSensitivity: 0,
         zoomSensitivity: 0,
         panSensitivity: 0,
         autoRotate: false, // 是否自动旋转
-        distance: 230 // 距离越小看到的饼图越大
+        distance: 280 // 距离越小看到的饼图越大
       }
     },
     series: series.value
