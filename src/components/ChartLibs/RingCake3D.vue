@@ -298,8 +298,8 @@ const init = () => {
     },
     startAngle: -30, //起始角度，支持范围[0, 360]。
     clockwise: false, //饼图的扇区是否是顺时针排布。上述这两项配置主要是为了对齐3d的样式
-    radius: ['20%', '45%'], // 饼图的半径，数组的第一项是内半径，第二项是外半径。
-    center: ['50%', '43%'], // 饼图的中心（圆心）坐标。
+    radius: ['20%', '35%'], // 饼图的半径，数组的第一项是内半径，第二项是外半径。
+    center: ['50%', '45%'], // 饼图的中心（圆心）坐标。
     data: optionsData.value,
     itemStyle: {
       opacity: 0
@@ -345,10 +345,10 @@ let option = computed(() => {
     },
     grid3D: {
       show: false,
-      boxHeight: 0.25,
+      boxHeight: 0.2,
       viewControl: {
         alpha: 25,
-        beta: 34,
+        beta: 40,
         rotateSensitivity: 0,
         zoomSensitivity: 0,
         panSensitivity: 0,
