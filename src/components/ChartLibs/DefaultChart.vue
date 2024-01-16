@@ -81,10 +81,8 @@ const init = async () => {
       // const JEOJSON = await getChinaGeoJson().catch((err) => {
       //   console.log('JEOJSON-err', err)
       // })
-
-      echarts.registerMap('china', JEOJSON)
-
-      emits('mapEmit', JEOJSON)
+      // echarts.registerMap('china', JEOJSON) 中国地图
+      // emits('mapEmit', JEOJSON)
     }
     myChart.value.setOption(option)
 

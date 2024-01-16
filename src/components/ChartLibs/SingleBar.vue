@@ -68,7 +68,7 @@ const option = computed(() => {
     },
     grid: {
       left: '10%',
-      top: '15%',
+      top: '20%',
       right: 'auto',
       bottom: '15%'
     },

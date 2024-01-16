@@ -145,7 +145,7 @@ const toggleFullscreen = () => {
       &__left {
         height: 100%;
         position: relative;
-        width: calc(60 * var(--app-base-unit));
+        min-width: calc(60 * var(--app-base-unit));
         .img-icon-lf-1 {
           position: absolute;
         }
@@ -157,6 +157,7 @@ const toggleFullscreen = () => {
       &__title {
         font-size: calc(28 * var(--app-base-unit));
         color: rgb(12 204 210);
+        min-width: calc(180 * var(--app-base-unit));
         // position: absolute;
         // left: calc(100 * var(--app-base-unit));
       }

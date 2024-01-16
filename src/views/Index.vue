@@ -88,7 +88,7 @@ const initHtmlFontSize = () => {
 
   // 横屏
   if (swhr > 1) {
-    if (screen.width > 1200) {
+    if (screen.width > 1024) {
       // 超宽屏大于 21：9
       if (swhr >= 21 / 9) {
         if (swhr > design.ratio) {
