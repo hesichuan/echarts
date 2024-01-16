@@ -29,7 +29,6 @@ watch(
             value: +item.num
           }
         })
-      console.error('RingCake3D')
       init()
       loadFinish.value = true
     }
