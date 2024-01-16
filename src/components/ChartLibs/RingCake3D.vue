@@ -349,7 +349,7 @@ let option = computed(() => {
       boxHeight: 0.25,
       viewControl: {
         alpha: 25,
-        beta: 40,
+        beta: 34,
         rotateSensitivity: 0,
         zoomSensitivity: 0,
         panSensitivity: 0,
