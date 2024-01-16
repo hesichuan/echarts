@@ -178,7 +178,7 @@ const currentPropsCloseHandle = () => {
       <BorderBox11
         :title="currentCompsTitle"
         class="custome-orderbox11"
-        style="width: 100vw; height: 100vh"
+        style="width: 50vw; height: 100vh; margin: 0 auto"
       >
       </BorderBox11>
       <div v-if="showCurrentChart" class="cur-comps-container">

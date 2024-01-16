@@ -207,6 +207,9 @@ const option = computed(() => {
           textStyle: {
             color: '#4084EE',
             fontSize: calcFont(14)
+          },
+          formatter: function (params: any) {
+            return params.value + '台套'
           }
         },
         showBackground: false,

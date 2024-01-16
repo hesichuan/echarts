@@ -54,7 +54,7 @@ defineExpose({ init })
 
 <template>
   <div class="current-chart-content">
-    <div :title="currentCompsTitle" class="custom-border11">
+    <div class="custom-border11">
       <div class="current-chart-content__container">
         <!-- <ChartFour :isScale="2" /> -->
         <component :is="currentComp" :isScale="2" :data="paramsData"></component>
@@ -96,8 +96,8 @@ defineExpose({ init })
   }
   .close {
     position: absolute;
-    right: calc(40 * var(--app-base-unit));
-    top: calc(70 * var(--app-base-unit));
+    right: 20%;
+    top: 2%;
     cursor: pointer;
     .img_btn {
       width: calc(60 * var(--app-base-unit));
